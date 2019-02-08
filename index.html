@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generator</title>
+    <script src="draw.js"></script>
+</head>
+
+<body>
+
+<input id="svg_width" type="text" value="500" onchange="setSVGSize()"/>
+<input id="svg_height" type="text" value="200" onchange="setSVGSize()"/>
+
+<p>Padding (%)</p>
+<input id="padding_slider" type="range" value="10" min="0" max="50" onchange="setPadding('slider')"/>
+<input id="padding_input" type="text" value="10" onchange="setPadding('input')"/>
+<!-- <p id="padding_text">10</p> -->
+
+<p>Colour theme</p>
+<select id="city" onchange="getCity(this)">
+    <option value="hk">Hong Kong</option>
+    <option value="gz">Guangzhou</option>
+    <option value="london">London</option>
+</select>
+
+<select id="hk" style="display:block" onchange="setLineColour(mainLine)">
+    <option value="twl">Tsuen Wan Line</option>
+    <option value="ktl">Kwun Tong Line</option>
+    <option value="isl">Island Line</option>
+    <option value="tkl">Tseung Kwan O Line</option>
+    <option value="tcl">Tung Chung Line</option>
+    <option value="drl">Disneyland Resort Line</option>
+</select>
+
+<select id="gz" style="display:none" onchange="setLineColour(mainLine)">
+    <option value="gz1">Line 1</option>
+    <option value="gz2">Line 2</option>
+    <option value="gz3">Line 3</option>
+    <option value="gz4">Line 4</option>
+    <option value="gz5">Line 5</option>
+    <option value="gz6">Line 6</option>
+    <option value="gz7">Line 7</option>
+    <option value="gz8">Line 8</option>
+    <option value="gz9">Line 9</option>
+    <option value="gz10">Line 10</option>
+    <option value="gz11">Line 11</option>
+    <option value="gz12">Line 12</option>
+</select>
+
+
+<br/>
+
+<svg 
+xmlns="http://www.w3.org/2000/svg"
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+id="root" width="500" height="200">
+    <style type="text/css">
+        .LineDiagram {fill:none;stroke-width:6}
+        .cgz1 {stroke:#F3D03E}
+        .cgz2 {stroke:#00629B}
+        .cgz3 {stroke:#ECA154}
+        .cgz4 {stroke:#00843D}
+        .cgz5 {stroke:#C5003E}
+        .cgz6 {stroke:#80225F}
+        .cgz7 {stroke:#97D700}
+        .cgz8 {stroke:#008C95}
+        .cgz9 {stroke:#71CC98}
+        .cgz10 {stroke:#7D9BC1}
+        .cgz11 {stroke:#470A68}
+        .cgz12 {stroke:#59621D}
+        .cgz13 {stroke:#8E8C13}
+        .cgz14 {stroke:#81312F}
+        .cgz18 {stroke:#D48BC8}
+        .cgz19 {stroke:#BB29BB}
+        .cgz21 {stroke:#201747}
+        .cgz22 {stroke:#041E42}
+        .cgf {stroke:#C4D600}
+        .cgzapm {stroke:#00B5E2}
+        .cgzthz1 {stroke:#44A729}
+
+        .ctwl {stroke:#E2231A}
+        .cktl {stroke:#00AF41}
+        .cisl {stroke:#0071CE}
+        .ctkl {stroke:#A35EB5}
+        .ctcl {stroke:#F38B00}
+        .cdrl {stroke:#E777CB}
+        .cael {stroke:#007078}
+        .csile {stroke:#B6BD00}
+        .csilw {stroke:#9182C2}
+        .cekl {stroke:#00FF00}
+        .cerl {stroke:#61B4E4}
+        .cwrl {stroke:#B6008D}
+        .cmol {stroke:#9A3820}
+        .cnol {stroke:#FF0066}
+        .c360 {stroke:#94989A}
+        .clrl {stroke:#CD9700}
+        .cefls {stroke:#000000}
+    </style>
+
+    <defs>
+        <path id="st" class="StationTick" d="M 2,0 H 7"/>
+        <path id="term" class="StationTick" d="M -7,0 H 7"/>
+        <g id="int">
+            <circle cx="0" cy="0" r="9" fill="#000"/>
+            <circle cx="0" cy="0" r="6" fill="#fff"/>
+        </g>
+
+        <use xlink:href="#st" id="stgz1" class="cgz1"/>
+        <use xlink:href="#st" id="stgz2" class="cgz2"/>
+        <use xlink:href="#st" id="stgz3" class="cgz3"/>
+        <use xlink:href="#st" id="stgz4" class="cgz4"/>
+        <use xlink:href="#st" id="stgz5" class="cgz5"/>
+        <use xlink:href="#st" id="stgz6" class="cgz6"/>
+        <use xlink:href="#st" id="stgz7" class="cgz7"/>
+        <use xlink:href="#st" id="stgz8" class="cgz8"/>
+        <use xlink:href="#st" id="stgz10" class="cgz10"/>
+        <use xlink:href="#st" id="stgz11" class="cgz11"/>
+        <use xlink:href="#st" id="stgz12" class="cgz12"/>
+        <use xlink:href="#st" id="stgz13" class="cgz13"/>
+        <use xlink:href="#st" id="stgz14" class="cgz14"/>
+        <use xlink:href="#st" id="stgz18" class="cgz18"/>
+        <use xlink:href="#st" id="stgz19" class="cgz19"/>
+        <use xlink:href="#st" id="stgz22" class="cgz22"/>
+    </defs>
+
+    <g class="LineDiagram">
+        <path id="mainLine" class="ctwl" d="M 25,30 h 450"/>
+    </g>
+
+    <g id="stations">
+
+    </g>
+
+    <rect id="outer" x="0" y="0" width="500" height="200" fill="none" stroke="black"/>
+</svg>
+
+</body>
+</html>
