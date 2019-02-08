@@ -46,6 +46,27 @@
     <option value="gz12">Line 12</option>
 </select>
 
+<p>Station list</p>
+<div id="stn_list">
+    <div id="stn0">
+        <input type="text" value="Central"/>
+        <button onclick="addStn(this)">+</button>
+        <button onclick="removeStn(this)">-</button>
+    </div>
+    <div id="stn1">
+        <input type="text" value="Admiralty"/>
+        <button onclick="addStn(this)">+</button>
+        <button onclick="removeStn(this)">-</button>
+    </div>
+    <div id="stn2">
+        <input type="text" value="Tsuen Wan"/>
+        <button onclick="addStn(this)">+</button>
+        <button onclick="removeStn(this)">-</button>
+    </div>
+</div>
+
+
+
 
 <br/>
 
@@ -127,7 +148,9 @@ id="root" width="500" height="200">
     </g>
 
     <g id="stations">
-
+        <use xlink:href="#int" transform="translate(25,30)" id="stn_icon_0"/>
+        <use xlink:href="#int" transform="translate(250,30)" id="stn_icon_1"/>
+        <use xlink:href="#int" transform="translate(475,30)" id="stn_icon_2"/>
     </g>
 
     <rect id="outer" x="0" y="0" width="500" height="200" fill="none" stroke="black"/>
