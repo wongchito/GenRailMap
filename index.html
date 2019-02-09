@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <title>Generator</title>
     <script src="draw.js"></script>
+    <!-- <style>
+        svg {
+            width: 1000px;
+            height: 500px;
+            float: left;
+        }
+    </style> -->
 </head>
 
 <body>
@@ -11,16 +18,32 @@
 <input id="svg_width" type="text" value="500" onchange="setSVGSize()"/>
 <input id="svg_height" type="text" value="200" onchange="setSVGSize()"/>
 
+<!-- <p>Zoom (%)</p>
+<input id="zoom_slider" type="range" value="2" min="1" max="3" step="0.01" onchange="setZoom('slider')"/>
+<input id="zoom_text" type="text" value="100" onchange="setZoom('text')"/> -->
+
 <p>Padding (%)</p>
 <input id="padding_slider" type="range" value="10" min="0" max="50" onchange="setPadding('slider')"/>
-<input id="padding_input" type="text" value="10" onchange="setPadding('input')"/>
+<input id="padding_text" type="text" value="10" onchange="setPadding('text')"/>
 <!-- <p id="padding_text">10</p> -->
+
+<p>y position (%)</p>
+<input id="y_slider" type="range" value="50" min="0" max="100" onchange="setYPos('slider')"/>
+<input id="y_text" type="text" value="50" onchange="setYPos('text')"/>
 
 <p>Colour theme</p>
 <select id="city" onchange="getCity(this)">
-    <option value="hk">Hong Kong 香港</option>
-    <option value="gz">广州 Guangzhou</option>
-    <option value="london">London</option>
+    <optgroup label="CHINA - 中國">
+        <option value="fs">Foshan - 佛山</option>
+        <option value="gz">Guangzhou - 广州</option>
+        <option value="sz">Shenzhen - 深圳</option>
+    </optgroup>
+    <optgroup label="HONG KONG - 香港">
+        <option value="hk">Hong Kong - 香港</option>
+    </optgroup>
+    <optgroup label="UNITED KINGDOM - 英國">
+        <option value="london">London - 倫敦</option>
+    </optgroup>
 </select>
 
 <div id="cities">
@@ -40,27 +63,58 @@
     </select>
     
     <select id="gz" style="display:none" onchange="setLineColour()">
-        <option value="gz1">1号线 - Line 1</option>
-        <option value="gz2">2号线 - Line 2</option>
-        <option value="gz3">3号线 - Line 3</option>
-        <option value="gz4">4号线 - Line 4</option>
-        <option value="gz5">5号线 - Line 5</option>
-        <option value="gz6">6号线 - Line 6</option>
-        <option value="gz7">7号线 - Line 7</option>
-        <option value="gz8">8号线 - Line 8</option>
-        <option value="gz9">9号线 - Line 9</option>
-        <option value="gz10">10号线 - Line 10</option>
-        <option value="gz11">11号线 - Line 11</option>
-        <option value="gz12">12号线 - Line 12</option>
-        <option value="gz13">13号线 - Line 13</option>
-        <option value="gz14">14号线 - Line 14</option>
-        <option value="gz18">18号线 - Line 18</option>
-        <option value="gz19">19号线 - Line 19</option>
-        <option value="gz21">21号线 - Line 21</option>
-        <option value="gz22">22号线 - Line 22</option>
-        <option value="gf">广佛线 - Guangfo Line</option>
-        <option value="gzapm">APM线 - APM Line</option>
+        <option value="gz1">Line 1 - 1号线</option>
+        <option value="gz2">Line 2 - 2号线</option>
+        <option value="gz3">Line 3 - 3号线</option>
+        <option value="gz4">Line 4 - 4号线</option>
+        <option value="gz5">Line 5 - 5号线</option>
+        <option value="gz6">Line 6 - 6号线</option>
+        <option value="gz7">Line 7 - 7号线</option>
+        <option value="gz8">Line 8 - 8号线</option>
+        <option value="gz9">Line 9 - 9号线</option>
+        <option value="gz10">Line 10 - 10号线</option>
+        <option value="gz11">Line 11 - 11号线</option>
+        <option value="gz12">Line 12 - 12号线</option>
+        <option value="gz13">Line 13 - 13号线</option>
+        <option value="gz14">Line 14 - 14号线</option>
+        <option value="gz18">Line 18 - 18号线</option>
+        <option value="gz19">Line 19 - 19号线</option>
+        <option value="gz21">Line 21 - 21号线</option>
+        <option value="gz22">Line 22 - 22号线</option>
+        <option value="gf">Guangfo Line - 广佛线</option>
+        <option value="gzapm">APM Line - APM线</option>
         <option value="gzthz1">THZ1</option>
+    </select>
+
+    <select id="fs" style="display:none" onchange="setLineColour()">
+        <option value="gf">Guangfo Line - 广佛线</option>
+        <option value="fs2">Line 2 - 2号线</option>
+        <option value="fs3">Line 3 - 3号线</option>
+        <option value="fs4">Line 4 - 4号线</option>
+        <option value="fs6">Line 6 - 6号线</option>
+        <option value="fs9">Line 9 - 9号线</option>
+        <option value="fs11">Line 11 - 11号线</option>
+        <option value="sz13">Line 13 - 13号线</option>
+    </select>
+
+    <select id="sz" style="display:none" onchange="setLineColour()">
+        <option value="sz1">Line 1 - 1号线</option>
+        <option value="sz2">Line 2 - 2号线</option>
+        <option value="sz3">Line 3 - 3号线</option>
+        <option value="sz4">Line 4 - 4号线</option>
+        <option value="sz5">Line 5 - 5号线</option>
+        <option value="sz6">Line 6 - 6号线</option>
+        <option value="sz7">Line 7 - 7号线</option>
+        <option value="sz8">Line 8 - 8号线</option>
+        <option value="sz9">Line 9 - 9号线</option>
+        <option value="sz10">Line 10 - 10号线</option>
+        <option value="sz11">Line 11 - 11号线</option>
+        <option value="sz12">Line 12 - 12号线</option>
+        <option value="sz13">Line 13 - 13号线</option>
+        <option value="sz14">Line 14 - 14号线</option>
+        <option value="sz15">Line 15 - 15号线</option>
+        <option value="sz16">Line 16 - 16号线</option>
+        <option value="sz20">Line 20 - 20号线</option>
     </select>
     
     <select id="london" style="display:none" onchange="setLineColour()">
@@ -100,7 +154,8 @@
 <svg 
 xmlns="http://www.w3.org/2000/svg"
 xmlns:xlink="http://www.w3.org/1999/xlink" 
-id="root" width="500" height="200">
+id="root" width="500" height="200"
+viewBox="0 0 500 200">
     <style type="text/css">
         .LineDiagram {fill:none;stroke-width:6}
         .cunknown {stroke:#999999}
@@ -126,6 +181,33 @@ id="root" width="500" height="200">
         .cgf {stroke:#C4D600}
         .cgzapm {stroke:#00B5E2}
         .cgzthz1 {stroke:#44A729}
+
+        .cfs1 {stroke:#C4D600}
+        .cfs2 {stroke:#009900}
+        .cfs3 {stroke:#0000FF}
+        .cfs4 {stroke:#FF00FF}
+        .cfs6 {stroke:#FFb81D}
+        .cfs9 {stroke:#A25EB5}
+        .cfs11 {stroke:#6600CC}
+        .cfs13 {stroke:#32B7EA}
+
+        .csz1 {stroke:#00B140}
+        .csz2 {stroke:#B94700}
+        .csz3 {stroke:#00A9E0}
+        .csz4 {stroke:#DA291C}
+        .csz5 {stroke:#A05EB5}
+        .csz6 {stroke:#00C7B1}
+        .csz7 {stroke:#0033A0}
+        .csz8 {stroke:#E45DBF}
+        .csz9 {stroke:#7B6469}
+        .csz10 {stroke:#0092BC}
+        .csz11 {stroke:#672146}
+        .csz12 {stroke:#A192B2}
+        .csz13 {stroke:#DE7C00}
+        .csz14 {stroke:#919D9D}
+        .csz15 {stroke:#84BD00}
+        .csz16 {stroke:#F67599}
+        .csz20 {stroke:#FFD700}
 
         .ctwl {stroke:#E2231A}
         .cktl {stroke:#00AF41}
@@ -173,14 +255,14 @@ id="root" width="500" height="200">
     </defs>
 
     <g class="LineDiagram">
-        <path id="line_main" class="ctwl" d="M 25,30 h 450"/>
-        <path id="line_passed" class="cunknown" d="M 250,30 H 25"/>
+        <path id="line_main" class="ctwl" d="M 25,100 h 450"/>
+        <path id="line_passed" class="cunknown" d="M 250,100 H 25"/>
     </g>
 
     <g id="stations">
-        <use xlink:href="#int" transform="translate(25,30)" id="stn_icon_0"/>
-        <use xlink:href="#int" transform="translate(250,30)" id="stn_icon_1"/>
-        <use xlink:href="#int" transform="translate(475,30)" id="stn_icon_2"/>
+        <use xlink:href="#int" transform="translate(25,100)" id="stn_icon_0"/>
+        <use xlink:href="#int" transform="translate(250,100)" id="stn_icon_1"/>
+        <use xlink:href="#int" transform="translate(475,100)" id="stn_icon_2"/>
     </g>
 
     <rect id="outer" x="0" y="0" width="500" height="200" fill="none" stroke="black"/>
