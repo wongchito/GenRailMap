@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Generator</title>
     <script src="draw.js"></script>
 </head>
@@ -17,55 +18,81 @@
 
 <p>Colour theme</p>
 <select id="city" onchange="getCity(this)">
-    <option value="hk">Hong Kong</option>
-    <option value="gz">Guangzhou</option>
+    <option value="hk">Hong Kong 香港</option>
+    <option value="gz">广州 Guangzhou</option>
     <option value="london">London</option>
 </select>
 
-<select id="hk" style="display:block" onchange="setLineColour(mainLine)">
-    <option value="twl">Tsuen Wan Line</option>
-    <option value="ktl">Kwun Tong Line</option>
-    <option value="isl">Island Line</option>
-    <option value="tkl">Tseung Kwan O Line</option>
-    <option value="tcl">Tung Chung Line</option>
-    <option value="drl">Disneyland Resort Line</option>
-</select>
+<div id="cities">
+    <select id="hk" style="display:block" onchange="setLineColour()">
+        <option value="twl">Tsuen Wan Line - 荃灣綫</option>
+        <option value="ktl">Kwun Tong Line - 觀塘綫</option>
+        <option value="isl">Island Line - 港島綫</option>
+        <option value="tkl">Tseung Kwan O Line - 將軍澳綫</option>
+        <option value="tcl">Tung Chung Line - 東涌綫</option>
+        <option value="drl">Disneyland Resort Line - 迪士尼綫</option>
+        <option value="ael">Airport Express - 機場快綫</option>
+        <option value="sile">South Island Line - 南港島綫（東段）</option>
+        <option value="silw">South Island Line - 南港島綫（西段）</option>
+        <option value="ekl">East Kowloon Line - 東九龍綫</option>
+        <option value="erl">East Rail Line - 東鐵綫</option>
+        <option value="wrl">West Rail Line - 西鐵綫</option>
+    </select>
+    
+    <select id="gz" style="display:none" onchange="setLineColour()">
+        <option value="gz1">1号线 - Line 1</option>
+        <option value="gz2">2号线 - Line 2</option>
+        <option value="gz3">3号线 - Line 3</option>
+        <option value="gz4">4号线 - Line 4</option>
+        <option value="gz5">5号线 - Line 5</option>
+        <option value="gz6">6号线 - Line 6</option>
+        <option value="gz7">7号线 - Line 7</option>
+        <option value="gz8">8号线 - Line 8</option>
+        <option value="gz9">9号线 - Line 9</option>
+        <option value="gz10">10号线 - Line 10</option>
+        <option value="gz11">11号线 - Line 11</option>
+        <option value="gz12">12号线 - Line 12</option>
+        <option value="gz13">13号线 - Line 13</option>
+        <option value="gz14">14号线 - Line 14</option>
+        <option value="gz18">18号线 - Line 18</option>
+        <option value="gz19">19号线 - Line 19</option>
+        <option value="gz21">21号线 - Line 21</option>
+        <option value="gz22">22号线 - Line 22</option>
+        <option value="gf">广佛线 - Guangfo Line</option>
+        <option value="gzapm">APM线 - APM Line</option>
+        <option value="gzthz1">THZ1</option>
+    </select>
+    
+    <select id="london" style="display:none" onchange="setLineColour()">
+        <option value="ctl">Central Line</option>
+    </select>
+</div>
 
-<select id="gz" style="display:none" onchange="setLineColour(mainLine)">
-    <option value="gz1">Line 1</option>
-    <option value="gz2">Line 2</option>
-    <option value="gz3">Line 3</option>
-    <option value="gz4">Line 4</option>
-    <option value="gz5">Line 5</option>
-    <option value="gz6">Line 6</option>
-    <option value="gz7">Line 7</option>
-    <option value="gz8">Line 8</option>
-    <option value="gz9">Line 9</option>
-    <option value="gz10">Line 10</option>
-    <option value="gz11">Line 11</option>
-    <option value="gz12">Line 12</option>
-</select>
+<p>Direction</p>
+<input type="radio" name="direction" value="left" onchange="setDirection(this)">left &lt;--</input>
+<input type="radio" name="direction" value="right" onchange="setDirection(this)" checked>right --&gt;</input>
 
 <p>Station list</p>
 <div id="stn_list">
     <div id="stn0">
-        <input type="text" value="Central"/>
+        <input type="radio" name="current" onchange="setCurrentStn(this)">
+        <input type="text" value="Central">
         <button onclick="addStn(this)">+</button>
         <button onclick="removeStn(this)">-</button>
     </div>
     <div id="stn1">
-        <input type="text" value="Admiralty"/>
+        <input type="radio" name="current" onchange="setCurrentStn(this)" checked>
+        <input type="text" value="Admiralty">
         <button onclick="addStn(this)">+</button>
         <button onclick="removeStn(this)">-</button>
     </div>
     <div id="stn2">
-        <input type="text" value="Tsuen Wan"/>
+        <input type="radio" name="current" onchange="setCurrentStn(this)">
+        <input type="text" value="Tsuen Wan">
         <button onclick="addStn(this)">+</button>
         <button onclick="removeStn(this)">-</button>
     </div>
 </div>
-
-
 
 
 <br/>
@@ -76,6 +103,8 @@ xmlns:xlink="http://www.w3.org/1999/xlink"
 id="root" width="500" height="200">
     <style type="text/css">
         .LineDiagram {fill:none;stroke-width:6}
+        .cunknown {stroke:#999999}
+
         .cgz1 {stroke:#F3D03E}
         .cgz2 {stroke:#00629B}
         .cgz3 {stroke:#ECA154}
@@ -144,7 +173,8 @@ id="root" width="500" height="200">
     </defs>
 
     <g class="LineDiagram">
-        <path id="mainLine" class="ctwl" d="M 25,30 h 450"/>
+        <path id="line_main" class="ctwl" d="M 25,30 h 450"/>
+        <path id="line_passed" class="cunknown" d="M 250,30 H 25"/>
     </g>
 
     <g id="stations">
