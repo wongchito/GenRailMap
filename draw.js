@@ -11,6 +11,7 @@ function setSVGSize() {
     var pad = document.getElementById('padding_input').value;
     setLineLength(width, pad);
     reposStn();
+    redrawLinePassed();
 }
 
 function setPadding(src) {
@@ -26,6 +27,7 @@ function setPadding(src) {
     var svg_width = document.getElementById('root').getAttribute('width');
     setLineLength(svg_width, pad);
     reposStn();
+    redrawLinePassed();
 }
 
 function setLineLength(svg_width, pad) {
