@@ -18,6 +18,8 @@
 <div style="display: flex; flex-wrap: nowrap;">
 <div>
 
+<button onclick="test()">TEST FUNCTION</button>
+
 <input id="svg_width" type="text" value="500" onchange="setSVGSize()"/>
 <input id="svg_height" type="text" value="200" onchange="setSVGSize()"/>
 
@@ -133,19 +135,22 @@
 <div id="stn_list">
     <div id="stn0">
         <input type="radio" name="current" onchange="setCurrentStn(this)">
-        <input type="text" value="Central">
+        <input type="text" value="中環" onchange="setStnName(this, 'field0')">
+        <input type="text" value="Central" onchange="setStnName(this, 'field1')">
         <button onclick="addStn(this)">+</button>
         <button onclick="removeStn(this)">-</button>
     </div>
     <div id="stn1">
         <input type="radio" name="current" onchange="setCurrentStn(this)" checked>
-        <input type="text" value="Admiralty">
+        <input type="text" value="金鐘" onchange="setStnName(this, 'field0')">
+        <input type="text" value="Admiralty" onchange="setStnName(this, 'field1')">
         <button onclick="addStn(this)">+</button>
         <button onclick="removeStn(this)">-</button>
     </div>
     <div id="stn2">
         <input type="radio" name="current" onchange="setCurrentStn(this)">
-        <input type="text" value="Tsuen Wan">
+        <input type="text" value="荃灣" onchange="setStnName(this, 'field0')">
+        <input type="text" value="Tsuen Wan" onchange="setStnName(this, 'field1')">
         <button onclick="addStn(this)">+</button>
         <button onclick="removeStn(this)">-</button>
     </div>
@@ -301,16 +306,16 @@ id="root" width="500" height="200" onload="initSVG()">
 
     <g id="station_names">
         <g id="stn_name_0">
-            <text x="25" y="80" class="StnNameZH" text-anchor="middle">中環</text>
-            <text x="25" y="95" class="StnNameEN" text-anchor="middle">Central</text>
+            <text id="field0" x="25" y="70" class="StnNameZH" text-anchor="middle">中環</text>
+            <text id="field1" x="25" y="85" class="StnNameEN" text-anchor="middle">Central</text>
         </g>
         <g id="stn_name_1">
-            <text x="250" y="80" class="StnNameZH" text-anchor="middle">金鐘</text>
-            <text x="250" y="95" class="StnNameEN" text-anchor="middle">Admiralty</text>
+            <text id="field0" x="250" y="70" class="StnNameZH" text-anchor="middle">金鐘</text>
+            <text id="field1" x="250" y="85" class="StnNameEN" text-anchor="middle">Admiralty</text>
         </g>
         <g id="stn_name_2">
-            <text x="475" y="80" class="StnNameZH" text-anchor="middle">荃灣</text>
-            <text x="475" y="95" class="StnNameEN" text-anchor="middle">Tsuen Wan</text>
+            <text id="field0" x="475" y="70" class="StnNameZH" text-anchor="middle">荃灣</text>
+            <text id="field1" x="475" y="85" class="StnNameEN" text-anchor="middle">Tsuen Wan</text>
         </g>
     </g>
 
