@@ -15,6 +15,9 @@
 
 <body>
 
+<div style="display: flex; flex-wrap: nowrap;">
+<div>
+
 <input id="svg_width" type="text" value="500" onchange="setSVGSize()"/>
 <input id="svg_height" type="text" value="200" onchange="setSVGSize()"/>
 
@@ -39,7 +42,7 @@
         <option value="sz">Shenzhen - 深圳</option>
     </optgroup>
     <optgroup label="HONG KONG - 香港">
-        <option value="hk">Hong Kong - 香港</option>
+        <option value="hk" selected="selected">Hong Kong - 香港</option>
     </optgroup>
     <optgroup label="UNITED KINGDOM - 英國">
         <option value="london">London - 倫敦</option>
@@ -148,16 +151,47 @@
     </div>
 </div>
 
-
-<br/>
+</div>
+<div>
 
 <svg 
 xmlns="http://www.w3.org/2000/svg"
 xmlns:xlink="http://www.w3.org/1999/xlink" 
-id="root" width="500" height="200"
-viewBox="0 0 500 200">
+id="root" width="500" height="200" onload="initSVG()">
     <style type="text/css">
         .LineDiagram {fill:none;stroke-width:6}
+
+        .CurrentStnNameEN {
+            font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
+            font-weight:bold;
+            fill: #fff;
+            alignment-baseline:middle;
+        }
+        .CurrentStnNameZH {
+            font-family:Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
+            font-weight:bold;
+            fill: #fff;
+            alignment-baseline:central;
+        }
+
+        .StnNameEN {
+            font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
+            font-weight:bold;
+            alignment-baseline:middle;
+        }
+        .StnNameZH {
+            font-family:Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
+            font-weight:bold;
+            alignment-baseline:central;
+        }
+
+        .StnName {
+            font-family: "Myriad Pro", "Hiragino Mincho ProN";
+            font-weight: bold;
+            fill: #fff;
+            alignment-baseline:central;
+        }
+
         .cunknown {stroke:#999999}
 
         .cgz1 {stroke:#F3D03E}
@@ -265,8 +299,34 @@ viewBox="0 0 500 200">
         <use xlink:href="#int" transform="translate(475,100)" id="stn_icon_2"/>
     </g>
 
+    <g id="station_names">
+        <g id="stn_name_0">
+            <text x="25" y="80" class="StnNameZH" text-anchor="middle">中環</text>
+            <text x="25" y="95" class="StnNameEN" text-anchor="middle">Central</text>
+        </g>
+        <g id="stn_name_1">
+            <text x="250" y="80" class="StnNameZH" text-anchor="middle">金鐘</text>
+            <text x="250" y="95" class="StnNameEN" text-anchor="middle">Admiralty</text>
+        </g>
+        <g id="stn_name_2">
+            <text x="475" y="80" class="StnNameZH" text-anchor="middle">荃灣</text>
+            <text x="475" y="95" class="StnNameEN" text-anchor="middle">Tsuen Wan</text>
+        </g>
+    </g>
+
     <rect id="outer" x="0" y="0" width="500" height="200" fill="none" stroke="black"/>
 </svg>
+
+
+</div>
+</div>
+
+
+
+
+<br/>
+
+
 
 </body>
 </html>

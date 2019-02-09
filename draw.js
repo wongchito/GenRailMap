@@ -1,3 +1,7 @@
+function initSVG() {
+    addCurrentBG();
+}
+
 function setSVGSize() {
     var width = document.getElementById('svg_width').value;
     var height = document.getElementById('svg_height').value;
@@ -192,6 +196,42 @@ function setDirection(elem) {
 function setCurrentStn(elem) {
     var current_stn_index = elem.parentNode.getAttribute('id').substring(3);
     redrawLinePassed(current_stn_index, null);
+    addCurrentBG();
+}
+
+function addCurrentBG() {
+    var stn_names = document.getElementById('station_names').children;
+    var current_stn_index = document.querySelector('input[name="current"]:checked').parentNode.getAttribute('id').substring(3);
+    for (i=0; i<stn_names.length; i++) {
+        if (i == current_stn_index) {
+            if (stn_names[i].children[0].nodeName != 'rect') {
+                var current_stn_x = document.getElementById('stn_icon_'+current_stn_index).getAttribute('transform').split(/\W/)[1];
+                var txt_dim = stn_names[i].getBBox();
+                
+                var txt_bg = document.createElementNS(stn_names[i].namespaceURI, 'rect');
+                txt_bg.setAttribute('x', (current_stn_x-45).toString());
+                txt_bg.setAttribute("y", txt_dim.y);
+                txt_bg.setAttribute("width", '90');
+                txt_bg.setAttribute("height", txt_dim.height);
+                txt_bg.setAttribute("fill", "black");
+                stn_names[i].insertBefore(txt_bg, stn_names[i].children[0]);
+
+                for (j=1; j<stn_names[i].children.length; j++) {
+                    var old_class = stn_names[i].children[j].getAttribute('class');
+                    stn_names[i].children[j].setAttribute('class', 'Current'+old_class);
+                }
+            }
+        } else {
+            if (stn_names[i].children[0].nodeName == 'rect') {
+                stn_names[i].removeChild(stn_names[i].children[0]);
+
+                for (j=0; j<stn_names[i].children.length; j++) {
+                    var old_class = stn_names[i].children[j].getAttribute('class').substring(7);
+                    stn_names[i].children[j].setAttribute('class', old_class);
+                }
+            }
+        }
+    }
 }
 
 function redrawLinePassed(current_stn_index=null, direction=null) {
