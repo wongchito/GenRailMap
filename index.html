@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Generator</title>
-    <script src="draw.js"></script>
+    <script src="gen_rail_map.js"></script>
+    <script src="params.js"></script>
     <!-- <style>
         svg {
             width: 1000px;
@@ -20,8 +21,8 @@
 
 <button onclick="test()">TEST FUNCTION</button>
 
-<input id="svg_width" type="text" value="500" onchange="setSVGSize()"/>
-<input id="svg_height" type="text" value="200" onchange="setSVGSize()"/>
+<input id="svg_width" type="text" value="500" onchange="setSVGWidth()"/>
+<input id="svg_height" type="text" value="200" onchange="setSVGHeight()"/>
 
 <!-- <p>Zoom (%)</p>
 <input id="zoom_slider" type="range" value="2" min="1" max="3" step="0.01" onchange="setZoom('slider')"/>
@@ -33,11 +34,11 @@
 <!-- <p id="padding_text">10</p> -->
 
 <p>y position (%)</p>
-<input id="y_slider" type="range" value="50" min="0" max="100" onchange="setYPos('slider')"/>
-<input id="y_text" type="text" value="50" onchange="setYPos('text')"/>
+<input id="y_slider" type="range" value="50" min="0" max="100" onchange="setY('slider')"/>
+<input id="y_text" type="text" value="50" onchange="setY('text')"/>
 
 <p>Colour theme</p>
-<select id="city" onchange="getCity(this)">
+<select id="colour_city" onchange="getCity(this)">
     <optgroup label="CHINA - 中國">
         <option value="fs">Foshan - 佛山</option>
         <option value="gz">Guangzhou - 广州</option>
@@ -51,7 +52,7 @@
     </optgroup>
 </select>
 
-<div id="cities">
+<div id="colour_cities">
     <select id="hk" style="display:block" onchange="setLineColour()">
         <option value="twl">Tsuen Wan Line - 荃灣綫</option>
         <option value="ktl">Kwun Tong Line - 觀塘綫</option>
@@ -127,6 +128,11 @@
     </select>
 </div>
 
+<p>Style</p>
+<select>
+    <option value="mtr">MTR - 港鐵</option>
+</select>
+
 <p>Direction</p>
 <input type="radio" name="direction" value="left" onchange="setDirection(this)">left &lt;--</input>
 <input type="radio" name="direction" value="right" onchange="setDirection(this)" checked>right --&gt;</input>
@@ -138,21 +144,21 @@
         <input type="text" value="中環" onchange="setStnName(this, 'field0')">
         <input type="text" value="Central" onchange="setStnName(this, 'field1')">
         <button onclick="addStn(this)">+</button>
-        <button onclick="removeStn(this)">-</button>
+        <button onclick="rmStn(this)">-</button>
     </div>
     <div id="stn1">
         <input type="radio" name="current" onchange="setCurrentStn(this)" checked>
         <input type="text" value="金鐘" onchange="setStnName(this, 'field0')">
         <input type="text" value="Admiralty" onchange="setStnName(this, 'field1')">
         <button onclick="addStn(this)">+</button>
-        <button onclick="removeStn(this)">-</button>
+        <button onclick="rmStn(this)">-</button>
     </div>
     <div id="stn2">
         <input type="radio" name="current" onchange="setCurrentStn(this)">
         <input type="text" value="荃灣" onchange="setStnName(this, 'field0')">
         <input type="text" value="Tsuen Wan" onchange="setStnName(this, 'field1')">
         <button onclick="addStn(this)">+</button>
-        <button onclick="removeStn(this)">-</button>
+        <button onclick="rmStn(this)">-</button>
     </div>
 </div>
 
