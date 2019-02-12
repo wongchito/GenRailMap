@@ -3,6 +3,7 @@ var default_params = {
     'svg_height': '200', 
     'padding': '10', 
     'y_pc': '50', 
+    'strip_pc': '90',
 
     'colour_city': 'hk', 
     'colour_name': 'ctwl', 

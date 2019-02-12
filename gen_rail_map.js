@@ -112,6 +112,31 @@ function setY(src) {
     redrawStn();
 }
 
+function setStripY(src) {
+    // Get new value
+    if (src == 'slider') {
+        var strip_pc = document.getElementById('strip_slider').value;
+        document.getElementById('strip_text').value = strip_pc;
+    }
+    if (src == 'text') {
+        var strip_pc = document.getElementById('strip_text').value;
+        document.getElementById('strip_slider').value = strip_pc;
+    }
+
+    // Log changes
+    var params_instance = getParams();
+    params_instance['strip_pc'] = strip_pc;
+    putParams(params_instance);
+
+    // Apply changes
+    var svg_height = params_instance['svg_height'];
+    var svg_width = params_instance['svg_width'];
+    var strip_y = svg_height * strip_pc / 100;
+
+    var strip_path_str = 'M 0,' + strip_y.toString() + ' H ' + svg_width;
+    document.getElementById('strip').setAttribute('d', strip_path_str);
+}
+
 function setLineColour() {
     // Get new value
     var colour_city = document.getElementById('colour_city').value;

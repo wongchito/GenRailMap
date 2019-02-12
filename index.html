@@ -37,6 +37,10 @@
 <input id="y_slider" type="range" value="50" min="0" max="100" onchange="setY('slider')"/>
 <input id="y_text" type="text" value="50" onchange="setY('text')"/>
 
+<p>Banner strip y position (%)</p>
+<input id="strip_slider" type="range" value="90" min="80" max="100" onchange="setStripY('slider')"/>
+<input id="strip_text" type="text" value="90" onchange="setStripY('text')"/>
+
 <p>Colour theme</p>
 <select id="colour_city" onchange="getCity(this)">
     <optgroup label="CHINA - 中國">
@@ -302,6 +306,10 @@ id="root" width="500" height="200" onload="initSVG()">
     <g class="LineDiagram">
         <path id="line_main" class="ctwl" d="M 25,100 h 450"/>
         <path id="line_passed" class="cunknown" d="M 250,100 H 25"/>
+    </g>
+
+    <g class="LineDiagram">
+        <path id="strip" class="ctwl" d="M 0,180 H 500"/>
     </g>
 
     <g id="stations">
