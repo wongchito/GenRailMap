@@ -150,6 +150,7 @@ function setLineColour() {
 
     // Apply changes
     document.getElementById('line_main').setAttribute('class', colour_name);
+    document.getElementById('strip').setAttribute('class', colour_name);
 }
 
 function getCity(dropdown) {
@@ -170,6 +171,7 @@ function getCity(dropdown) {
             params_instance['colour_name'] = colour_name;
 
             document.getElementById('line_main').setAttribute('class', colour_name);
+            document.getElementById('strip').setAttribute('class', colour_name);
         } else {
             cities[i].style.display = 'none'
         }
