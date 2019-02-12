@@ -24,6 +24,8 @@
 <input id="svg_width" type="text" value="500" onchange="setSVGWidth()"/>
 <input id="svg_height" type="text" value="200" onchange="setSVGHeight()"/>
 
+<input type="checkbox" onchange="showOuter(this)" checked>Show border</input>
+
 <!-- <p>Zoom (%)</p>
 <input id="zoom_slider" type="range" value="2" min="1" max="3" step="0.01" onchange="setZoom('slider')"/>
 <input id="zoom_text" type="text" value="100" onchange="setZoom('text')"/> -->
@@ -141,6 +143,10 @@
 <input type="radio" name="direction" value="left" onchange="setDirection(this)">left &lt;--</input>
 <input type="radio" name="direction" value="right" onchange="setDirection(this)" checked>right --&gt;</input>
 
+<p>Text background gap</p>
+<input id="txt_bg_gap_slider" type="range" value="10" min="0" max="20" onchange="setTxtBGGap('slider')"/>
+<input id="txt_bg_gap_text" type="text" value="10" onchange="setTxtBGGap('text')"/>
+
 <p>Station list</p>
 <div id="stn_list">
     <div id="stn0">
@@ -179,6 +185,7 @@ id="root" width="500" height="200" onload="initSVG()">
         .CurrentStnNameEN {
             font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
+            font-size:13px;
             fill: #fff;
             alignment-baseline:middle;
         }
@@ -192,6 +199,7 @@ id="root" width="500" height="200" onload="initSVG()">
         .StnNameEN {
             font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
+            font-size:13px;
             alignment-baseline:middle;
         }
         .StnNameZH {

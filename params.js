@@ -1,6 +1,7 @@
 var default_params = {
     'svg_width': '500', 
     'svg_height': '200', 
+    'show_outer': true,
     'padding': '10', 
     'y_pc': '50', 
     'strip_pc': '90',
@@ -9,7 +10,8 @@ var default_params = {
     'colour_name': 'ctwl', 
 
     'direction': 'right', 
-
+    'txt_bg_gap': '10',
+    'txt_bg_flip': false,
     'stn_list': [
         {'field0': '中環', 'field1': 'Central'}, 
         {'field0': '金鐘', 'field1': 'Admiralty'},
@@ -23,6 +25,7 @@ function initSVG() {
 
     document.getElementById('svg_height').value = default_params['svg_height'];
     addCurrentBG();
+    reposStnName();
 }
 
 function getParams(params_name='all_params') {
@@ -58,6 +61,15 @@ function getY() {
     return y;
 }
 
+function getStripY() {
+    var params_instance = getParams();
+    var svg_height = params_instance['svg_height'];
+    var strip_pc = params_instance['strip_pc'];
+    var strip_y = svg_height * strip_pc / 100;
+
+    return strip_y;
+}
+
 function getNStn() {
     var params_instance = getParams();
     var n_stn = params_instance['stn_list'].length;
@@ -71,6 +83,19 @@ function getStnX(idx) {
     var n_stn = getNStn();
     var stn_x = lineStart + (lineLength / (n_stn-1)) * idx;
     return stn_x;
+}
+
+function getBGY(idx) {
+    var stn_name = document.getElementById('stn_name_'+idx.toString());
+    if (stn_name.children[0].nodeName == 'rect') {
+        var bg_lower_y = stn_name.getBBox().y + stn_name.getBBox().height;
+        var bg_upper_y = Number(stn_name.getBBox().y);
+    } else {
+        var bg_lower_y = stn_name.getBBox().y + stn_name.getBBox().height + 2.5;
+        var bg_upper_y = stn_name.getBBox().y - 2.5;
+    }
+    
+    return [bg_lower_y, bg_upper_y];
 }
 
 // function getLineColour() {

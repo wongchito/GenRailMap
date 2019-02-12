@@ -10,6 +10,7 @@ function setSVGWidth() {
     // Apply changes
     document.getElementById('root').setAttribute('width', svg_width);
     document.getElementById('outer').setAttribute('width', svg_width);
+    redrawStrip();
     redrawLineMain();
     redrawLinePassed();
     redrawStn();
@@ -28,9 +29,11 @@ function setSVGHeight() {
     // Apply changes
     document.getElementById('root').setAttribute('height', svg_height);
     document.getElementById('outer').setAttribute('height', svg_height);
+    redrawStrip();
     redrawLineMain();
     redrawLinePassed();
     redrawStn();
+    reposStnName();
 }
 
 // function setZoom(src) {
@@ -54,6 +57,23 @@ function setSVGHeight() {
 //     document.getElementById('root').setAttribute('viewBox', viewBox_str);
 // }
 
+function showOuter(elem) {
+    // Get new value
+    var show_outer = elem.checked;
+    
+    // Log changes
+    var params_instance = getParams();
+    params_instance['show_outer'] = show_outer;
+    putParams(params_instance);
+
+    // Apply changes
+    if (show_outer) {
+        document.getElementById('outer').setAttribute('stroke', 'black');
+    } else {
+        document.getElementById('outer').setAttribute('stroke', 'none');
+    }
+}
+
 function setPadding(src) {
     // Get new value
     if (src == 'slider') {
@@ -76,6 +96,17 @@ function setPadding(src) {
     redrawStn();
 }
 
+function redrawStrip() {
+    // Get strip info
+    var strip_y = getStripY();
+    var params_instance = getParams();
+    var svg_width = params_instance['svg_width'];
+
+    // Apply changes
+    var strip_path_str = 'M 0,' + strip_y.toString() + ' H ' + svg_width;
+    document.getElementById('strip').setAttribute('d', strip_path_str);
+}
+
 function redrawLineMain() {
     // Get linePos info
     var linePos = getLinePos();
@@ -83,7 +114,6 @@ function redrawLineMain() {
     var lineLength = linePos[1];
 
     // Read from log
-    var params_instance = getParams();
     var y = getY()
 
     // Apply changes
@@ -129,12 +159,7 @@ function setStripY(src) {
     putParams(params_instance);
 
     // Apply changes
-    var svg_height = params_instance['svg_height'];
-    var svg_width = params_instance['svg_width'];
-    var strip_y = svg_height * strip_pc / 100;
-
-    var strip_path_str = 'M 0,' + strip_y.toString() + ' H ' + svg_width;
-    document.getElementById('strip').setAttribute('d', strip_path_str);
+    redrawStrip();
 }
 
 function setLineColour() {
@@ -160,24 +185,39 @@ function getCity(dropdown) {
     // Log changes
     var params_instance = getParams();
     params_instance['colour_city'] = colour_city;
+    putParams(params_instance);
 
     var cities = document.getElementById('colour_cities').children;
 
     for (i=0; i<cities.length; i++) {
         if (cities[i].getAttribute('id') == colour_city) {
             cities[i].style.display = 'block'
-
-            var colour_name = 'c' + cities[i].children[0].value;
-            params_instance['colour_name'] = colour_name;
-
-            document.getElementById('line_main').setAttribute('class', colour_name);
-            document.getElementById('strip').setAttribute('class', colour_name);
         } else {
             cities[i].style.display = 'none'
         }
     }
+    setLineColour()
+    // putParams(params_instance);
+}
 
+function setTxtBGGap(src) {
+    // Get new value
+    if (src == 'slider') {
+        var txt_bg_gap = document.getElementById('txt_bg_gap_slider').value;
+        document.getElementById('txt_bg_gap_text').value = txt_bg_gap;
+    }
+    if (src == 'text') {
+        var txt_bg_gap = document.getElementById('txt_bg_gap_text').value;
+        document.getElementById('txt_bg_gap_slider').value = txt_bg_gap;
+    }
+
+    // Log changes
+    var params_instance = getParams();
+    params_instance['txt_bg_gap'] = txt_bg_gap;
     putParams(params_instance);
+
+    // Apply changes
+    reposStnName();
 }
 
 function addStn(elem) {
@@ -209,6 +249,7 @@ function addStn(elem) {
     redrawStn();
     redrawLinePassed();
     addCurrentBG();
+    reposStnName();
 }
 
 function rmStn(elem) { 
@@ -255,6 +296,7 @@ function rmStn(elem) {
     // Apply other changes
     redrawLinePassed();
     addCurrentBG();
+    reposStnName();
 }
 
 function reidxStn() {
@@ -316,6 +358,7 @@ function setCurrentStn(elem) {
     // Apply changes
     redrawLinePassed();
     addCurrentBG();
+    reposStnName();
 }
 
 function addCurrentBG() {
@@ -334,10 +377,10 @@ function addCurrentBG() {
             var txt_dim = stn_names[i].getBBox();
             
             var txt_bg = document.createElementNS(stn_names[i].namespaceURI, 'rect');
-            txt_bg.setAttribute('x', (current_stn_x-45).toString());
-            txt_bg.setAttribute("y", txt_dim.y);
-            txt_bg.setAttribute("width", '90');
-            txt_bg.setAttribute("height", txt_dim.height);
+            txt_bg.setAttribute('x', (txt_dim.x-10).toString());
+            txt_bg.setAttribute("y", (txt_dim.y-2.5).toString());
+            txt_bg.setAttribute("width", (txt_dim.width+20).toString());
+            txt_bg.setAttribute("height", (txt_dim.height+5).toString());
             txt_bg.setAttribute("fill", "black");
             stn_names[i].insertBefore(txt_bg, stn_names[i].children[0]);
             
@@ -400,10 +443,51 @@ function setStnName(elem, target) {
     stn_name.querySelector('#'+target).textContent = elem.value;
 }
 
+function reposStnName() {
+    var params_instance = getParams();
+    var y = getY();
+    var txt_bg_gap = params_instance['txt_bg_gap'];
+    var txt_bg_flip = params_instance['txt_bg_flip'];
+
+    var stn_names = document.getElementById('station_names').children;
+    for (i=0; i<stn_names.length; i++) {
+        var bg_y = getBGY(i);
+        var bg_lower_y = bg_y[0];
+        var bg_upper_y = bg_y[1];
+
+        var stn_name = stn_names[i].children;
+
+        if (i%2 == txt_bg_flip) {
+            var dy = y - Number(txt_bg_gap) - bg_lower_y;
+        } else {
+            var dy = y + Number(txt_bg_gap) - bg_upper_y;
+        }
+
+        for (j=0; j<stn_name.length; j++) {
+            var new_y = Number(stn_name[j].getAttribute('y')) + dy;
+            stn_name[j].setAttribute('y', new_y.toString());
+        }
+    }
+    // addCurrentBG();
+}
+
 function test() {
+    reposStnName();
+    // var stn_name = document.getElementById('stn_name_0');
+    // var stn_name_y = stn_name.getBBox().y + stn_name.getBBox().height;
+    // var params_instance = getParams();
+    // var y = getY();
+    // var txt_bg_gap = params_instance['txt_bg_gap'];
+    // var dy = y - txt_bg_gap - stn_name_y;
+    // for (i=1; i<3; i++) {
+    //     var new_y = Number(stn_name.children[i].getAttribute('y')) + dy;
+    //     stn_name.children[i].setAttribute('y', new_y.toString());
+    // }
+    // addCurrentBG();
+
     // readTextFile('init.json')
     
-    alert(JSON.stringify(getParams()));
+    // alert(JSON.stringify(getParams()));
     // alert(sessionStorage.all_params);
     // loadJSON(function(json) {
     //     console.log(json); // this will log out the json object
