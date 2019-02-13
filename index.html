@@ -5,6 +5,7 @@
     <title>Generator</title>
     <script src="gen_rail_map.js"></script>
     <script src="load_params.js"></script>
+    <script src="get_params.js"></script>
     <script src="params.js"></script>
     <!-- <style>
         svg {
@@ -156,6 +157,7 @@
         <input type="radio" name="current" onchange="setCurrentStn(this)">
         <input type="text" value="中環" onchange="setStnName(this, 'field0')">
         <input type="text" value="Central" onchange="setStnName(this, 'field1')">
+        <input type="checkbox" onchange="wrapStnName(this)">
         <button onclick="addStn(this)">+</button>
         <button onclick="rmStn(this)">-</button>
     </div>
@@ -163,6 +165,8 @@
         <input type="radio" name="current" onchange="setCurrentStn(this)" checked>
         <input type="text" value="金鐘" onchange="setStnName(this, 'field0')">
         <input type="text" value="Admiralty" onchange="setStnName(this, 'field1')">
+
+        <input type="checkbox" onchange="wrapStnName(this)">
         <button onclick="addStn(this)">+</button>
         <button onclick="rmStn(this)">-</button>
     </div>
@@ -170,6 +174,7 @@
         <input type="radio" name="current" onchange="setCurrentStn(this)">
         <input type="text" value="荃灣" onchange="setStnName(this, 'field0')">
         <input type="text" value="Tsuen Wan" onchange="setStnName(this, 'field1')">
+        <input type="checkbox" onchange="wrapStnName(this)">
         <button onclick="addStn(this)">+</button>
         <button onclick="rmStn(this)">-</button>
     </div>
@@ -194,7 +199,7 @@ id="root" width="500" height="200" onload="initSVG()">
         .CurrentStnNameEN {
             font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
-            font-size:13px;
+            font-size:12px;
             fill: #fff;
             alignment-baseline:middle;
         }
@@ -208,7 +213,7 @@ id="root" width="500" height="200" onload="initSVG()">
         .StnNameEN {
             font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
-            font-size:13px;
+            font-size:12px;
             alignment-baseline:middle;
         }
         .StnNameZH {

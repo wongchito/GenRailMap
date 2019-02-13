@@ -94,6 +94,7 @@ function setPadding(src) {
     redrawLineMain();
     redrawLinePassed();
     redrawStn();
+    addCurrentBG();
 }
 
 function redrawStrip() {
@@ -140,6 +141,7 @@ function setY(src) {
     redrawLineMain();
     redrawLinePassed();
     redrawStn();
+    reposStnName();
 }
 
 function setStripY(src) {
@@ -439,16 +441,27 @@ function redrawLinePassed() {
 
 function setStnName(elem, target) {
     // Get new value
-    var stn_index = elem.parentNode.getAttribute('id').substring(3);
+    var stn_idx = elem.parentNode.getAttribute('id').substring(3);
 
     // Log changes
     var params_instance = getParams();
-    params_instance['stn_list'][stn_index][target] = elem.value; 
+    params_instance['stn_list'][stn_idx][target] = elem.value; 
+    var wrap = params_instance['stn_list'][stn_idx]['wrap'];
     putParams(params_instance);
 
     // Apply changes
-    var stn_name = document.getElementById('stn_name_'+stn_index);
-    stn_name.querySelector('#'+target).textContent = elem.value;
+    var stn_name = document.getElementById('stn_name_'+stn_idx);
+    if (wrap && target == 'field1') {
+        var [str1, str2] = splitText(elem.parentNode.children[2].value);
+        var stn_x = getStnX(stn_idx);
+        var stn_name_html = str1 + '<tspan x="' + stn_x.toString() + '" dy="15">' + str2 + '</tspan>';
+        stn_name.querySelector('#field1').innerHTML = stn_name_html;
+    } else {
+        stn_name.querySelector('#'+target).textContent = elem.value;
+    }
+
+    addCurrentBG();
+    reposStnName();
 }
 
 function reposStnName() {
@@ -491,21 +504,25 @@ function flipStnPos() {
     reposStnName();
 }
 
-function test() {
+function wrapStnName(elem) {
+    // Get new value
+    var wrap = elem.checked;
+    var stn_idx = elem.parentNode.getAttribute('id').substring(3);
+
+    // Log changes
     var params_instance = getParams();
-    alert(JSON.stringify(params_instance));
-    var n_stn = getNStn();
-    alert(n_stn);
+    params_instance['stn_list'][stn_idx]['wrap'] = wrap;
+    putParams(params_instance);
 
-    var stns = document.getElementById('stn_list').children;
-    var stn_icons = document.getElementById('stations').children;
-    var stn_names = document.getElementById('station_names').children;
+    // Apply changes
+    setStnName(elem.parentNode.children[2], 'field1');
+}
 
-    for (i=0; i<n_stn; i++) {
-        stns[i].setAttribute('id', 'stn'+i.toString());
-        stn_icons[i].setAttribute('id', 'stn_icon_'+i.toString());
-        stn_names[i].setAttribute('id', 'stn_name_'+i.toString());
-    }
+function test() {
+    var a = 'Guangzhou South Railway Station';
+    alert(splitText(a));
+
+    // alert(a);
     // var stn_name = document.getElementById('stn_name_0');
     // var stn_name_y = stn_name.getBBox().y + stn_name.getBBox().height;
     // var params_instance = getParams();
@@ -519,51 +536,6 @@ function test() {
     // addCurrentBG();
 
     // readTextFile('init.json')
-    
-    // alert(JSON.stringify(getParams()));
-    // alert(sessionStorage.all_params);
-    // loadJSON(function(json) {
-    //     console.log(json); // this will log out the json object
-    //   });
-    // if (sessionStorage.testObject) {
-    //     var b = JSON.parse(sessionStorage.testObject);
-    //     b['svg_width'] += 1;
-    //     sessionStorage.testObject = JSON.stringify(b);
-    //     alert(sessionStorage.testObject);
-    // } else {
-    //     sessionStorage.testObject = JSON.stringify(init);
-    // }
 
-    // var b = localStorage.getItem('testObject');
-    // alert(sessionStorage.testObject);
-    // var a = document.getElementById('root').getElementsByTagName('style');
 }
 
-// function loadJSON(callback) {   
-//     var xobj = new XMLHttpRequest();
-//     xobj.overrideMimeType("application/json");
-//     xobj.open('GET', './init.json', true);
-//     xobj.onreadystatechange = function () {
-//         if (xobj.readyState == 4 && xobj.status == "200") {
-//             callback(JSON.parse(xobj.responseText));
-//         }
-//     };
-//     xobj.send(null);  
-// }
-
-// function readTextFile(file) {
-//     var rawFile = new XMLHttpRequest(); // XMLHttpRequest (often abbreviated as XHR) is a browser object accessible in JavaScript that provides data in XML, JSON, but also HTML format, or even a simple text using HTTP requests.
-//     rawFile.open("GET", file, false); // open with method GET the file with the link file ,  false (synchronous)
-//     rawFile.onreadystatechange = function ()
-//     {
-//         if(rawFile.readyState === 4) // readyState = 4: request finished and response is ready
-//         {
-//             if(rawFile.status === 200) // status 200: "OK"
-//             {
-//                 var allText = rawFile.responseText; //  Returns the response data as a string
-//                 console.log(allText); // display text on the console
-//             }
-//         }
-//     }
-//     rawFile.send(null); //Sends the request to the server Used for GET requests with param null
-// }
