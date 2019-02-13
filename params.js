@@ -11,11 +11,34 @@ var default_params = {
 
     'direction': 'right', 
     'txt_bg_gap': '10',
-    'txt_bg_flip': false,
+    'txt_flip': false,
     'stn_list': [
         {'field0': '中環', 'field1': 'Central'}, 
         {'field0': '金鐘', 'field1': 'Admiralty'},
         {'field0': '荃灣', 'field1': 'Tsuen Wan'}
+    ], 
+    'current_stn_idx': '1'
+}
+
+var template_hk_twl_params = {
+    'svg_width': '700', 
+    'svg_height': '300', 
+    'show_outer': false,
+    'padding': '15', 
+    'y_pc': '55', 
+    'strip_pc': '95',
+
+    'colour_city': 'gz', 
+    'colour_name': 'cgz2', 
+
+    'direction': 'left', 
+    'txt_bg_gap': '12',
+    'txt_flip': true,
+    'stn_list': [
+        {'field0': '東曉南', 'field1': 'Dongxiaonan'}, 
+        {'field0': '江泰路', 'field1': 'Jiangtai Lu'},
+        {'field0': '昌崗', 'field1': 'Changgang'},
+        {'field0': '江南西', 'field1': 'Jiangnanxi'}
     ], 
     'current_stn_idx': '1'
 }

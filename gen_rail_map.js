@@ -220,15 +220,17 @@ function setTxtBGGap(src) {
     reposStnName();
 }
 
-function addStn(elem) {
+function addStn(elem, load=false) {
     // Get new value
     var par = elem.parentNode;
     var add_idx = par.getAttribute('id').substring(3);
     
-    // Log changes
-    var params_instance = getParams();
-    params_instance['stn_list'].splice(add_idx, 0, params_instance['stn_list'][add_idx]);
-    putParams(params_instance);
+    if (!load) {
+        // Log changes
+        var params_instance = getParams();
+        params_instance['stn_list'].splice(add_idx, 0, params_instance['stn_list'][add_idx]);
+        putParams(params_instance);
+    }
 
     // Apply changes
     var new_stn = par.cloneNode(true);
@@ -245,22 +247,26 @@ function addStn(elem) {
     var stn_names = document.getElementById('station_names').children;
     stn_name.parentNode.insertBefore(new_stn_name, stn_names[parseInt(add_idx)]);
 
-    reidxStn();
-    redrawStn();
-    redrawLinePassed();
-    addCurrentBG();
-    reposStnName();
+    if (!load) {
+        reidxStn();
+        redrawStn();
+        redrawLinePassed();
+        addCurrentBG();
+        reposStnName();
+    }
 }
 
-function rmStn(elem) { 
+function rmStn(elem, load=false) { 
     // Get value to remove
     var par = elem.parentNode;
     var rm_idx = par.getAttribute('id').substring(3);
 
-    // Log changes
-    var params_instance = getParams();
-    params_instance['stn_list'].splice(rm_idx, 1);
-    putParams(params_instance);
+    if (!load) {
+        // Log changes
+        var params_instance = getParams();
+        params_instance['stn_list'].splice(rm_idx, 1);
+        putParams(params_instance);
+    }
 
     // Remove station in HTML
     par.parentNode.removeChild(par);
@@ -273,30 +279,32 @@ function rmStn(elem) {
     var stn_name = document.getElementById('stn_name_'+rm_idx);
     stn_name.parentNode.removeChild(stn_name);
 
-    reidxStn();
-    redrawStn();
-
-    // Fix radio input
-    var current_stn_idx = document.querySelector('input[name="current"]:checked');
-
-    if (current_stn_idx == null) {
-        var n_stn = params_instance['stn_list'].length;
-        if (rm_idx >= n_stn) {
-            current_stn_idx = n_stn - 1;
-        } else {
-            current_stn_idx = rm_idx;
+    if (!load) {
+        reidxStn();
+        redrawStn();
+    
+        // Fix radio input
+        var current_stn_idx = document.querySelector('input[name="current"]:checked');
+    
+        if (current_stn_idx == null) {
+            var n_stn = params_instance['stn_list'].length;
+            if (rm_idx >= n_stn) {
+                current_stn_idx = n_stn - 1;
+            } else {
+                current_stn_idx = rm_idx;
+            }
+            document.getElementById('stn_list').children[current_stn_idx].children[0].checked = true;
         }
-        document.getElementById('stn_list').children[current_stn_idx].children[0].checked = true;
+    
+        // Log changes
+        params_instance['current_stn_idx'] = current_stn_idx.toString();
+        putParams(params_instance);
+    
+        // Apply other changes
+        redrawLinePassed();
+        addCurrentBG();
+        reposStnName();
     }
-
-    // Log changes
-    params_instance['current_stn_idx'] = current_stn_idx.toString();
-    putParams(params_instance);
-
-    // Apply other changes
-    redrawLinePassed();
-    addCurrentBG();
-    reposStnName();
 }
 
 function reidxStn() {
@@ -447,7 +455,7 @@ function reposStnName() {
     var params_instance = getParams();
     var y = getY();
     var txt_bg_gap = params_instance['txt_bg_gap'];
-    var txt_bg_flip = params_instance['txt_bg_flip'];
+    var txt_flip = params_instance['txt_flip'];
 
     var stn_names = document.getElementById('station_names').children;
     for (i=0; i<stn_names.length; i++) {
@@ -457,7 +465,7 @@ function reposStnName() {
 
         var stn_name = stn_names[i].children;
 
-        if (i%2 == txt_bg_flip) {
+        if (i%2 == txt_flip) {
             var dy = y - Number(txt_bg_gap) - bg_lower_y;
         } else {
             var dy = y + Number(txt_bg_gap) - bg_upper_y;
@@ -471,8 +479,33 @@ function reposStnName() {
     // addCurrentBG();
 }
 
-function test() {
+function flipStnPos() {
+    var params_instance = getParams();
+    if (params_instance['txt_flip']) {
+        params_instance['txt_flip'] = false;
+    } else {
+        params_instance['txt_flip'] = true;
+    }
+    putParams(params_instance);
+
     reposStnName();
+}
+
+function test() {
+    var params_instance = getParams();
+    alert(JSON.stringify(params_instance));
+    var n_stn = getNStn();
+    alert(n_stn);
+
+    var stns = document.getElementById('stn_list').children;
+    var stn_icons = document.getElementById('stations').children;
+    var stn_names = document.getElementById('station_names').children;
+
+    for (i=0; i<n_stn; i++) {
+        stns[i].setAttribute('id', 'stn'+i.toString());
+        stn_icons[i].setAttribute('id', 'stn_icon_'+i.toString());
+        stn_names[i].setAttribute('id', 'stn_name_'+i.toString());
+    }
     // var stn_name = document.getElementById('stn_name_0');
     // var stn_name_y = stn_name.getBBox().y + stn_name.getBBox().height;
     // var params_instance = getParams();

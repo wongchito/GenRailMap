@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Generator</title>
     <script src="gen_rail_map.js"></script>
+    <script src="load_params.js"></script>
     <script src="params.js"></script>
     <!-- <style>
         svg {
@@ -24,7 +25,7 @@
 <input id="svg_width" type="text" value="500" onchange="setSVGWidth()"/>
 <input id="svg_height" type="text" value="200" onchange="setSVGHeight()"/>
 
-<input type="checkbox" onchange="showOuter(this)" checked>Show border</input>
+<input id="outer_checkbox" type="checkbox" onchange="showOuter(this)" checked>Show border</input>
 
 <!-- <p>Zoom (%)</p>
 <input id="zoom_slider" type="range" value="2" min="1" max="3" step="0.01" onchange="setZoom('slider')"/>
@@ -147,6 +148,8 @@
 <input id="txt_bg_gap_slider" type="range" value="10" min="0" max="20" onchange="setTxtBGGap('slider')"/>
 <input id="txt_bg_gap_text" type="text" value="10" onchange="setTxtBGGap('text')"/>
 
+<button onclick="flipStnPos()">Flip</button>
+
 <p>Station list</p>
 <div id="stn_list">
     <div id="stn0">
@@ -171,6 +174,12 @@
         <button onclick="rmStn(this)">-</button>
     </div>
 </div>
+
+<p>Load templates</p>
+<select id="template" onchange="getCity(this)">
+    <option value="gz2">Line 2 - 2号线</option>
+</select>
+<button onclick="loadTemplate('hk_twl')">Load</button>
 
 </div>
 <div>
