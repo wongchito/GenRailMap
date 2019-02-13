@@ -35,12 +35,15 @@ var template_hk_twl_params = {
     'txt_bg_gap': '12',
     'txt_flip': true,
     'stn_list': [
+        {'field0': '南洲', 'field1': 'Nanzhou'}, 
         {'field0': '東曉南', 'field1': 'Dongxiaonan'}, 
         {'field0': '江泰路', 'field1': 'Jiangtai Lu'},
         {'field0': '昌崗', 'field1': 'Changgang'},
-        {'field0': '江南西', 'field1': 'Jiangnanxi'}
+        {'field0': '江南西', 'field1': 'Jiangnanxi'},
+        {'field0': '市二宮', 'field1': 'The 2nd Workers\' Cultural Palace'},
+        {'field0': '海珠廣場', 'field1': 'Haizhu Square'}
     ], 
-    'current_stn_idx': '1'
+    'current_stn_idx': '2'
 }
 
 function initSVG() {
