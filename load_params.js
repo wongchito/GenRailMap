@@ -1,5 +1,6 @@
 function loadTemplate(line) {
-    sessionStorage.all_params = JSON.stringify(template_hk_twl_params);
+    alert('All changes will be discarded! ')
+    sessionStorage.all_params = JSON.stringify(template_gz8_params);
 
     loadSVGSize();
 }
@@ -76,9 +77,17 @@ function loadSVGSize() {
     for (i=0; i<n_stn; i++) {
         document.getElementById('stn'+i).children[1].value = stn_list[i]['field0'];
         document.getElementById('stn'+i).children[2].value = stn_list[i]['field1'];
+        var wrap = stn_list[i]['wrap'];
         var stn_name = document.getElementById('stn_name_'+i);
         stn_name.querySelector('#field0').textContent = stn_list[i]['field0'];
-        stn_name.querySelector('#field1').textContent = stn_list[i]['field1'];
+        if (wrap) {
+            var [str1, str2] = splitText(stn_list[i]['field1']);
+            var stn_x = getStnX(i);
+            var stn_name_html = str1 + '<tspan x="' + stn_x.toString() + '" dy="15">' + str2 + '</tspan>';
+            stn_name.querySelector('#field1').innerHTML = stn_name_html;
+        } else {
+            stn_name.querySelector('#field1').textContent = stn_list[i]['field1'];
+        }
     }
 
     redrawStn();
