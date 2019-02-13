@@ -75,9 +75,15 @@ function loadSVGSize() {
     redrawLinePassed();
 
     for (i=0; i<n_stn; i++) {
+        // Wrap
+        var wrap = stn_list[i]['wrap'];
+        document.getElementById('stn'+i).children[3].checked = wrap;
+
+        // Name in list
         document.getElementById('stn'+i).children[1].value = stn_list[i]['field0'];
         document.getElementById('stn'+i).children[2].value = stn_list[i]['field1'];
-        var wrap = stn_list[i]['wrap'];
+
+        // Name in SVG
         var stn_name = document.getElementById('stn_name_'+i);
         stn_name.querySelector('#field0').textContent = stn_list[i]['field0'];
         if (wrap) {

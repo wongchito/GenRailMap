@@ -252,6 +252,12 @@ function addStn(elem, load=false) {
     if (!load) {
         reidxStn();
         redrawStn();
+
+        // Fix radio input
+        var current_stn_idx = document.querySelector('input[name="current"]:checked').parentNode.getAttribute('id').substring(3);
+        params_instance['current_stn_idx'] = current_stn_idx;
+        putParams(params_instance);
+
         redrawLinePassed();
         addCurrentBG();
         reposStnName();
@@ -286,9 +292,10 @@ function rmStn(elem, load=false) {
         redrawStn();
     
         // Fix radio input
-        var current_stn_idx = document.querySelector('input[name="current"]:checked');
-    
-        if (current_stn_idx == null) {
+        var current_stn = document.querySelector('input[name="current"]:checked');
+        if (current_stn != null) {
+            var current_stn_idx = current_stn.parentNode.getAttribute('id').substring(3);
+        } else {
             var n_stn = params_instance['stn_list'].length;
             if (rm_idx >= n_stn) {
                 current_stn_idx = n_stn - 1;
@@ -338,6 +345,9 @@ function redrawStn() {
         for (j=0; j<stn_name.children.length; j++) {
             if (stn_name.children[j].nodeName != 'rect') {
                 stn_name.children[j].setAttribute('x', stn_x.toString());
+            }
+            if (stn_name.children[j].childElementCount) {
+                stn_name.children[j].children[0].setAttribute('x', stn_x.toString());
             }
         }
     }
@@ -519,8 +529,9 @@ function wrapStnName(elem) {
 }
 
 function test() {
-    var a = 'Guangzhou South Railway Station';
-    alert(splitText(a));
+    // var a = document.getElementById('stn_name_2').children;
+    // alert(a[1].children[0].getAttribute('x'));
+    alert(JSON.stringify(getParams()));
 
     // alert(a);
     // var stn_name = document.getElementById('stn_name_0');

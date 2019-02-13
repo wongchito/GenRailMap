@@ -22,11 +22,11 @@ var default_params = {
 
 var template_gz8_params = {
     'svg_width': '700', 
-    'svg_height': '300', 
+    'svg_height': '200', 
     'show_outer': true,
     'padding': '15', 
-    'y_pc': '55', 
-    'strip_pc': '95',
+    'y_pc': '45', 
+    'strip_pc': '90',
 
     'colour_city': 'gz', 
     'colour_name': 'cgz8', 
@@ -39,9 +39,17 @@ var template_gz8_params = {
         {'field0': '沙園', 'field1': 'Shayuan', 'wrap': false}, 
         {'field0': '寶崗大道', 'field1': 'Baogang Dadao', 'wrap': true},
         {'field0': '昌崗', 'field1': 'Changgang', 'wrap': false},
-        {'field0': '江南西', 'field1': 'Jiangnanxi', 'wrap': false}
+        {"field0":"曉港","field1":"Xiaogang","wrap":false},
+        {"field0":"中大","field1":"Sun Yat-sen University","wrap":true},{"field0":"鷺江","field1":"Lujiang","wrap":false},
+        {"field0":"客村","field1":"Kecun","wrap":false},
+        {"field0":"赤崗","field1":"Chigang","wrap":false},
+        {"field0":"磨碟沙","field1":"Modiesha","wrap":false},
+        {"field0":"新港東","field1":"Xingangdong","wrap":false},
+        {"field0":"琶洲","field1":"Pazhou","wrap":false},
+        {"field0":"萬勝圍","field1":"Wanshengwei","wrap":false}
     ], 
-    'current_stn_idx': '2'
+    'current_stn_idx': '3'
+    
 }
 
 var template_gz2_params = {
