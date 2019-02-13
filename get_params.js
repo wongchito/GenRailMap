@@ -69,8 +69,8 @@ function getBGY(idx) {
         var bg_lower_y = stn_name.getBBox().y + stn_name.getBBox().height;
         var bg_upper_y = Number(stn_name.getBBox().y);
     } else {
-        var bg_lower_y = stn_name.getBBox().y + stn_name.getBBox().height + 2.5;
-        var bg_upper_y = stn_name.getBBox().y - 2.5;
+        var bg_lower_y = stn_name.getBBox().y + stn_name.getBBox().height + 2;
+        var bg_upper_y = stn_name.getBBox().y - 2;
     }
     
     return [bg_lower_y, bg_upper_y];
@@ -100,4 +100,27 @@ function splitText(str) {
     }
 
     return [str1, str2];
+}
+
+function getStnState(idx) {
+    var params_instance = getParams();
+    var current_stn_idx = params_instance['current_stn_idx'];
+    var direction = params_instance['direction'];
+    if (direction == 'right') {
+        if (idx < current_stn_idx) {
+            return -1;
+        } else if (idx == current_stn_idx) {
+            return 0;
+        } else {
+            return 1;
+        }
+    } else {
+        if (idx < current_stn_idx) {
+            return 1;
+        } else if (idx == current_stn_idx) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
 }

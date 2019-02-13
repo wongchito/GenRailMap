@@ -142,8 +142,8 @@
 </select>
 
 <p>Direction</p>
-<input type="radio" name="direction" value="left" onchange="setDirection(this)">left &lt;--</input>
-<input type="radio" name="direction" value="right" onchange="setDirection(this)" checked>right --&gt;</input>
+<input id="direc_l" type="radio" name="direction" value="left" onchange="setDirection(this)">left &lt;--</input>
+<input id="direc_r" type="radio" name="direction" value="right" onchange="setDirection(this)" checked>right --&gt;</input>
 
 <p>Text background gap</p>
 <input id="txt_bg_gap_slider" type="range" value="10" min="0" max="20" onchange="setTxtBGGap('slider')"/>
@@ -194,31 +194,44 @@ xmlns="http://www.w3.org/2000/svg"
 xmlns:xlink="http://www.w3.org/1999/xlink" 
 id="root" width="500" height="200" onload="initSVG()">
     <style type="text/css">
-        .LineDiagram {fill:none;stroke-width:6}
+        .LineDiagram {fill:none;stroke-width:11}
+        .LineDiagramChange {fill:none; stroke-width:9}
 
-        .CurrentStnNameEN {
+        .PassedName {
+            fill: #AAAAAA;
+        }
+        .CurrentName {
+            fill: #FFFFFF;
+        }
+        .FutureName {
+            fill: #000000;
+        }
+
+        <!-- .CurrentStnNameEN {
             font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
-            font-size:12px;
+            font-size:11px;
             fill: #fff;
             alignment-baseline:middle;
         }
         .CurrentStnNameZH {
             font-family:Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
+            font-size:18px;
             fill: #fff;
             alignment-baseline:central;
-        }
+        } -->
 
         .StnNameEN {
             font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
-            font-size:12px;
+            font-size:11px;
             alignment-baseline:middle;
         }
         .StnNameZH {
             font-family:Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
+            font-size:18px;
             alignment-baseline:central;
         }
 
@@ -229,6 +242,7 @@ id="root" width="500" height="200" onload="initSVG()">
             alignment-baseline:central;
         }
 
+        .cpassed {stroke:#AAAAAA}
         .cunknown {stroke:#999999}
 
         .cgz1 {stroke:#F3D03E}
@@ -303,8 +317,12 @@ id="root" width="500" height="200" onload="initSVG()">
         <path id="st" class="StationTick" d="M 2,0 H 7"/>
         <path id="term" class="StationTick" d="M -7,0 H 7"/>
         <g id="int">
-            <circle cx="0" cy="0" r="9" fill="#000"/>
-            <circle cx="0" cy="0" r="6" fill="#fff"/>
+            <circle cx="0" cy="0" r="10.5" fill="#000"/>
+            <circle cx="0" cy="0" r="8" fill="#fff"/>
+        </g>
+        <g id="passedint">
+            <circle cx="0" cy="0" r="10.5" fill="#AAAAAA"/>
+            <circle cx="0" cy="0" r="8" fill="#fff"/>
         </g>
 
         <use xlink:href="#st" id="stgz1" class="cgz1"/>
@@ -327,7 +345,7 @@ id="root" width="500" height="200" onload="initSVG()">
 
     <g class="LineDiagram">
         <path id="line_main" class="ctwl" d="M 25,100 h 450"/>
-        <path id="line_passed" class="cunknown" d="M 250,100 H 25"/>
+        <path id="line_passed" class="cpassed" d="M 250,100 H 25"/>
     </g>
 
     <g class="LineDiagram">
@@ -335,21 +353,21 @@ id="root" width="500" height="200" onload="initSVG()">
     </g>
 
     <g id="stations">
-        <use xlink:href="#int" transform="translate(25,100)" id="stn_icon_0"/>
+        <use xlink:href="#passedint" transform="translate(25,100)" id="stn_icon_0"/>
         <use xlink:href="#int" transform="translate(250,100)" id="stn_icon_1"/>
         <use xlink:href="#int" transform="translate(475,100)" id="stn_icon_2"/>
     </g>
 
     <g id="station_names">
-        <g id="stn_name_0">
+        <g id="stn_name_0" class="PassedName">
             <text id="field0" x="25" y="70" class="StnNameZH" text-anchor="middle">中環</text>
             <text id="field1" x="25" y="85" class="StnNameEN" text-anchor="middle">Central</text>
         </g>
-        <g id="stn_name_1">
+        <g id="stn_name_1" class="CurrentName">
             <text id="field0" x="250" y="70" class="StnNameZH" text-anchor="middle">金鐘</text>
             <text id="field1" x="250" y="85" class="StnNameEN" text-anchor="middle">Admiralty</text>
         </g>
-        <g id="stn_name_2">
+        <g id="stn_name_2" class="FutureName">
             <text id="field0" x="475" y="70" class="StnNameZH" text-anchor="middle">荃灣</text>
             <text id="field1" x="475" y="85" class="StnNameEN" text-anchor="middle">Tsuen Wan</text>
         </g>

@@ -259,6 +259,7 @@ function addStn(elem, load=false) {
         putParams(params_instance);
 
         redrawLinePassed();
+        redrawStn();
         addCurrentBG();
         reposStnName();
     }
@@ -311,6 +312,7 @@ function rmStn(elem, load=false) {
     
         // Apply other changes
         redrawLinePassed();
+        redrawStn();
         addCurrentBG();
         reposStnName();
     }
@@ -339,9 +341,23 @@ function redrawStn() {
 
     // Apply changes
     for (i=0; i<n_stn; i++) {
+        var stn_state = getStnState(i);
         var stn_x = getStnX(i);
         stn_icons[i].setAttribute('transform', 'translate(' + stn_x.toString() + ',' + y.toString() + ')');
+        if (stn_state == -1) {
+            stn_icons[i].setAttribute('xlink:href', '#passedint');
+        } else {
+            stn_icons[i].setAttribute('xlink:href', '#int');
+        }
+
         var stn_name = document.getElementById('stn_name_'+i);
+        if (stn_state == -1) {
+            stn_name.setAttribute('class', 'PassedName');
+        } else if (stn_state == 0) {
+            stn_name.setAttribute('class', 'CurrentName');
+        } else {
+            stn_name.setAttribute('class', 'FutureName');
+        }
         for (j=0; j<stn_name.children.length; j++) {
             if (stn_name.children[j].nodeName != 'rect') {
                 stn_name.children[j].setAttribute('x', stn_x.toString());
@@ -364,6 +380,7 @@ function setDirection(elem) {
 
     // Apply changes
     redrawLinePassed();
+    redrawStn();
 }
 
 function setCurrentStn(elem) {
@@ -376,6 +393,7 @@ function setCurrentStn(elem) {
     putParams(params_instance);
 
     // Apply changes
+    redrawStn();
     redrawLinePassed();
     addCurrentBG();
     reposStnName();
@@ -397,18 +415,18 @@ function addCurrentBG() {
             var txt_dim = stn_names[i].getBBox();
             
             var txt_bg = document.createElementNS(stn_names[i].namespaceURI, 'rect');
-            txt_bg.setAttribute('x', (txt_dim.x-10).toString());
-            txt_bg.setAttribute("y", (txt_dim.y-2.5).toString());
-            txt_bg.setAttribute("width", (txt_dim.width+20).toString());
-            txt_bg.setAttribute("height", (txt_dim.height+5).toString());
+            txt_bg.setAttribute('x', (txt_dim.x-4).toString());
+            txt_bg.setAttribute("y", (txt_dim.y-2).toString());
+            txt_bg.setAttribute("width", (txt_dim.width+8).toString());
+            txt_bg.setAttribute("height", (txt_dim.height+4).toString());
             txt_bg.setAttribute("fill", "black");
             stn_names[i].insertBefore(txt_bg, stn_names[i].children[0]);
             
             // Change class
-            for (j=1; j<stn_names[i].children.length; j++) {
-                var class_lang = stn_names[i].children[j].getAttribute('class').slice(-2);
-                stn_names[i].children[j].setAttribute('class', 'CurrentStnName'+class_lang);
-            }
+            // for (j=1; j<stn_names[i].children.length; j++) {
+            //     var class_lang = stn_names[i].children[j].getAttribute('class').slice(-2);
+            //     stn_names[i].children[j].setAttribute('class', 'CurrentStnName'+class_lang);
+            // }
         } else {
             // Remove BG
             if (stn_names[i].children[0].nodeName == 'rect') {

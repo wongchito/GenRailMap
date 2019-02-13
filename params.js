@@ -20,6 +20,37 @@ var default_params = {
     'current_stn_idx': '1'
 }
 
+var template_wrl_params = {
+    "svg_width":"1000",
+    "svg_height":"200",
+    "show_outer":true,
+    "padding":"9",
+    "y_pc":"45",
+    "strip_pc":"97",
+    
+    "colour_city":"hk",
+    "colour_name":"cwrl",
+
+    "direction":"right",
+    "txt_bg_gap":"16",
+    "txt_flip":false,
+    "stn_list":[
+        {"field0":"屯門","field1":"Tuen Mun","wrap":false},
+        {"field0":"兆康","field1":"Siu Hong","wrap":false},
+        {"field0":"天水圍","field1":"Tin Shui Wai","wrap":false},
+        {"field0":"朗屏","field1":"Long Ping","wrap":false},
+        {"field0":"元朗","field1":"Yuen Long","wrap":false},
+        {"field0":"錦上路","field1":"Kam Sheung Road","wrap":false},
+        {"field0":"荃灣西","field1":"Tsuen Wan West","wrap":false},
+        {"field0":"美孚","field1":"Mei Foo","wrap":false},
+        {"field0":"南昌","field1":"Nam Cheong","wrap":false},
+        {"field0":"柯士甸","field1":"Austin","wrap":false},
+        {"field0":"尖東","field1":"East Tsim Sha Tsui","wrap":false},
+        {"field0":"紅磡","field1":"Hung Hom","wrap":false}
+    ],
+    "current_stn_idx":"10"
+}
+
 var template_gz8_params = {
     'svg_width': '700', 
     'svg_height': '200', 

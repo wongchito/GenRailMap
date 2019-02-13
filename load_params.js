@@ -1,6 +1,6 @@
 function loadTemplate(line) {
     alert('All changes will be discarded! ')
-    sessionStorage.all_params = JSON.stringify(template_gz8_params);
+    sessionStorage.all_params = JSON.stringify(template_wrl_params);
 
     loadSVGSize();
 }
@@ -49,7 +49,7 @@ function loadSVGSize() {
     redrawLineMain();
 
     var direction = params_instance['direction'];
-    document.querySelector('input[name="direction"]').checked = direction;
+    document.getElementById('direc_'+direction.substring(0,1)).checked = true;
 
     var txt_bg_gap = params_instance['txt_bg_gap'];
     document.getElementById('txt_bg_gap_text').value = txt_bg_gap;
