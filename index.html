@@ -21,10 +21,10 @@
 <div style="display: flex; flex-wrap: nowrap;">
 <div>
 
-<button onclick="test()">TEST FUNCTION</button>
+<!-- <button onclick="test()">TEST FUNCTION</button> -->
 
-<input id="svg_width" type="text" value="500" onchange="setSVGWidth()"/>
-<input id="svg_height" type="text" value="200" onchange="setSVGHeight()"/>
+<input id="svg_width" type="text" value="500" onchange="setSVGWidth()">width</input>
+<input id="svg_height" type="text" value="200" onchange="setSVGHeight()">height</input>
 
 <input id="outer_checkbox" type="checkbox" onchange="showOuter(this)" checked>Show border</input>
 
@@ -42,8 +42,8 @@
 <input id="y_text" type="text" value="50" onchange="setY('text')"/>
 
 <p>Banner strip y position (%)</p>
-<input id="strip_slider" type="range" value="90" min="80" max="100" onchange="setStripY('slider')"/>
-<input id="strip_text" type="text" value="90" onchange="setStripY('text')"/>
+<input id="strip_slider" type="range" value="95" min="80" max="100" onchange="setStripY('slider')"/>
+<input id="strip_text" type="text" value="95" onchange="setStripY('text')"/>
 
 <p>Colour theme</p>
 <select id="colour_city" onchange="getCity(this)">
@@ -147,8 +147,8 @@
 <input id="direc_r" type="radio" name="direction" value="right" onchange="setDirection(this)" checked>right --&gt;</input>
 
 <p>Text background gap</p>
-<input id="txt_bg_gap_slider" type="range" value="10" min="0" max="20" onchange="setTxtBGGap('slider')"/>
-<input id="txt_bg_gap_text" type="text" value="10" onchange="setTxtBGGap('text')"/>
+<input id="txt_bg_gap_slider" type="range" value="15" min="0" max="30" onchange="setTxtBGGap('slider')"/>
+<input id="txt_bg_gap_text" type="text" value="15" onchange="setTxtBGGap('text')"/>
 
 <button onclick="flipStnPos()">Flip</button>
 
@@ -199,6 +199,7 @@ id="root" width="500" height="200" onload="initSVG()">
     <style type="text/css">
         .LineDiagram {fill:none;stroke-width:11}
         .LineDiagramChange {fill:none; stroke-width:10}
+        .Strip {fill:none;stroke-width:20}
 
         .PassedName {
             fill: #AAAAAA;
@@ -235,6 +236,19 @@ id="root" width="500" height="200" onload="initSVG()">
             font-family:Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
             font-size:18px;
+            alignment-baseline:central;
+        }
+
+        .IntNameEN {
+            font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
+            font-weight:bold;
+            font-size:6px;
+            alignment-baseline:middle;
+        }
+        .IntNameZH {
+            font-family:Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
+            font-weight:bold;
+            font-size:10px;
             alignment-baseline:central;
         }
 
@@ -355,8 +369,8 @@ id="root" width="500" height="200" onload="initSVG()">
         <path id="line_passed" class="cpassed" d="M 250,100 H 25"/>
     </g>
 
-    <g class="LineDiagram">
-        <path id="strip" class="ctwl" d="M 0,180 H 500"/>
+    <g class="Strip">
+        <path id="strip" class="ctwl" d="M 0,190 H 500"/>
     </g>
 
     <g class="LineDiagramChange" id="station_ints">
@@ -386,8 +400,26 @@ id="root" width="500" height="200" onload="initSVG()">
         </g>
     </g>
 
+    <g id="change_names">
+        <g id="int_name_0" class="PassedName">
+            <text id="field0" x="25" y="0" class="IntNameZH" text-anchor="middle"></text>
+            <text id="field1" x="25" y="8" class="IntNameEN" text-anchor="middle"></text>
+        </g>
+        <g id="int_name_1" class="FutureName">
+            <text id="field0" x="250" y="0" class="IntNameZH" text-anchor="middle"></text>
+            <text id="field1" x="250" y="8" class="IntNameEN" text-anchor="middle"></text>
+        </g>
+        <g id="int_name_2" class="FutureName">
+            <text id="field0" x="475" y="0" class="IntNameZH" text-anchor="middle"></text>
+            <text id="field1" x="475" y="8" class="IntNameEN" text-anchor="middle"></text>
+        </g>
+    </g>
+
     <rect id="outer" x="0" y="0" width="500" height="200" fill="none" stroke="black"/>
 </svg>
+
+<br/>
+<a href="https://github.com/wongchito/GenRailMap">Improve this page</a>
 
 
 </div>

@@ -1,6 +1,6 @@
 function loadTemplate(line) {
     alert('All changes will be discarded! ')
-    sessionStorage.all_params = JSON.stringify(template_wrl_params);
+    sessionStorage.all_params = JSON.stringify(template_gz8_params);
 
     loadSVGSize();
 }
@@ -96,13 +96,24 @@ function loadSVGSize() {
                 colour_list.children[j].setAttribute('onchange', 'setChangeColour(this)');
             }
 
+            var int_name_field0 = document.createElementNS(document.getElementById('stn'+i).namespaceURI, 'input');
+            int_name_field0.setAttribute('type', 'input');
+            int_name_field0.setAttribute('onchange', 'setChangeName(this,0)');
+            int_name_field0.value = stn_list[i]['change_name'][0];
+
+            var int_name_field1 = int_name_field0.cloneNode(true);
+            int_name_field1.setAttribute('onchange', 'setChangeName(this,1)');
+            int_name_field1.value = stn_list[i]['change_name'][1];
+
             document.getElementById('stn'+i).appendChild(city_list);
             document.getElementById('stn'+i).appendChild(colour_list);
+            document.getElementById('stn'+i).appendChild(int_name_field0);
+            document.getElementById('stn'+i).appendChild(int_name_field1);
 
-            document.getElementById('colour_city_int_'+i).value = 'hk';
+            document.getElementById('colour_city_int_'+i).value = 'gz';
             // document.getElementById('colour_cities_int_'+i).querySelector('#hk').style.display = 'block;
             // alert(stn_list[i]['change'].substring(1));
-            document.getElementById('colour_cities_int_'+i).querySelector('#hk').value = stn_list[i]['change'].substring(1);
+            document.getElementById('colour_cities_int_'+i).querySelector('#gz').value = stn_list[i]['change'].substring(1);
         } else {
             document.getElementById('stn'+i).children[6].checked = false;
         }
@@ -118,6 +129,12 @@ function loadSVGSize() {
         } else {
             stn_name.querySelector('#field1').textContent = stn_list[i]['field1'];
         }
+
+        // Int name in SVG
+        var int_name = document.getElementById('int_name_'+i);
+        // alert(stn_list[i]['change_name'][0])
+        int_name.querySelector('#field0').textContent = stn_list[i]['change_name'][0];
+        int_name.querySelector('#field1').textContent = stn_list[i]['change_name'][1];
     }
 
     redrawStn();

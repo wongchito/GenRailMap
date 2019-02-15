@@ -242,6 +242,8 @@ function addStn(elem, load=false) {
     var new_stn = par.cloneNode(true);
     if (new_stn.children[8]) {
         new_stn.children[6].checked = false;
+        new_stn.removeChild(new_stn.children[10]);
+        new_stn.removeChild(new_stn.children[9]);
         new_stn.removeChild(new_stn.children[8]);
         new_stn.removeChild(new_stn.children[7]);
     } // reset interchange
@@ -263,6 +265,14 @@ function addStn(elem, load=false) {
     var new_stn_name = stn_name.cloneNode(true);
     var stn_names = document.getElementById('station_names').children;
     stn_name.parentNode.insertBefore(new_stn_name, stn_names[parseInt(add_idx)]);
+
+    var int_name = document.getElementById('int_name_'+add_idx);
+    var new_int_name = int_name.cloneNode(true);
+    for (i=0;i<new_int_name.childElementCount;i++) {
+        new_int_name.children[i].textContent = '';
+    }
+    var int_names = document.getElementById('change_names').children;
+    int_name.parentNode.insertBefore(new_int_name, int_names[parseInt(add_idx)]);
 
     if (!load) {
         reidxStn();
@@ -307,6 +317,10 @@ function rmStn(elem, load=false) {
     var stn_name = document.getElementById('stn_name_'+rm_idx);
     stn_name.parentNode.removeChild(stn_name);
 
+    // Remove int name in SVG
+    var int_name = document.getElementById('int_name_'+rm_idx);
+    int_name.parentNode.removeChild(int_name);
+
     if (!load) {
         reidxStn();
         // redrawStn();
@@ -344,6 +358,7 @@ function reidxStn() {
     var stn_icons = document.getElementById('stations').children;
     var stn_ints = document.getElementById('station_ints').children;
     var stn_names = document.getElementById('station_names').children;
+    var int_names = document.getElementById('change_names').children;
 
     for (i=0; i<n_stn; i++) {
         stns[i].setAttribute('id', 'stn'+i.toString());
@@ -355,6 +370,8 @@ function reidxStn() {
             stns[i].children[7].setAttribute('id', 'colour_city_int_'+i.toString());
             stns[i].children[8].setAttribute('id', 'colour_cities_int_'+i.toString());
         }
+
+        int_names[i].setAttribute('id', 'int_name_'+i.toString());
     }
 }
 
@@ -406,6 +423,16 @@ function redrawStn() {
             if (stn_name.children[j].childElementCount) {
                 stn_name.children[j].children[0].setAttribute('x', stn_x.toString());
             }
+        }
+
+        var int_name = document.getElementById('int_name_'+i);
+        if (stn_state == -1) {
+            int_name.setAttribute('class','PassedName');
+        } else {
+            int_name.setAttribute('class', 'FutrueName');
+        }
+        for (j=0; j<int_name.childElementCount; j++) {
+            int_name.children[j].setAttribute('x', stn_x.toString());
         }
     }
 }
@@ -546,7 +573,6 @@ function reposStnName() {
         var bg_lower_y = bg_y[0];
         var bg_upper_y = bg_y[1];
 
-        var stn_name = stn_names[i].children;
 
         if (i%2 == txt_flip) {
             var dy = y - Number(txt_bg_gap) - bg_lower_y;
@@ -556,9 +582,25 @@ function reposStnName() {
             document.getElementById('stn_int_'+i).setAttribute('xlink:href', '#intline_up');
         }
 
+        var stn_name = stn_names[i].children;
         for (j=0; j<stn_name.length; j++) {
             var new_y = Number(stn_name[j].getAttribute('y')) + dy;
             stn_name[j].setAttribute('y', new_y.toString());
+        }
+
+        // interchange line name
+        var [int_lower_y,int_upper_y] = getIntLineY(i);
+        // alert([y,int_upper_y,int_lower_y]);
+        if (i%2 == txt_flip) {
+            var int_dy = y + 25 - int_upper_y;
+        } else {
+            var int_dy = y - 25 - int_lower_y;
+        }
+        // alert(int_dy);
+        var int_name = document.getElementById('int_name_'+i.toString());
+        for (j=0; j<int_name.childElementCount; j++) {
+            var new_int_y = Number(int_name.children[j].getAttribute('y')) + int_dy;
+            int_name.children[j].setAttribute('y', new_int_y.toString());
         }
     }
     // addCurrentBG();
@@ -605,16 +647,27 @@ function showColourSelector(elem, load=false) {
     for (i=0; i<colour_list.childElementCount; i++) {
         colour_list.children[i].setAttribute('onchange', 'setChangeColour(this)');
     }
+
+    var int_name_field0 = document.createElementNS(elem.namespaceURI, 'input');
+    int_name_field0.setAttribute('type', 'input');
+    int_name_field0.setAttribute('onchange', 'setChangeName(this,0)');
+
+    var int_name_field1 = int_name_field0.cloneNode(true);
+    int_name_field1.setAttribute('onchange', 'setChangeName(this,1)');
     
     if (change) {
         elem.parentNode.appendChild(city_list);
         elem.parentNode.appendChild(colour_list);
+        elem.parentNode.appendChild(int_name_field0);
+        elem.parentNode.appendChild(int_name_field1);
         getChangeCity(elem.parentNode.children[7]);
     } else {
         params_instance['stn_list'][stn_idx]['change'] = 'cnone';
         putParams(params_instance);
 
         if (elem.parentNode.children[7]) {
+            elem.parentNode.removeChild(elem.parentNode.children[10]);
+            elem.parentNode.removeChild(elem.parentNode.children[9]);
             elem.parentNode.removeChild(elem.parentNode.children[8]);
             elem.parentNode.removeChild(elem.parentNode.children[7]);
         }
@@ -657,10 +710,28 @@ function setChangeColour(elem) {
     
 }
 
+function setChangeName(elem, i) {
+    // Get new value
+    var int_name_txt = elem.value;
+    var stn_idx = elem.parentNode.getAttribute('id').substring(3);
+
+    // Log changes
+    var params_instance = getParams();
+    params_instance['stn_list'][stn_idx]['change_name'][i] = int_name_txt;
+    putParams(params_instance);
+
+    // Apply changes
+    var int_name = document.getElementById('int_name_'+stn_idx);
+    int_name.querySelector('#field'+i.toString()).textContent = int_name_txt;
+    reposStnName();
+}
+
 function test() {
+    for (i=0;i<3;i++)
+    alert(getIntLineY(i));
     // var a = document.getElementById('stn_name_2').children;
     // alert(a[1].children[0].getAttribute('x'));
-    alert(JSON.stringify(getParams()));
+    // alert(JSON.stringify(getParams()));
 
 }
 

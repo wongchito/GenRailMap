@@ -76,6 +76,15 @@ function getBGY(idx) {
     return [bg_lower_y, bg_upper_y];
 }
 
+function getIntLineY(idx) {
+    var int_name = document.getElementById('int_name_'+idx.toString());
+    // alert(int_name.getBBox().height);
+    var int_lower_y = int_name.getBBox().y + int_name.getBBox().height;
+    var int_upper_y = Number(int_name.getBBox().y);
+
+    return [int_lower_y, int_upper_y];
+}
+
 // function getLineColour() {
 //     var params_instance = getParams();
 //     var colour_city = 
