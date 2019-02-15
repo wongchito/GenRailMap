@@ -43,7 +43,8 @@ function loadSVGSize() {
     document.getElementById('colour_city').value = colour_city;
     getCity(document.getElementById('colour_city'));
     var colour_name = params_instance['colour_name'];
-    document.getElementById(colour_city).value = colour_name.substring(1);
+    var colour_list = document.getElementById('colour_cities');
+    colour_list.querySelector('#' + colour_city).value = colour_name.substring(1);
     setLineColour();
 
     redrawLineMain();
@@ -82,6 +83,29 @@ function loadSVGSize() {
         // Name in list
         document.getElementById('stn'+i).children[1].value = stn_list[i]['field0'];
         document.getElementById('stn'+i).children[2].value = stn_list[i]['field1'];
+        if (stn_list[i]['change'] != 'cnone') {
+            document.getElementById('stn'+i).children[6].checked = true;
+
+            var city_list = document.getElementById('colour_city').cloneNode(true);
+            city_list.setAttribute('id', 'colour_city_int_'+i);
+            city_list.setAttribute('onchange', 'getChangeCity(this)');
+
+            var colour_list = document.getElementById('colour_cities').cloneNode(true);
+            colour_list.setAttribute('id', 'colour_cities_int_'+i);
+            for (j=0; j<colour_list.childElementCount; j++) {
+                colour_list.children[j].setAttribute('onchange', 'setChangeColour(this)');
+            }
+
+            document.getElementById('stn'+i).appendChild(city_list);
+            document.getElementById('stn'+i).appendChild(colour_list);
+
+            document.getElementById('colour_city_int_'+i).value = 'hk';
+            // document.getElementById('colour_cities_int_'+i).querySelector('#hk').style.display = 'block;
+            // alert(stn_list[i]['change'].substring(1));
+            document.getElementById('colour_cities_int_'+i).querySelector('#hk').value = stn_list[i]['change'].substring(1);
+        } else {
+            document.getElementById('stn'+i).children[6].checked = false;
+        }
 
         // Name in SVG
         var stn_name = document.getElementById('stn_name_'+i);

@@ -74,6 +74,7 @@
         <option value="ekl">East Kowloon Line - 東九龍綫</option>
         <option value="erl">East Rail Line - 東鐵綫</option>
         <option value="wrl">West Rail Line - 西鐵綫</option>
+        <option value="lrl">Light Rail - 輕鐵</option>
     </select>
     
     <select id="gz" style="display:none" onchange="setLineColour()">
@@ -160,15 +161,16 @@
         <input type="checkbox" onchange="wrapStnName(this)">
         <button onclick="addStn(this)">+</button>
         <button onclick="rmStn(this)">-</button>
+        <input type="checkbox" onchange="showColourSelector(this)">
     </div>
     <div id="stn1">
         <input type="radio" name="current" onchange="setCurrentStn(this)" checked>
         <input type="text" value="金鐘" onchange="setStnName(this, 'field0')">
         <input type="text" value="Admiralty" onchange="setStnName(this, 'field1')">
-
         <input type="checkbox" onchange="wrapStnName(this)">
         <button onclick="addStn(this)">+</button>
         <button onclick="rmStn(this)">-</button>
+        <input type="checkbox" onchange="showColourSelector(this)">
     </div>
     <div id="stn2">
         <input type="radio" name="current" onchange="setCurrentStn(this)">
@@ -177,6 +179,7 @@
         <input type="checkbox" onchange="wrapStnName(this)">
         <button onclick="addStn(this)">+</button>
         <button onclick="rmStn(this)">-</button>
+        <input type="checkbox" onchange="showColourSelector(this)">
     </div>
 </div>
 
@@ -195,7 +198,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink"
 id="root" width="500" height="200" onload="initSVG()">
     <style type="text/css">
         .LineDiagram {fill:none;stroke-width:11}
-        .LineDiagramChange {fill:none; stroke-width:9}
+        .LineDiagramChange {fill:none; stroke-width:10}
 
         .PassedName {
             fill: #AAAAAA;
@@ -243,6 +246,7 @@ id="root" width="500" height="200" onload="initSVG()">
         }
 
         .cpassed {stroke:#AAAAAA}
+        .cnone {stroke:none}
         .cunknown {stroke:#999999}
 
         .cgz1 {stroke:#F3D03E}
@@ -311,6 +315,7 @@ id="root" width="500" height="200" onload="initSVG()">
         .c360 {stroke:#94989A}
         .clrl {stroke:#CD9700}
         .cefls {stroke:#000000}
+
     </style>
 
     <defs>
@@ -324,6 +329,8 @@ id="root" width="500" height="200" onload="initSVG()">
             <circle cx="0" cy="0" r="10.5" fill="#AAAAAA"/>
             <circle cx="0" cy="0" r="8" fill="#fff"/>
         </g>
+        <path id="intline_up" d="M 0,0 v -17" stroke-linecap="round"/>
+        <path id="intline_down" d="M 0,0 v 17" stroke-linecap="round"/>
 
         <use xlink:href="#st" id="stgz1" class="cgz1"/>
         <use xlink:href="#st" id="stgz2" class="cgz2"/>
@@ -350,6 +357,12 @@ id="root" width="500" height="200" onload="initSVG()">
 
     <g class="LineDiagram">
         <path id="strip" class="ctwl" d="M 0,180 H 500"/>
+    </g>
+
+    <g class="LineDiagramChange" id="station_ints">
+        <use id="stn_int_0" xlink:href="#intline_down" class="cnone" x="25" y="100"/>
+        <use id="stn_int_1" xlink:href="#intline_up" class="cnone" x="250" y="100"/>
+        <use id="stn_int_2" xlink:href="#intline_down" class="cnone" x="475" y="100"/>
     </g>
 
     <g id="stations">
