@@ -142,3 +142,13 @@ function loadSVGSize() {
     reposStnName();
 
 }
+
+function save() {
+    var params_instance = getParams();
+    document.getElementById('params_string').value = JSON.stringify(params_instance);
+}
+
+function load() {
+    sessionStorage.all_params = document.getElementById('params_string').value;
+    loadSVGSize();
+}

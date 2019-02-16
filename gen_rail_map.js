@@ -735,3 +735,38 @@ function test() {
 
 }
 
+function testCity(elem) {
+    var par = elem.parentNode;
+    var city = elem.value;
+    var selectLine = par.querySelector('#selectLine');
+    var ln = selectLine.length;
+    while (ln) {
+        selectLine.remove(0);
+        ln--;
+    }
+
+    var line_list = colours[city]['line'];
+    var line_keys = Object.keys(line_list);
+    for (i=0; i<line_keys.length; i++) {
+        var option = document.createElement('option'); 
+        var key = line_keys[i];
+        option.text = line_list[key]['name'][0] + ' - ' + line_list[key]['name'][1];
+        option.value = key;
+        selectLine.add(option);
+    }
+
+    testColour(selectLine);
+}
+
+function testColour(elem) {
+    var par = elem.parentNode;
+    var line = elem.value;
+    var city = par.querySelector('#selectCity').value;
+    par.querySelector('#selectColour').value = colours[city]['line'][line]['colour'];
+}
+
+function testLoad() {
+    var theme = document.getElementById('theme');
+    testCity(theme.querySelector('#selectCity'));
+    testColour(theme.querySelector('#selectLine'));
+}
