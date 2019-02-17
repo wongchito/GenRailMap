@@ -1,9 +1,16 @@
 function initSVG() {
-    sessionStorage.all_params = JSON.stringify(default_params);
+    // if (sessionStorage.all_params != null) {
+    //     alert(sessionStorage.all_params);
+    //     loadSVGSize();
+    // } else {
+        sessionStorage.all_params = JSON.stringify(default_params);
+        // loadSVGSize();
+            
+        addCurrentBG();
+        reposStnName();
+    // }
 
-    document.getElementById('svg_height').value = default_params['svg_height'];
-    addCurrentBG();
-    reposStnName();
+    // document.getElementById('svg_height').value = default_params['svg_height'];
 }
 
 function getParams(params_name='all_params') {
@@ -59,7 +66,12 @@ function getStnX(idx) {
     var lineStart = linePos[0];
     var lineLength = linePos[1];
     var n_stn = getNStn();
-    var stn_x = lineStart + (lineLength / (n_stn-1)) * idx;
+    if (n_stn > 1) {
+        var stn_x = lineStart + (lineLength / (n_stn-1)) * idx;
+    }
+    if (n_stn == 1) {
+        var stn_x = lineStart + lineLength / 2;
+    }
     return stn_x;
 }
 

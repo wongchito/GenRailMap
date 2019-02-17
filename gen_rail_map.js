@@ -164,44 +164,86 @@ function setStripY(src) {
     redrawStrip();
 }
 
-function setLineColour() {
-    // Get new value
-    var colour_city = document.getElementById('colour_city').value;
-    var colour_list = document.getElementById('colour_cities');
-    var colour_name = 'c' + colour_list.querySelector('#' + colour_city).value;
+function setLineColour(elem) {
+    var target = elem.getAttribute('id');
+    if (target == 'theme') {
+        var city = elem.querySelector('#city').value;
+        var line = elem.querySelector('#line').value;
+        var colour = elem.querySelector('#colour').value;
+        var colour_name = 'c' + line;
 
-    // Log changes
-    var params_instance = getParams();
-    params_instance['colour_city'] = colour_city;
-    params_instance['colour_name'] = colour_name;
-    putParams(params_instance);
+        // Log changes
+        var params_instance = getParams();
+        params_instance['theme'][0] = city;
+        params_instance['theme'][1] = line;
+        // params_instance['colour_city'] = city;
+        // params_instance['colour_name'] = colour_name;
+        putParams(params_instance);
 
-    // Apply changes
-    document.getElementById('line_main').setAttribute('class', colour_name);
-    document.getElementById('strip').setAttribute('class', colour_name);
-}
+        // Apply changes
+        document.getElementById('line_main').setAttribute('stroke', colour);
+        document.getElementById('strip').setAttribute('stroke', colour);
+    } else if (target.substring(0,13) == 'int_selector') {
+        var stn_idx = elem.parentNode.getAttribute('id').substring(3);
+        var stn_state = getStnState(Number(stn_idx));
+        var change_city = elem.querySelector('#city').value;
+        var change_line = elem.querySelector('#line').value;
+        var change_colour = colours[change_city]['line'][change_line]['colour'];
+        var colour_name = 'c' + change_colour;
 
-function getCity(dropdown) {
-    // Get new value
-    var colour_city = dropdown.options[dropdown.selectedIndex].value;
+        // Log changes
+        var params_instance = getParams();
+        params_instance['stn_list'][stn_idx]['change'][0] = change_city;
+        params_instance['stn_list'][stn_idx]['change'][1] = change_line;
+        putParams(params_instance);
 
-    // Log changes
-    var params_instance = getParams();
-    params_instance['colour_city'] = colour_city;
-    putParams(params_instance);
-
-    var cities = document.getElementById('colour_cities').children;
-
-    for (i=0; i<cities.length; i++) {
-        if (cities[i].getAttribute('id') == colour_city) {
-            cities[i].style.display = 'block'
+        // Apply changes
+        if (stn_state == -1) {
+            document.getElementById('stn_int_'+stn_idx).setAttribute('stroke', '#AAAAAA');
         } else {
-            cities[i].style.display = 'none'
+            document.getElementById('stn_int_'+stn_idx).setAttribute('stroke', change_colour);
         }
     }
-    setLineColour()
-    // putParams(params_instance);
 }
+
+// function setLineColour() {
+//     // Get new value
+//     var colour_city = document.getElementById('colour_city').value;
+//     var colour_list = document.getElementById('colour_cities');
+//     var colour_name = 'c' + colour_list.querySelector('#' + colour_city).value;
+
+//     // Log changes
+//     var params_instance = getParams();
+//     params_instance['colour_city'] = colour_city;
+//     params_instance['colour_name'] = colour_name;
+//     putParams(params_instance);
+
+//     // Apply changes
+//     document.getElementById('line_main').setAttribute('class', colour_name);
+//     document.getElementById('strip').setAttribute('class', colour_name);
+// }
+
+// function getCity(dropdown) {
+//     // Get new value
+//     var colour_city = dropdown.options[dropdown.selectedIndex].value;
+
+//     // Log changes
+//     var params_instance = getParams();
+//     params_instance['colour_city'] = colour_city;
+//     putParams(params_instance);
+
+//     var cities = document.getElementById('colour_cities').children;
+
+//     for (i=0; i<cities.length; i++) {
+//         if (cities[i].getAttribute('id') == colour_city) {
+//             cities[i].style.display = 'block'
+//         } else {
+//             cities[i].style.display = 'none'
+//         }
+//     }
+//     setLineColour()
+//     // putParams(params_instance);
+// }
 
 function setTxtBGGap(src) {
     // Get new value
@@ -235,14 +277,14 @@ function addStn(elem, load=false) {
         putParams(params_instance);
 
         var params_instance = getParams();
-        params_instance['stn_list'][add_idx]['change'] = 'cnone'; // reset interchange
+        params_instance['stn_list'][add_idx]['change'][0] = 'nullCity';
+        params_instance['stn_list'][add_idx]['change'][1] = 'nullLine'; // reset interchange
     }
 
     // Apply changes
     var new_stn = par.cloneNode(true);
     if (new_stn.children[8]) {
         new_stn.children[6].checked = false;
-        new_stn.removeChild(new_stn.children[10]);
         new_stn.removeChild(new_stn.children[9]);
         new_stn.removeChild(new_stn.children[8]);
         new_stn.removeChild(new_stn.children[7]);
@@ -257,7 +299,7 @@ function addStn(elem, load=false) {
 
     var stn_int = document.getElementById('stn_int_'+add_idx);
     var new_stn_int = stn_int.cloneNode(true);
-    new_stn_int.setAttribute('class', 'cnone'); // reset interchange
+    new_stn_int.setAttribute('stroke', 'none'); // reset interchange
     var stn_ints = document.getElementById('station_ints').children;
     stn_int.parentNode.insertBefore(new_stn_int, stn_ints[parseInt(add_idx)]);
 
@@ -366,10 +408,10 @@ function reidxStn() {
         stn_ints[i].setAttribute('id', 'stn_int_'+i.toString());
         stn_names[i].setAttribute('id', 'stn_name_'+i.toString());
 
-        if (stns[i].children[8]) {
-            stns[i].children[7].setAttribute('id', 'colour_city_int_'+i.toString());
-            stns[i].children[8].setAttribute('id', 'colour_cities_int_'+i.toString());
-        }
+        // if (stns[i].children[8]) {
+        //     stns[i].children[7].setAttribute('id', 'colour_city_int_'+i.toString());
+        //     stns[i].children[8].setAttribute('id', 'colour_cities_int_'+i.toString());
+        // }
 
         int_names[i].setAttribute('id', 'int_name_'+i.toString());
     }
@@ -397,12 +439,13 @@ function redrawStn() {
         }
 
         var stn_int = document.getElementById('stn_int_'+i);
-        var change_colour = params_instance['stn_list'][i]['change'];
-        if (change_colour != 'cnone') {
+        var [change_city,change_line] = params_instance['stn_list'][i]['change'];
+        if (change_line != 'nullLine') {
+            var change_colour = colours[change_city]['line'][change_line]['colour'];
             if (stn_state == -1) {
-                stn_int.setAttribute('class', 'cpassed');
+                stn_int.setAttribute('stroke', '#AAAAAA');
             } else {
-                stn_int.setAttribute('class', params_instance['stn_list'][i]['change']);
+                stn_int.setAttribute('stroke', change_colour);
             }
         }
         stn_int.setAttribute('x', stn_x.toString());
@@ -429,7 +472,7 @@ function redrawStn() {
         if (stn_state == -1) {
             int_name.setAttribute('class','PassedName');
         } else {
-            int_name.setAttribute('class', 'FutrueName');
+            int_name.setAttribute('class', 'FutureName');
         }
         for (j=0; j<int_name.childElementCount; j++) {
             int_name.children[j].setAttribute('x', stn_x.toString());
@@ -541,19 +584,19 @@ function setStnName(elem, target) {
 
     // Log changes
     var params_instance = getParams();
-    params_instance['stn_list'][stn_idx][target] = elem.value; 
+    params_instance['stn_list'][stn_idx]['name'][target] = elem.value; 
     var wrap = params_instance['stn_list'][stn_idx]['wrap'];
     putParams(params_instance);
 
     // Apply changes
     var stn_name = document.getElementById('stn_name_'+stn_idx);
-    if (wrap && target == 'field1') {
+    if (wrap && target == 1) {
         var [str1, str2] = splitText(elem.parentNode.children[2].value);
         var stn_x = getStnX(stn_idx);
         var stn_name_html = str1 + '<tspan x="' + stn_x.toString() + '" dy="15">' + str2 + '</tspan>';
         stn_name.querySelector('#field1').innerHTML = stn_name_html;
     } else {
-        stn_name.querySelector('#'+target).textContent = elem.value;
+        stn_name.querySelector('#field'+target.toString()).textContent = elem.value;
     }
 
     addCurrentBG();
@@ -629,51 +672,52 @@ function wrapStnName(elem) {
     putParams(params_instance);
 
     // Apply changes
-    setStnName(elem.parentNode.children[2], 'field1');
+    setStnName(elem.parentNode.children[2], 1);
 }
 
-function showColourSelector(elem, load=false) {
-    // Get new value
-    var change = elem.checked;
-    var stn_idx = elem.parentNode.getAttribute('id').substring(3);
-    var params_instance = getParams();
+// function showColourSelector(elem, load=false) {
+//     // Get new value
+//     var change = elem.checked;
+//     var stn_idx = elem.parentNode.getAttribute('id').substring(3);
+//     var params_instance = getParams();
 
-    var city_list = document.getElementById('colour_city').cloneNode(true);
-    city_list.setAttribute('id', 'colour_city_int_'+stn_idx);
-    city_list.setAttribute('onchange', 'getChangeCity(this)');
+//     var city_list = document.getElementById('colour_city').cloneNode(true);
+//     city_list.setAttribute('id', 'colour_city_int_'+stn_idx);
+//     city_list.setAttribute('onchange', 'getChangeCity(this)');
+//     city_list.style.display = 'block';
 
-    var colour_list = document.getElementById('colour_cities').cloneNode(true);
-    colour_list.setAttribute('id', 'colour_cities_int_'+stn_idx);
-    for (i=0; i<colour_list.childElementCount; i++) {
-        colour_list.children[i].setAttribute('onchange', 'setChangeColour(this)');
-    }
+//     var colour_list = document.getElementById('colour_cities').cloneNode(true);
+//     colour_list.setAttribute('id', 'colour_cities_int_'+stn_idx);
+//     for (i=0; i<colour_list.childElementCount; i++) {
+//         colour_list.children[i].setAttribute('onchange', 'setChangeColour(this)');
+//     }
 
-    var int_name_field0 = document.createElementNS(elem.namespaceURI, 'input');
-    int_name_field0.setAttribute('type', 'input');
-    int_name_field0.setAttribute('onchange', 'setChangeName(this,0)');
+//     var int_name_field0 = document.createElementNS(elem.namespaceURI, 'input');
+//     int_name_field0.setAttribute('type', 'input');
+//     int_name_field0.setAttribute('onchange', 'setChangeName(this,0)');
 
-    var int_name_field1 = int_name_field0.cloneNode(true);
-    int_name_field1.setAttribute('onchange', 'setChangeName(this,1)');
+//     var int_name_field1 = int_name_field0.cloneNode(true);
+//     int_name_field1.setAttribute('onchange', 'setChangeName(this,1)');
     
-    if (change) {
-        elem.parentNode.appendChild(city_list);
-        elem.parentNode.appendChild(colour_list);
-        elem.parentNode.appendChild(int_name_field0);
-        elem.parentNode.appendChild(int_name_field1);
-        getChangeCity(elem.parentNode.children[7]);
-    } else {
-        params_instance['stn_list'][stn_idx]['change'] = 'cnone';
-        putParams(params_instance);
+//     if (change) {
+//         elem.parentNode.appendChild(city_list);
+//         elem.parentNode.appendChild(colour_list);
+//         elem.parentNode.appendChild(int_name_field0);
+//         elem.parentNode.appendChild(int_name_field1);
+//         getChangeCity(elem.parentNode.children[7]);
+//     } else {
+//         params_instance['stn_list'][stn_idx]['change'] = 'cnone';
+//         putParams(params_instance);
 
-        if (elem.parentNode.children[7]) {
-            elem.parentNode.removeChild(elem.parentNode.children[10]);
-            elem.parentNode.removeChild(elem.parentNode.children[9]);
-            elem.parentNode.removeChild(elem.parentNode.children[8]);
-            elem.parentNode.removeChild(elem.parentNode.children[7]);
-        }
-        document.getElementById('stn_int_'+stn_idx).setAttribute('class', 'cnone');
-    }
-}
+//         if (elem.parentNode.children[7]) {
+//             elem.parentNode.removeChild(elem.parentNode.children[10]);
+//             elem.parentNode.removeChild(elem.parentNode.children[9]);
+//             elem.parentNode.removeChild(elem.parentNode.children[8]);
+//             elem.parentNode.removeChild(elem.parentNode.children[7]);
+//         }
+//         document.getElementById('stn_int_'+stn_idx).setAttribute('class', 'cnone');
+//     }
+// }
 
 function getChangeCity(elem) {
     var stn_idx = elem.parentNode.getAttribute('id').substring(3);
@@ -689,26 +733,26 @@ function getChangeCity(elem) {
     setChangeColour(elem.parentNode.children[8].children[0]);
 }
 
-function setChangeColour(elem) {
-    var stn_idx = elem.parentNode.parentNode.getAttribute('id').substring(3);
-    var stn_state = getStnState(Number(stn_idx));
-    var change_city = document.getElementById('colour_city_int_'+stn_idx).value;
-    var colour_list = document.getElementById('colour_cities_int_'+stn_idx);
-    var colour_name = 'c' + colour_list.querySelector('#'+change_city).value;
+// function setChangeColour(elem) {
+//     var stn_idx = elem.parentNode.parentNode.getAttribute('id').substring(3);
+//     var stn_state = getStnState(Number(stn_idx));
+//     var change_city = document.getElementById('colour_city_int_'+stn_idx).value;
+//     var colour_list = document.getElementById('colour_cities_int_'+stn_idx);
+//     var colour_name = 'c' + colour_list.querySelector('#'+change_city).value;
 
-    // Log changes
-    var params_instance = getParams();
-    params_instance['stn_list'][stn_idx]['change'] = colour_name;
-    putParams(params_instance);
+//     // Log changes
+//     var params_instance = getParams();
+//     params_instance['stn_list'][stn_idx]['change'] = colour_name;
+//     putParams(params_instance);
 
-    // Apply changes
-    if (stn_state == -1) {
-        document.getElementById('stn_int_'+stn_idx).setAttribute('class', 'cpassed');
-    } else {
-        document.getElementById('stn_int_'+stn_idx).setAttribute('class', colour_name);
-    }
+//     // Apply changes
+//     if (stn_state == -1) {
+//         document.getElementById('stn_int_'+stn_idx).setAttribute('class', 'cpassed');
+//     } else {
+//         document.getElementById('stn_int_'+stn_idx).setAttribute('class', colour_name);
+//     }
     
-}
+// }
 
 function setChangeName(elem, i) {
     // Get new value
@@ -733,40 +777,4 @@ function test() {
     // alert(a[1].children[0].getAttribute('x'));
     // alert(JSON.stringify(getParams()));
 
-}
-
-function testCity(elem) {
-    var par = elem.parentNode;
-    var city = elem.value;
-    var selectLine = par.querySelector('#selectLine');
-    var ln = selectLine.length;
-    while (ln) {
-        selectLine.remove(0);
-        ln--;
-    }
-
-    var line_list = colours[city]['line'];
-    var line_keys = Object.keys(line_list);
-    for (i=0; i<line_keys.length; i++) {
-        var option = document.createElement('option'); 
-        var key = line_keys[i];
-        option.text = line_list[key]['name'][0] + ' - ' + line_list[key]['name'][1];
-        option.value = key;
-        selectLine.add(option);
-    }
-
-    testColour(selectLine);
-}
-
-function testColour(elem) {
-    var par = elem.parentNode;
-    var line = elem.value;
-    var city = par.querySelector('#selectCity').value;
-    par.querySelector('#selectColour').value = colours[city]['line'][line]['colour'];
-}
-
-function testLoad() {
-    var theme = document.getElementById('theme');
-    testCity(theme.querySelector('#selectCity'));
-    testColour(theme.querySelector('#selectLine'));
 }

@@ -1,6 +1,14 @@
 function loadTemplate(line) {
     alert('All changes will be discarded! ')
-    sessionStorage.all_params = JSON.stringify(template_gz8_params);
+    if (line == 'gz8') {
+        sessionStorage.all_params = JSON.stringify(template_gz8_params);
+    }
+    if (line == 'wrl') {
+        sessionStorage.all_params = JSON.stringify(template_wrl_params);
+    }
+    if (line == 'edi24') {
+        sessionStorage.all_params = JSON.stringify(template_edi24_params);
+    }
 
     loadSVGSize();
 }
@@ -39,13 +47,14 @@ function loadSVGSize() {
     document.getElementById('strip_slider').value = strip_pc;
     redrawStrip();
 
-    var colour_city = params_instance['colour_city'];
-    document.getElementById('colour_city').value = colour_city;
-    getCity(document.getElementById('colour_city'));
-    var colour_name = params_instance['colour_name'];
-    var colour_list = document.getElementById('colour_cities');
-    colour_list.querySelector('#' + colour_city).value = colour_name.substring(1);
-    setLineColour();
+    var theme_city = params_instance['theme'][0];
+    var theme = document.getElementById('theme');
+    theme.querySelector('#city').value = theme_city;
+    loadLine(theme);
+
+    var theme_line = params_instance['theme'][1];
+    theme.querySelector('#line').value = theme_line;
+    loadColour(theme);
 
     redrawLineMain();
 
@@ -58,14 +67,18 @@ function loadSVGSize() {
 
     var stn_list = params_instance['stn_list'];
     var n_stn = stn_list.length;
-    var n_stn_pre = document.getElementById('stn_list').childElementCount;
+    var stns = document.getElementById('stn_list').children;
 
+    while (stns.length - 1) {
+        rmStn(stns[1].children[2], true);
+    }
+
+    var n_stn_pre = stns.length;
     while (n_stn - n_stn_pre != 0) {
-        if (n_stn > n_stn_pre) {
-            addStn(document.getElementById('stn0').children[2], true);
-        } else {
-            rmStn(document.getElementById('stn0').children[2], true);
-        }
+        addStn(document.getElementById('stn0').children[2], true);
+        // } else if (n_stn < n_stn_pre) {
+        //     rmStn(document.getElementById('stn_list').children[1].children[2], true);
+        // // }
         var n_stn_pre = document.getElementById('stn_list').childElementCount;
     }
 
@@ -74,67 +87,63 @@ function loadSVGSize() {
     var current_stn_idx = params_instance['current_stn_idx'];
     document.getElementById('stn_list').children[current_stn_idx].children[0].checked = true;
     redrawLinePassed();
-
-    for (i=0; i<n_stn; i++) {
+    for (k=0; k<n_stn; k++) {
         // Wrap
-        var wrap = stn_list[i]['wrap'];
-        document.getElementById('stn'+i).children[3].checked = wrap;
+        var wrap = stn_list[k]['wrap'];
+        document.getElementById('stn'+k).children[3].checked = wrap;
 
         // Name in list
-        document.getElementById('stn'+i).children[1].value = stn_list[i]['field0'];
-        document.getElementById('stn'+i).children[2].value = stn_list[i]['field1'];
-        if (stn_list[i]['change'] != 'cnone') {
-            document.getElementById('stn'+i).children[6].checked = true;
+        document.getElementById('stn'+k).children[1].value = stn_list[k]['name'][0];
+        document.getElementById('stn'+k).children[2].value = stn_list[k]['name'][1];
+        if (stn_list[k]['change'][0] != 'nullCity') {
+            var elem = document.getElementById('stn'+k).children[6];
+            elem.checked = true;
 
-            var city_list = document.getElementById('colour_city').cloneNode(true);
-            city_list.setAttribute('id', 'colour_city_int_'+i);
-            city_list.setAttribute('onchange', 'getChangeCity(this)');
+            var selector = document.getElementById('theme').cloneNode(true);
+            selector.setAttribute('id', 'int_selector');
 
-            var colour_list = document.getElementById('colour_cities').cloneNode(true);
-            colour_list.setAttribute('id', 'colour_cities_int_'+i);
-            for (j=0; j<colour_list.childElementCount; j++) {
-                colour_list.children[j].setAttribute('onchange', 'setChangeColour(this)');
-            }
-
-            var int_name_field0 = document.createElementNS(document.getElementById('stn'+i).namespaceURI, 'input');
+            var int_name_field0 = document.createElementNS(elem.namespaceURI, 'input');
             int_name_field0.setAttribute('type', 'input');
             int_name_field0.setAttribute('onchange', 'setChangeName(this,0)');
-            int_name_field0.value = stn_list[i]['change_name'][0];
+            int_name_field0.value = stn_list[k]['change_name'][0];
 
             var int_name_field1 = int_name_field0.cloneNode(true);
             int_name_field1.setAttribute('onchange', 'setChangeName(this,1)');
-            int_name_field1.value = stn_list[i]['change_name'][1];
+            int_name_field1.value = stn_list[k]['change_name'][1];
 
-            document.getElementById('stn'+i).appendChild(city_list);
-            document.getElementById('stn'+i).appendChild(colour_list);
-            document.getElementById('stn'+i).appendChild(int_name_field0);
-            document.getElementById('stn'+i).appendChild(int_name_field1);
+            document.getElementById('stn'+k).appendChild(selector);
+            document.getElementById('stn'+k).appendChild(int_name_field0);
+            document.getElementById('stn'+k).appendChild(int_name_field1);
 
-            document.getElementById('colour_city_int_'+i).value = 'gz';
-            // document.getElementById('colour_cities_int_'+i).querySelector('#hk').style.display = 'block;
-            // alert(stn_list[i]['change'].substring(1));
-            document.getElementById('colour_cities_int_'+i).querySelector('#gz').value = stn_list[i]['change'].substring(1);
+            var [change_city,change_line] = stn_list[k]['change'];
+            loadCity(selector, change_city);
+            loadLine(selector, change_line);
         } else {
-            document.getElementById('stn'+i).children[6].checked = false;
+            document.getElementById('stn'+k).children[6].checked = false;
+            if (document.getElementById('stn'+k).children[7]) {
+                document.getElementById('stn'+k).remove(9);
+                document.getElementById('stn'+k).remove(8);
+                document.getElementById('stn'+k).remove(7);
+            }
         }
 
         // Name in SVG
-        var stn_name = document.getElementById('stn_name_'+i);
-        stn_name.querySelector('#field0').textContent = stn_list[i]['field0'];
+        var stn_name = document.getElementById('stn_name_'+k);
+        stn_name.querySelector('#field0').textContent = stn_list[k]['name'][0];
         if (wrap) {
-            var [str1, str2] = splitText(stn_list[i]['field1']);
-            var stn_x = getStnX(i);
+            var [str1, str2] = splitText(stn_list[k]['name'][1]);
+            var stn_x = getStnX(k);
             var stn_name_html = str1 + '<tspan x="' + stn_x.toString() + '" dy="15">' + str2 + '</tspan>';
             stn_name.querySelector('#field1').innerHTML = stn_name_html;
         } else {
-            stn_name.querySelector('#field1').textContent = stn_list[i]['field1'];
+            stn_name.querySelector('#field1').textContent = stn_list[k]['name'][1];
         }
 
         // Int name in SVG
-        var int_name = document.getElementById('int_name_'+i);
+        var int_name = document.getElementById('int_name_'+k);
         // alert(stn_list[i]['change_name'][0])
-        int_name.querySelector('#field0').textContent = stn_list[i]['change_name'][0];
-        int_name.querySelector('#field1').textContent = stn_list[i]['change_name'][1];
+        int_name.querySelector('#field0').textContent = stn_list[k]['change_name'][0];
+        int_name.querySelector('#field1').textContent = stn_list[k]['change_name'][1];
     }
 
     redrawStn();
@@ -149,6 +158,75 @@ function save() {
 }
 
 function load() {
+    // sessionStorage.all_params = JSON.stringify(template_gz8_params);
     sessionStorage.all_params = document.getElementById('params_string').value;
-    loadSVGSize();
+    if (checkDataVer()) {
+        loadSVGSize();
+    } else {
+        alert('Warning: Configuration imported is deprecated! Please save the updated script in the text area and reload it again!')
+    }
+    // loadSVGSize();
+}
+
+function checkDataVer() {
+    var return_value = true;
+    // var params_instance = getParams();
+    var params_instance = JSON.parse(document.getElementById('params_string').value);
+
+    if (params_instance['colour_city']) {
+        var theme_city = params_instance['colour_city'];
+        if (theme_city == 'gz') {
+            theme_city = 'guangzhou';
+        }
+        if (theme_city == 'hk') {
+            theme_city = 'hongkong';
+        }
+        if (theme_city == 'fs') {
+            theme_city = 'foshan';
+        }
+        if (theme_city == 'sz') {
+            theme_city = 'shenzhen';
+        }
+        if (params_instance['theme'] == null) {
+            params_instance['theme'] = ['',''];
+        }
+        params_instance['theme'][0] = theme_city;
+        delete params_instance['colour_city'];
+
+        return_value = false;
+    }
+
+    if (params_instance['colour_name']) {
+        var theme_colour = params_instance['colour_name'];
+        theme_colour = theme_colour.substring(1,theme_colour.length);
+        if (params_instance['theme'] == null) {
+            params_instance['theme'] = ['',''];
+        }
+        params_instance['theme'][1] = theme_colour;
+        delete params_instance['colour_name'];
+
+        return_value = false;
+    }
+
+    if (params_instance['stn_list'][0]['field0']) {
+        var stn_list = params_instance['stn_list'];
+        for (i=0; i<stn_list.length; i++) {
+            stn_list[i]['name'] = [stn_list[i]['field0'], stn_list[i]['field1']];
+            delete stn_list[i]['field0'];
+            delete stn_list[i]['field1'];
+
+            if (stn_list[i]['change'] == 'cnone') {
+                stn_list[i]['change'] = ['nullCity', 'nullLine'];
+            } else {
+                stn_list[i]['change'] = [params_instance['theme'][0], stn_list[i]['change'].substring(1,stn_list[i]['change'].length)];
+            }
+        }
+
+        return_value = false;
+    }
+
+    if (!return_value) {
+        document.getElementById('params_string').value = JSON.stringify(params_instance);
+    }
+    return return_value;
 }
