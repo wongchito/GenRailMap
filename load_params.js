@@ -50,11 +50,11 @@ function loadSVGSize() {
     var theme_city = params_instance['theme'][0];
     var theme = document.getElementById('theme');
     theme.querySelector('#city').value = theme_city;
-    loadLine(theme);
+    loadLine(theme, params_instance['theme'][1]);
 
-    var theme_line = params_instance['theme'][1];
-    theme.querySelector('#line').value = theme_line;
-    loadColour(theme);
+    // var theme_line = params_instance['theme'][1];
+    // theme.querySelector('#line').value = theme_line;
+    // loadColour(theme);
 
     redrawLineMain();
 

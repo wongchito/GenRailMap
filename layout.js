@@ -1,4 +1,4 @@
-function loadCity(elem, city=null) {
+function loadCity(elem, city=null, line=null) {
     var city_selector = elem.querySelector('#city');
     while (city_selector.length) {
         city_selector.remove(0);
@@ -23,7 +23,7 @@ function loadCity(elem, city=null) {
         city_selector.value = city;
     }
 
-    loadLine(elem);
+    loadLine(elem, line=line);
 }
 
 function loadLine(elem, line=null) {
@@ -108,8 +108,8 @@ function loadChangeColourSelector(elem) {
 
 function init() {
     // checkVer();
-    loadCity(document.getElementById('theme'));
     sessionStorage.all_params = JSON.stringify(default_params);
+    loadCity(document.getElementById('theme'), default_params['theme'][0], default_params['theme'][1]);
     setFont();
     loadSVGSize();
 }
