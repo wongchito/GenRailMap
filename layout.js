@@ -107,7 +107,7 @@ function loadChangeColourSelector(elem) {
 }
 
 function init() {
-    // checkVer();
+    checkVer();
     loadCity(document.getElementById('theme'));
 }
 
