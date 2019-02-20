@@ -276,6 +276,11 @@ function setLineColour(elem) {
 //     // putParams(params_instance);
 // }
 
+function setStyle(elem) {
+    var style = elem.value;
+    alert(style);
+}
+
 function setTxtBGGap(src) {
     // Get new value
     if (src == 'slider') {

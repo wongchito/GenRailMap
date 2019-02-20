@@ -3,11 +3,12 @@ function initSVG() {
     //     alert(sessionStorage.all_params);
     //     loadSVGSize();
     // } else {
-        sessionStorage.all_params = JSON.stringify(default_params);
+        // sessionStorage.all_params = JSON.stringify(default_params);
         // loadSVGSize();
-        setFont();
-        reposStnName();
-        addCurrentBG();
+        // setFont();
+        // reposStnName();
+        // addCurrentBG();
+        // loadSVGSize();
     // }
 
     // document.getElementById('svg_height').value = default_params['svg_height'];

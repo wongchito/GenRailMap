@@ -2,18 +2,19 @@ var default_params = {
     'svg_width': '500', 
     'svg_height': '200', 
     'show_outer': true,
-    'padding': '10', 
+    'padding': '20', 
     'y_pc': '50', 
     'strip_pc': '95',
 
-    "theme":["guangzhou","gz1"],
+    "theme":["hongkong","twl"],
+    "style":"mtr",
 
-    'direction': 'right', 
+    'direction': 'left', 
     'txt_bg_gap': '15',
     'txt_flip': false,
     'stn_list': [
-        {"name":["中環","Central"], "wrap":false, 'change':["nullCity","nullLine"], 'change_name':['','']}, 
-        {"name":["金鐘","Admiralty"], 'wrap': false, 'change':["nullCity","nullLine"], 'change_name':['','']},
+        {"name":["中環","Central"], "wrap":false, 'change':["hongkong","isl"], 'change_name':['港島綫往上環','Island Line towards Sheung Wan']}, 
+        {"name":["金鐘","Admiralty"], 'wrap': false, 'change':["hongkong","isl"], 'change_name':['港島綫往柴灣','Island Line towards Chai Wan']},
         {"name":["荃灣","Tsuen Wan"], 'wrap': false, 'change':["nullCity","nullLine"], 'change_name':['','']}
     ], 
     'current_stn_idx': '1'
@@ -28,6 +29,7 @@ var template_wrl_params = {
     "strip_pc":"97",
 
     "theme":["hongkong","wrl"],
+    "style":"mtr",
     
     "direction":"right",
     "txt_bg_gap":"16",
@@ -58,6 +60,7 @@ var template_gz8_params = {
     "strip_pc":"96",
 
     "theme":["guangzhou","gz8"],
+    "style":"mtr",
 
     "direction":"left",
     "txt_bg_gap":"16",
@@ -104,6 +107,7 @@ var template_edi24_params = {
     "strip_pc":"97",
 
     "theme":["edinburgh","24"],
+    "style":"mtr",
 
     "direction":"right",
     "txt_bg_gap":"13",

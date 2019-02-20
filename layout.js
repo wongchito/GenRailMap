@@ -107,8 +107,11 @@ function loadChangeColourSelector(elem) {
 }
 
 function init() {
-    checkVer();
+    // checkVer();
     loadCity(document.getElementById('theme'));
+    sessionStorage.all_params = JSON.stringify(default_params);
+    setFont();
+    loadSVGSize();
 }
 
 function test() {

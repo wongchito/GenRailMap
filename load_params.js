@@ -58,6 +58,10 @@ function loadSVGSize() {
 
     redrawLineMain();
 
+    var style = params_instance['style'];
+    var style_selector = document.getElementById('style');
+    style_selector.value = style;
+
     var direction = params_instance['direction'];
     document.getElementById('direc_'+direction.substring(0,1)).checked = true;
 
@@ -152,8 +156,8 @@ function loadSVGSize() {
         }
 
         // Name in HTML
-        document.getElementById('stn'+k.toString()).children[1].setAttribute('value', stn_list[k]['name'][0]);
-        document.getElementById('stn'+k.toString()).children[2].setAttribute('value', stn_list[k]['name'][1]);
+        document.getElementById('stn'+k.toString()).children[1].value = stn_list[k]['name'][0];
+        document.getElementById('stn'+k.toString()).children[2].value = stn_list[k]['name'][1];
 
         // Int name in SVG
         var int_name = document.getElementById('int_name_'+k);

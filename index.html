@@ -142,7 +142,8 @@
 </div> -->
 
 <p>Style</p>
-<select>
+<select id="style" onchange="setStyle(this)">
+    <option value="gzmtr">Guangzhou Metro - 广州地铁</option>
     <option value="mtr">MTR - 港鐵</option>
 </select>
 
@@ -160,17 +161,17 @@
 <div id="stn_list">
     <div id="stn0">
         <input type="radio" name="current" onchange="setCurrentStn(this)">
-        <input type="text" value="中環" onchange="setStnName(this, 0)">
-        <input type="text" value="Central" onchange="setStnName(this, 1)">
+        <input type="text" onchange="setStnName(this, 0)">
+        <input type="text" onchange="setStnName(this, 1)">
         <input type="checkbox" onchange="wrapStnName(this)">Wrap</input>
         <button onclick="addStn(this)">+</button>
         <button onclick="rmStn(this)">-</button>
         <input type="checkbox" onchange="loadChangeColourSelector(this)">
     </div>
-    <div id="stn1">
+    <!-- <div id="stn1">
         <input type="radio" name="current" onchange="setCurrentStn(this)" checked>
-        <input type="text" value="金鐘" onchange="setStnName(this, 0)">
-        <input type="text" value="Admiralty" onchange="setStnName(this, 1)">
+        <input type="text" onchange="setStnName(this, 0)">
+        <input type="text" onchange="setStnName(this, 1)">
         <input type="checkbox" onchange="wrapStnName(this)">Wrap</input>
         <button onclick="addStn(this)">+</button>
         <button onclick="rmStn(this)">-</button>
@@ -178,13 +179,13 @@
     </div>
     <div id="stn2">
         <input type="radio" name="current" onchange="setCurrentStn(this)">
-        <input type="text" value="荃灣" onchange="setStnName(this, 0)">
-        <input type="text" value="Tsuen Wan" onchange="setStnName(this, 1)">
+        <input type="text" onchange="setStnName(this, 0)">
+        <input type="text" onchange="setStnName(this, 1)">
         <input type="checkbox" onchange="wrapStnName(this)">Wrap</input>
         <button onclick="addStn(this)">+</button>
         <button onclick="rmStn(this)">-</button>
         <input type="checkbox" onchange="loadChangeColourSelector(this)">
-    </div>
+    </div> -->
 </div>
 
 <p>Load templates</p>
@@ -271,14 +272,14 @@ id="root" width="500" height="200" onload="initSVG()">
 
     <g class="LineDiagramChange" id="station_ints">
         <use id="stn_int_0" xlink:href="#intline_down" stroke="none" x="25" y="100"/>
-        <use id="stn_int_1" xlink:href="#intline_up" stroke="none" x="250" y="100"/>
-        <use id="stn_int_2" xlink:href="#intline_down" stroke="none" x="475" y="100"/>
+        <!-- <use id="stn_int_1" xlink:href="#intline_up" stroke="none" x="250" y="100"/>
+        <use id="stn_int_2" xlink:href="#intline_down" stroke="none" x="475" y="100"/> -->
     </g>
 
     <g id="stations">
-        <use xlink:href="#passedint" transform="translate(25,100)" id="stn_icon_0"/>
-        <use xlink:href="#int" transform="translate(250,100)" id="stn_icon_1"/>
-        <use xlink:href="#int" transform="translate(475,100)" id="stn_icon_2"/>
+        <use xlink:href="#int" transform="translate(25,100)" id="stn_icon_0"/>
+        <!-- <use xlink:href="#int" transform="translate(250,100)" id="stn_icon_1"/>
+        <use xlink:href="#int" transform="translate(475,100)" id="stn_icon_2"/> -->
     </g>
 
     <g>
@@ -290,14 +291,14 @@ id="root" width="500" height="200" onload="initSVG()">
             <text id="field0" class="StnNameZH">中環</text>
             <text id="field1" dy="15" class="StnNameEN">Central</text>
         </g>
-        <g id="stn_name_1" class="CurrentName" transform="translate(250,70)rotate(0)" text-anchor="middle">
+        <!-- <g id="stn_name_1" class="CurrentName" transform="translate(250,70)rotate(0)" text-anchor="middle">
             <text id="field0" class="StnNameZH">金鐘</text>
             <text id="field1" dy="15" class="StnNameEN">Admiralty</text>
         </g>
         <g id="stn_name_2" class="FutureName" transform="translate(475,70)rotate(0)" text-anchor="middle">
             <text id="field0" class="StnNameZH">荃灣</text>
             <text id="field1" dy="15" class="StnNameEN">Tsuen Wan</text>
-        </g>
+        </g> -->
     </g>
 
     <g id="change_names">
@@ -305,14 +306,14 @@ id="root" width="500" height="200" onload="initSVG()">
             <text id="field0" x="25" y="0" class="IntNameZH" text-anchor="middle"></text>
             <text id="field1" x="25" y="8" class="IntNameEN" text-anchor="middle"></text>
         </g>
-        <g id="int_name_1" class="FutureName">
+        <!-- <g id="int_name_1" class="FutureName">
             <text id="field0" x="250" y="0" class="IntNameZH" text-anchor="middle"></text>
             <text id="field1" x="250" y="8" class="IntNameEN" text-anchor="middle"></text>
         </g>
         <g id="int_name_2" class="FutureName">
             <text id="field0" x="475" y="0" class="IntNameZH" text-anchor="middle"></text>
             <text id="field1" x="475" y="8" class="IntNameEN" text-anchor="middle"></text>
-        </g>
+        </g> -->
     </g>
 
     <rect id="outer" x="0" y="0" width="500" height="200" fill="none" stroke="black"/>
