@@ -73,19 +73,29 @@ function loadSVGSize() {
         rmStn(stns[1].children[2], true);
     }
 
-    var n_stn_pre = stns.length;
-    while (n_stn - n_stn_pre != 0) {
+    stns[0].children[6].checked = false;
+    if (stns[0].children[8]) {
+        stns[0].removeChild(stns[0].children[9]);
+        stns[0].removeChild(stns[0].children[8]);
+        stns[0].removeChild(stns[0].children[7]);
+    }
+    document.getElementById('stn_int_0').setAttribute('stroke', 'none');
+
+    var stn_to_add = n_stn - 1;
+    while (stn_to_add != 0) {
         addStn(document.getElementById('stn0').children[2], true);
         // } else if (n_stn < n_stn_pre) {
         //     rmStn(document.getElementById('stn_list').children[1].children[2], true);
         // // }
-        var n_stn_pre = document.getElementById('stn_list').childElementCount;
+        // var n_stn_pre = document.getElementById('stn_list').childElementCount;
+        stn_to_add--;
     }
-
+    // alert(n_stn_pre);
     reidxStn();
 
     var current_stn_idx = params_instance['current_stn_idx'];
-    document.getElementById('stn_list').children[current_stn_idx].children[0].checked = true;
+    document.getElementById('stn'+current_stn_idx).children[0].checked = true;
+    // document.getElementById('stn_list').children[current_stn_idx].children[0].checked = true;
     redrawLinePassed();
     for (k=0; k<n_stn; k++) {
         // Wrap
@@ -118,18 +128,20 @@ function loadSVGSize() {
             var [change_city,change_line] = stn_list[k]['change'];
             loadCity(selector, change_city);
             loadLine(selector, change_line);
-        } else {
-            document.getElementById('stn'+k).children[6].checked = false;
-            if (document.getElementById('stn'+k).children[7]) {
-                document.getElementById('stn'+k).remove(9);
-                document.getElementById('stn'+k).remove(8);
-                document.getElementById('stn'+k).remove(7);
-            }
         }
+        // } else {
+        //     document.getElementById('stn'+k).children[6].checked = false;
+        //     if (document.getElementById('stn'+k).children[8]) {
+        //         document.getElementById('stn'+k).remove(9);
+        //         document.getElementById('stn'+k).remove(8);
+        //         document.getElementById('stn'+k).remove(7);
+        //     }
+        // }
 
         // Name in SVG
         var stn_name = document.getElementById('stn_name_'+k);
         stn_name.querySelector('#field0').textContent = stn_list[k]['name'][0];
+
         if (wrap) {
             var [str1, str2] = splitText(stn_list[k]['name'][1]);
             var stn_x = getStnX(k);
@@ -139,6 +151,10 @@ function loadSVGSize() {
             stn_name.querySelector('#field1').textContent = stn_list[k]['name'][1];
         }
 
+        // Name in HTML
+        document.getElementById('stn'+k.toString()).children[1].setAttribute('value', stn_list[k]['name'][0]);
+        document.getElementById('stn'+k.toString()).children[2].setAttribute('value', stn_list[k]['name'][1]);
+
         // Int name in SVG
         var int_name = document.getElementById('int_name_'+k);
         // alert(stn_list[i]['change_name'][0])
@@ -147,8 +163,8 @@ function loadSVGSize() {
     }
 
     redrawStn();
-    addCurrentBG();
     reposStnName();
+    addCurrentBG();
 
 }
 

@@ -5,9 +5,9 @@ function initSVG() {
     // } else {
         sessionStorage.all_params = JSON.stringify(default_params);
         // loadSVGSize();
-            
-        addCurrentBG();
+        setFont();
         reposStnName();
+        addCurrentBG();
     // }
 
     // document.getElementById('svg_height').value = default_params['svg_height'];
@@ -77,13 +77,21 @@ function getStnX(idx) {
 
 function getBGY(idx) {
     var stn_name = document.getElementById('stn_name_'+idx.toString());
-    if (stn_name.children[0].nodeName == 'rect') {
-        var bg_lower_y = stn_name.getBBox().y + stn_name.getBBox().height;
-        var bg_upper_y = Number(stn_name.getBBox().y);
-    } else {
-        var bg_lower_y = stn_name.getBBox().y + stn_name.getBBox().height + 2;
-        var bg_upper_y = stn_name.getBBox().y - 2;
-    }
+    var pt = document.getElementById('root').createSVGPoint();
+    var bb = stn_name.getBBox();
+    pt.x = bb.x;
+    pt.y = bb.y;
+    var ctm = stn_name.getCTM();
+    var pos = pt.matrixTransform(ctm);
+    var bg_lower_y = pos.y + bb.height + 2;
+    var bg_upper_y = pos.y - 2;
+    // if (stn_name.children[0].nodeName == 'rect') {
+    //     var bg_lower_y = pos.y + bb.height;
+    //     var bg_upper_y = pos.y;
+    // } else {
+    //     var bg_lower_y = pos.y + bb.height + 2;
+    //     var bg_upper_y = pos.y - 2;
+    // }
     
     return [bg_lower_y, bg_upper_y];
 }

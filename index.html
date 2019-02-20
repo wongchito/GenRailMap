@@ -9,6 +9,7 @@
     <script src="layout.js"></script>
     <script src="colours.js"></script>
     <script src="params.js"></script>
+    <script src="fonts.js"></script>
 </head>
 
 <body onload="init()">
@@ -217,50 +218,30 @@ id="root" width="500" height="200" onload="initSVG()">
         }
 
         .StnNameEN {
-            font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
             font-size:11px;
             alignment-baseline:middle;
         }
         .StnNameZH {
-            font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","Source Han Serif","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
             font-size:18px;
             alignment-baseline:central;
         }
 
         .IntNameEN {
-            font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
             font-size:6px;
             alignment-baseline:middle;
         }
         .IntNameZH {
-            font-family:"Myriad Pro",Arial,"Hiragino Mincho ProN","Source Han Serif","PingFang HK","Meiryo UI",Meiryo,"Microsoft Jhenghei UI","Arial Unicode MS",sans-serif;
             font-weight:bold;
             font-size:10px;
-            alignment-baseline:central;
-        }
-
-        .StnName {
-            font-family: "Myriad Pro", "Hiragino Mincho ProN";
-            font-weight: bold;
-            fill: #fff;
             alignment-baseline:central;
         }
 
         .cpassed {stroke:#AAAAAA}
         .cnone {stroke:none}
         .cunknown {stroke:#999999}
-
-        .cfs1 {stroke:#C4D600}
-        .cfs2 {stroke:#009900}
-        .cfs3 {stroke:#0000FF}
-        .cfs4 {stroke:#FF00FF}
-        .cfs6 {stroke:#FFb81D}
-        .cfs9 {stroke:#A25EB5}
-        .cfs11 {stroke:#6600CC}
-        .cfs13 {stroke:#32B7EA}
 
     </style>
 
@@ -300,18 +281,22 @@ id="root" width="500" height="200" onload="initSVG()">
         <use xlink:href="#int" transform="translate(475,100)" id="stn_icon_2"/>
     </g>
 
+    <g>
+        <rect id="current_bg" x="0" y="0" width="100" height="20" fill="#000"/>
+    </g>
+
     <g id="station_names">
-        <g id="stn_name_0" class="PassedName">
-            <text id="field0" x="25" y="70" class="StnNameZH" text-anchor="middle">中環</text>
-            <text id="field1" x="25" y="85" class="StnNameEN" text-anchor="middle">Central</text>
+        <g id="stn_name_0" class="PassedName" transform="translate(25,70)rotate(0)" text-anchor="middle">
+            <text id="field0" class="StnNameZH">中環</text>
+            <text id="field1" dy="15" class="StnNameEN">Central</text>
         </g>
-        <g id="stn_name_1" class="CurrentName">
-            <text id="field0" x="250" y="70" class="StnNameZH" text-anchor="middle">金鐘</text>
-            <text id="field1" x="250" y="85" class="StnNameEN" text-anchor="middle">Admiralty</text>
+        <g id="stn_name_1" class="CurrentName" transform="translate(250,70)rotate(0)" text-anchor="middle">
+            <text id="field0" class="StnNameZH">金鐘</text>
+            <text id="field1" dy="15" class="StnNameEN">Admiralty</text>
         </g>
-        <g id="stn_name_2" class="FutureName">
-            <text id="field0" x="475" y="70" class="StnNameZH" text-anchor="middle">荃灣</text>
-            <text id="field1" x="475" y="85" class="StnNameEN" text-anchor="middle">Tsuen Wan</text>
+        <g id="stn_name_2" class="FutureName" transform="translate(475,70)rotate(0)" text-anchor="middle">
+            <text id="field0" class="StnNameZH">荃灣</text>
+            <text id="field1" dy="15" class="StnNameEN">Tsuen Wan</text>
         </g>
     </g>
 

@@ -107,12 +107,38 @@ function loadChangeColourSelector(elem) {
 }
 
 function init() {
-    checkVer();
+    // checkVer();
     loadCity(document.getElementById('theme'));
 }
 
 function test() {
-    loadCity(document.getElementById('theme'));
+    // for (i=0; i<3; i++) {
+    //     var name = document.getElementById('stn_name_'+i).querySelector('#field1');
+    //     var x = name.parentNode.getAttribute('transform').match(/-?\d+/g)[0];
+    //     var dim = name.getBoundingClientRect();
+    //     x = x - (dim.left - x);
+    //     name.parentNode.setAttribute('transform', 'translate('+x.toString()+',75)rotate(-45)');
+    // }
+    for (i=0; i<3; i++) {
+        var name = document.getElementById('stn_name_'+i);
+        var pt = document.getElementById('root').createSVGPoint();
+        var bb = name.getBBox();
+        var bcr = name.getBoundingClientRect();
+        pt.x = bcr.left;
+        pt.y = bcr.top;
+        var ctm = document.getElementById('root').getScreenCTM();
+        var pos = pt.matrixTransform(ctm.inverse());
+        // alert([pos.x, pos.y])
+        // alert([dim.x, dim.y, dim2.width, dim2.height]);
+        var rect = document.createElementNS(name.namespaceURI, 'rect');
+        rect.setAttribute('x', pos.x);
+        rect.setAttribute('y', pos.y);
+        rect.setAttribute('width', bcr.width);
+        rect.setAttribute('height', bcr.height);
+        rect.setAttribute('fill', 'none');
+        rect.setAttribute('stroke', '#000');
+        name.parentNode.appendChild(rect);
+    }
 }
 
 function notImplement() {

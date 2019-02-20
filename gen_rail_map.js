@@ -36,6 +36,36 @@ function setSVGHeight() {
     reposStnName();
 }
 
+function setFont() {
+    var font_zh = fontEN[0];
+    var font_en = fontEN[0];
+    for (i=1; i<fontEN.length-1; i++) {
+        font_zh += ',' + fontEN[i];
+        font_en += ',' + fontEN[i];
+    }
+    font_en += ',' + fontEN[fontEN.length-1];
+
+    for (i=0; i<fontZH.length; i++) {
+        font_zh += ',' + fontZH[i];
+    }
+
+    var stn_names = document.getElementById('station_names').children;
+    for (i=0; i<stn_names.length; i++) {
+        stn_names[i].children[0].setAttribute('font-family', font_zh);
+        for (j=1; j<stn_names[i].childElementCount; j++) {
+            stn_names[i].children[j].setAttribute('font-family', font_en);
+        }
+    }
+
+    var change_names = document.getElementById('change_names').children;
+    for (i=0; i<change_names.length; i++) {
+        change_names[i].children[0].setAttribute('font-family', font_zh);
+        for (j=1; j<change_names[i].childElementCount; j++) {
+            change_names[i].children[j].setAttribute('font-family', font_en);
+        }
+    }
+}
+
 // function setZoom(src) {
 //     if (src == 'slider') {
 //         var zoom_log = document.getElementById('zoom_slider').value;
@@ -142,6 +172,7 @@ function setY(src) {
     redrawLinePassed();
     redrawStn();
     reposStnName();
+    addCurrentBG();
 }
 
 function setStripY(src) {
@@ -263,6 +294,7 @@ function setTxtBGGap(src) {
 
     // Apply changes
     reposStnName();
+    addCurrentBG();
 }
 
 function addStn(elem, load=false) {
@@ -327,8 +359,8 @@ function addStn(elem, load=false) {
 
         redrawLinePassed();
         redrawStn();
-        addCurrentBG();
         reposStnName();
+        addCurrentBG();
     }
 }
 
@@ -388,8 +420,8 @@ function rmStn(elem, load=false) {
         // Apply other changes
         redrawLinePassed();
         redrawStn();
-        addCurrentBG();
         reposStnName();
+        addCurrentBG();
     }
 }
 
@@ -459,14 +491,18 @@ function redrawStn() {
         } else {
             stn_name.setAttribute('class', 'FutureName');
         }
-        for (j=0; j<stn_name.children.length; j++) {
-            if (stn_name.children[j].nodeName != 'rect') {
-                stn_name.children[j].setAttribute('x', stn_x.toString());
-            }
-            if (stn_name.children[j].childElementCount) {
-                stn_name.children[j].children[0].setAttribute('x', stn_x.toString());
-            }
-        }
+
+        var [pre_x, pre_y, pre_d] = stn_name.getAttribute('transform').match(/-?\d+\.?\d*/g);
+        var tf_str = 'translate(' + stn_x.toString() + ',' + pre_y + ')rotate(' + pre_d + ')';
+        stn_name.setAttribute('transform', tf_str);
+        // for (j=0; j<stn_name.children.length; j++) {
+        //     if (stn_name.children[j].nodeName != 'rect') {
+        //         stn_name.children[j].setAttribute('x', stn_x.toString());
+        //     }
+        //     if (stn_name.children[j].childElementCount) {
+        //         stn_name.children[j].children[0].setAttribute('x', stn_x.toString());
+        //     }
+        // }
 
         var int_name = document.getElementById('int_name_'+i);
         if (stn_state == -1) {
@@ -506,8 +542,8 @@ function setCurrentStn(elem) {
     // Apply changes
     redrawStn();
     redrawLinePassed();
-    addCurrentBG();
     reposStnName();
+    addCurrentBG();
 }
 
 function addCurrentBG() {
@@ -515,42 +551,55 @@ function addCurrentBG() {
     var current_stn_idx = params_instance['current_stn_idx'];
     var current_stn_x = getStnX(current_stn_idx);
 
-    var stn_names = document.getElementById('station_names').children;
+    var stn_name = document.getElementById('stn_name_'+current_stn_idx);
 
-    for (i=0; i<stn_names.length; i++) {
-        if (i == current_stn_idx) {
-            // Add background
-            if (stn_names[i].children[0].nodeName == 'rect') {
-                stn_names[i].removeChild(stn_names[i].children[0]);
-            }
-            var txt_dim = stn_names[i].getBBox();
+    var txt_bcr = stn_name.getBoundingClientRect();
+    var pt = document.getElementById('root').createSVGPoint();
+    pt.x = txt_bcr.left;
+    pt.y = txt_bcr.top;
+    var ctm = document.getElementById('root').getScreenCTM();
+    var txt_pos = pt.matrixTransform(ctm.inverse());
             
-            var txt_bg = document.createElementNS(stn_names[i].namespaceURI, 'rect');
-            txt_bg.setAttribute('x', (txt_dim.x-4).toString());
-            txt_bg.setAttribute("y", (txt_dim.y-2).toString());
-            txt_bg.setAttribute("width", (txt_dim.width+8).toString());
-            txt_bg.setAttribute("height", (txt_dim.height+4).toString());
-            txt_bg.setAttribute("fill", "black");
-            stn_names[i].insertBefore(txt_bg, stn_names[i].children[0]);
-            
-            // Change class
-            // for (j=1; j<stn_names[i].children.length; j++) {
-            //     var class_lang = stn_names[i].children[j].getAttribute('class').slice(-2);
-            //     stn_names[i].children[j].setAttribute('class', 'CurrentStnName'+class_lang);
-            // }
-        } else {
-            // Remove BG
-            if (stn_names[i].children[0].nodeName == 'rect') {
-                stn_names[i].removeChild(stn_names[i].children[0]);
+    var txt_bg = document.getElementById('current_bg');
+    txt_bg.setAttribute('x', (txt_pos.x-4).toString());
+    txt_bg.setAttribute("y", (txt_pos.y-2).toString());
+    txt_bg.setAttribute("width", (txt_bcr.width+8).toString());
+    txt_bg.setAttribute("height", (txt_bcr.height+4).toString());
 
-                // Change back class
-                for (j=0; j<stn_names[i].children.length; j++) {
-                    var class_lang = stn_names[i].children[j].getAttribute('class').slice(-2);
-                    stn_names[i].children[j].setAttribute('class', 'StnName'+class_lang);
-                }
-            }
-        }
-    }
+    // for (i=0; i<stn_names.length; i++) {
+    //     if (i == current_stn_idx) {
+    //         // Add background
+    //         if (stn_names[i].children[0].nodeName == 'rect') {
+    //             stn_names[i].removeChild(stn_names[i].children[0]);
+    //         }
+    //         var txt_dim = stn_names[i].getBBox();
+            
+    //         var txt_bg = document.createElementNS(stn_names[i].namespaceURI, 'rect');
+    //         txt_bg.setAttribute('x', (txt_dim.x-4).toString());
+    //         txt_bg.setAttribute("y", (txt_dim.y-2).toString());
+    //         txt_bg.setAttribute("width", (txt_dim.width+8).toString());
+    //         txt_bg.setAttribute("height", (txt_dim.height+4).toString());
+    //         txt_bg.setAttribute("fill", "black");
+    //         stn_names[i].insertBefore(txt_bg, stn_names[i].children[0]);
+            
+    //         // Change class
+    //         // for (j=1; j<stn_names[i].children.length; j++) {
+    //         //     var class_lang = stn_names[i].children[j].getAttribute('class').slice(-2);
+    //         //     stn_names[i].children[j].setAttribute('class', 'CurrentStnName'+class_lang);
+    //         // }
+    //     } else {
+    //         // Remove BG
+    //         if (stn_names[i].children[0].nodeName == 'rect') {
+    //             stn_names[i].removeChild(stn_names[i].children[0]);
+
+    //             // Change back class
+    //             for (j=0; j<stn_names[i].children.length; j++) {
+    //                 var class_lang = stn_names[i].children[j].getAttribute('class').slice(-2);
+    //                 stn_names[i].children[j].setAttribute('class', 'StnName'+class_lang);
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 function redrawLinePassed() {
@@ -599,8 +648,8 @@ function setStnName(elem, target) {
         stn_name.querySelector('#field'+target.toString()).textContent = elem.value;
     }
 
-    addCurrentBG();
     reposStnName();
+    addCurrentBG();
 }
 
 function reposStnName() {
@@ -626,10 +675,14 @@ function reposStnName() {
         }
 
         var stn_name = stn_names[i].children;
-        for (j=0; j<stn_name.length; j++) {
-            var new_y = Number(stn_name[j].getAttribute('y')) + dy;
-            stn_name[j].setAttribute('y', new_y.toString());
-        }
+        // for (j=0; j<stn_name.length; j++) {
+        //     var new_y = Number(stn_name[j].getAttribute('y')) + dy;
+        //     stn_name[j].setAttribute('y', new_y.toString());
+        // }
+
+        var [pre_x, pre_y, pre_d] = stn_names[i].getAttribute('transform').match(/-?\d+\.?\d*/g);
+        var new_y = Number(pre_y) + dy;
+        stn_names[i].setAttribute('transform', 'translate('+pre_x+','+new_y.toString()+')rotate('+pre_d+')');
 
         // interchange line name
         var [int_lower_y,int_upper_y] = getIntLineY(i);
@@ -675,49 +728,6 @@ function wrapStnName(elem) {
     setStnName(elem.parentNode.children[2], 1);
 }
 
-// function showColourSelector(elem, load=false) {
-//     // Get new value
-//     var change = elem.checked;
-//     var stn_idx = elem.parentNode.getAttribute('id').substring(3);
-//     var params_instance = getParams();
-
-//     var city_list = document.getElementById('colour_city').cloneNode(true);
-//     city_list.setAttribute('id', 'colour_city_int_'+stn_idx);
-//     city_list.setAttribute('onchange', 'getChangeCity(this)');
-//     city_list.style.display = 'block';
-
-//     var colour_list = document.getElementById('colour_cities').cloneNode(true);
-//     colour_list.setAttribute('id', 'colour_cities_int_'+stn_idx);
-//     for (i=0; i<colour_list.childElementCount; i++) {
-//         colour_list.children[i].setAttribute('onchange', 'setChangeColour(this)');
-//     }
-
-//     var int_name_field0 = document.createElementNS(elem.namespaceURI, 'input');
-//     int_name_field0.setAttribute('type', 'input');
-//     int_name_field0.setAttribute('onchange', 'setChangeName(this,0)');
-
-//     var int_name_field1 = int_name_field0.cloneNode(true);
-//     int_name_field1.setAttribute('onchange', 'setChangeName(this,1)');
-    
-//     if (change) {
-//         elem.parentNode.appendChild(city_list);
-//         elem.parentNode.appendChild(colour_list);
-//         elem.parentNode.appendChild(int_name_field0);
-//         elem.parentNode.appendChild(int_name_field1);
-//         getChangeCity(elem.parentNode.children[7]);
-//     } else {
-//         params_instance['stn_list'][stn_idx]['change'] = 'cnone';
-//         putParams(params_instance);
-
-//         if (elem.parentNode.children[7]) {
-//             elem.parentNode.removeChild(elem.parentNode.children[10]);
-//             elem.parentNode.removeChild(elem.parentNode.children[9]);
-//             elem.parentNode.removeChild(elem.parentNode.children[8]);
-//             elem.parentNode.removeChild(elem.parentNode.children[7]);
-//         }
-//         document.getElementById('stn_int_'+stn_idx).setAttribute('class', 'cnone');
-//     }
-// }
 
 function getChangeCity(elem) {
     var stn_idx = elem.parentNode.getAttribute('id').substring(3);
@@ -732,27 +742,6 @@ function getChangeCity(elem) {
     }
     setChangeColour(elem.parentNode.children[8].children[0]);
 }
-
-// function setChangeColour(elem) {
-//     var stn_idx = elem.parentNode.parentNode.getAttribute('id').substring(3);
-//     var stn_state = getStnState(Number(stn_idx));
-//     var change_city = document.getElementById('colour_city_int_'+stn_idx).value;
-//     var colour_list = document.getElementById('colour_cities_int_'+stn_idx);
-//     var colour_name = 'c' + colour_list.querySelector('#'+change_city).value;
-
-//     // Log changes
-//     var params_instance = getParams();
-//     params_instance['stn_list'][stn_idx]['change'] = colour_name;
-//     putParams(params_instance);
-
-//     // Apply changes
-//     if (stn_state == -1) {
-//         document.getElementById('stn_int_'+stn_idx).setAttribute('class', 'cpassed');
-//     } else {
-//         document.getElementById('stn_int_'+stn_idx).setAttribute('class', colour_name);
-//     }
-    
-// }
 
 function setChangeName(elem, i) {
     // Get new value
@@ -770,11 +759,11 @@ function setChangeName(elem, i) {
     reposStnName();
 }
 
-function test() {
-    for (i=0;i<3;i++)
-    alert(getIntLineY(i));
-    // var a = document.getElementById('stn_name_2').children;
-    // alert(a[1].children[0].getAttribute('x'));
-    // alert(JSON.stringify(getParams()));
+// function test() {
+//     for (i=0;i<3;i++)
+//     alert(getIntLineY(i));
+//     // var a = document.getElementById('stn_name_2').children;
+//     // alert(a[1].children[0].getAttribute('x'));
+//     // alert(JSON.stringify(getParams()));
 
-}
+// }
