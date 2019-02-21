@@ -245,6 +245,12 @@ function checkDataVer() {
         return_value = false;
     }
 
+    if (params_instance['style'] == null) {
+        params_instance['style'] = 'mtr';
+
+        return_value = false;
+    }
+
     if (!return_value) {
         document.getElementById('params_string').value = JSON.stringify(params_instance);
     }
