@@ -109,8 +109,10 @@ function loadChangeColourSelector(elem) {
 function init() {
     // checkVer();
     sessionStorage.all_params = JSON.stringify(default_params);
+    sessionStorage.myfonts = JSON.stringify(myfonts);
     loadCity(document.getElementById('theme'), default_params['theme'][0], default_params['theme'][1]);
     setFont();
+    setFontWeight();
     loadSVGSize();
 }
 
@@ -122,26 +124,29 @@ function test() {
     //     x = x - (dim.left - x);
     //     name.parentNode.setAttribute('transform', 'translate('+x.toString()+',75)rotate(-45)');
     // }
-    for (i=0; i<3; i++) {
-        var name = document.getElementById('stn_name_'+i);
-        var pt = document.getElementById('root').createSVGPoint();
-        var bb = name.getBBox();
-        var bcr = name.getBoundingClientRect();
-        pt.x = bcr.left;
-        pt.y = bcr.top;
-        var ctm = document.getElementById('root').getScreenCTM();
-        var pos = pt.matrixTransform(ctm.inverse());
-        // alert([pos.x, pos.y])
-        // alert([dim.x, dim.y, dim2.width, dim2.height]);
-        var rect = document.createElementNS(name.namespaceURI, 'rect');
-        rect.setAttribute('x', pos.x);
-        rect.setAttribute('y', pos.y);
-        rect.setAttribute('width', bcr.width);
-        rect.setAttribute('height', bcr.height);
-        rect.setAttribute('fill', 'none');
-        rect.setAttribute('stroke', '#000');
-        name.parentNode.appendChild(rect);
-    }
+    // for (i=0; i<3; i++) {
+    //     var name = document.getElementById('stn_name_'+i);
+    //     var pt = document.getElementById('root').createSVGPoint();
+    //     var bb = name.getBBox();
+    //     var bcr = name.getBoundingClientRect();
+    //     pt.x = bcr.left;
+    //     pt.y = bcr.top;
+    //     var ctm = document.getElementById('root').getScreenCTM();
+    //     var pos = pt.matrixTransform(ctm.inverse());
+    //     // alert([pos.x, pos.y])
+    //     // alert([dim.x, dim.y, dim2.width, dim2.height]);
+    //     var rect = document.createElementNS(name.namespaceURI, 'rect');
+    //     rect.setAttribute('x', pos.x);
+    //     rect.setAttribute('y', pos.y);
+    //     rect.setAttribute('width', bcr.width);
+    //     rect.setAttribute('height', bcr.height);
+    //     rect.setAttribute('fill', 'none');
+    //     rect.setAttribute('stroke', '#000');
+    //     name.parentNode.appendChild(rect);
+    // }
+    var name = document.getElementById('int_name_0');
+    var bb = name.getBBox();
+    alert([bb.x, bb.y, bb.width, bb.height]);
 }
 
 function notImplement() {
@@ -149,13 +154,22 @@ function notImplement() {
 }
 
 function checkVer() {
-    if (Number(localStorage.ver) != 20190217) {
+    if (localStorage.ver) {
         localStorage.ver = 0;
     }
-    if (typeof(Storage) !== "undefined") {
-        if (Number(localStorage.ver) != 20190217) {
-            localStorage.ver = 20190217;
-            alert('New version (20190217):\n\t1. Update colour palette\n\t2. Update colour selector\n\t3. New templates available');
-        }
+
+    var log_str = '';
+
+    if (Number(localStorage.ver) < 20190217) {
+        localStorage.ver = 20190217;
+        log_str = 'New version (20190217):\n\t1. Update colour palette\n\t2. Update colour selector\n\t3. New templates available\n\n' + log_str;
     }
+
+    if (Number(localStorage.ver) < 20190222) {
+        localStorage.ver = 20190222;
+        log_str = 'New version (20190222):\n\t1. Add Guangzhou Metro style\n\t2. Add font weight selector\n\n' + log_str;
+        alert(log_str);
+    }
+
+    
 }

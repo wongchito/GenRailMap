@@ -11,9 +11,9 @@ function setSVGWidth() {
     document.getElementById('root').setAttribute('width', svg_width);
     document.getElementById('outer').setAttribute('width', svg_width);
     redrawStrip();
-    redrawLineMain();
-    redrawLinePassed();
+    redrawLines();
     redrawStn();
+    reposStnName();
     addCurrentBG();
 }
 
@@ -30,13 +30,15 @@ function setSVGHeight() {
     document.getElementById('root').setAttribute('height', svg_height);
     document.getElementById('outer').setAttribute('height', svg_height);
     redrawStrip();
-    redrawLineMain();
-    redrawLinePassed();
+    redrawLines();
     redrawStn();
+    reposStnName();
     reposStnName();
 }
 
 function setFont() {
+    var fontZH = getFonts('zh');
+    var fontEN = getFonts('en');
     var font_zh = fontEN[0];
     var font_en = fontEN[0];
     for (i=1; i<fontEN.length-1; i++) {
@@ -121,9 +123,9 @@ function setPadding(src) {
     putParams(params_instance);
 
     // Apply changes
-    redrawLineMain();
-    redrawLinePassed();
+    redrawLines();
     redrawStn();
+    reposStnName();
     addCurrentBG();
 }
 
@@ -138,17 +140,44 @@ function redrawStrip() {
     document.getElementById('strip').setAttribute('d', strip_path_str);
 }
 
-function redrawLineMain() {
-    // Get linePos info
+function redrawLines(line=null) {
+    if (line == null) {
+        redrawLines('main');
+        redrawLines('passed');
+    }
+
+    // Read from log
+    var params_instance = getParams();
+    var current_stn_idx = params_instance['current_stn_idx'];
+    var direction = params_instance['direction'];
+
     var linePos = getLinePos();
     var lineStart = linePos[0];
     var lineLength = linePos[1];
+    var lineEnd = lineStart + lineLength;
+    
+    var current_stn_x = getStnX(current_stn_idx);
 
-    // Read from log
-    var y = getY()
-
-    // Apply changes
-    document.getElementById('line_main').setAttribute('d', 'M ' + lineStart.toString() + ',' + y + ' h ' + lineLength.toString());
+    var y = getY();
+    
+    if (line == 'main') {
+        if (direction == 'left') {
+            var path_str = 'M ' + current_stn_x.toString() + ',' + y.toString() + ' H ' + lineStart.toString();
+        }
+        if (direction == 'right') {
+            var path_str = 'M ' + current_stn_x.toString() + ',' + y.toString() + ' H ' + lineEnd.toString();
+        }
+        document.getElementById('line_main').setAttribute('d', path_str);
+    }
+    if (line == 'passed') {
+        if (direction == 'right') {
+            var path_str = 'M ' + current_stn_x.toString() + ',' + y.toString() + ' H ' + lineStart.toString();
+        }
+        if (direction == 'left') {
+            var path_str = 'M ' + current_stn_x.toString() + ',' + y.toString() + ' H ' + lineEnd.toString();
+        }
+        document.getElementById('line_passed').setAttribute('d', path_str);
+    }
 }
 
 function setY(src) {
@@ -168,8 +197,7 @@ function setY(src) {
     putParams(params_instance);
 
     // Apply changes
-    redrawLineMain();
-    redrawLinePassed();
+    redrawLines();
     redrawStn();
     reposStnName();
     addCurrentBG();
@@ -197,6 +225,8 @@ function setStripY(src) {
 
 function setLineColour(elem) {
     var target = elem.getAttribute('id');
+    var params_instance = getParams();
+    var style = params_instance['style']
     if (target == 'theme') {
         var city = elem.querySelector('#city').value;
         var line = elem.querySelector('#line').value;
@@ -214,6 +244,12 @@ function setLineColour(elem) {
         // Apply changes
         document.getElementById('line_main').setAttribute('stroke', colour);
         document.getElementById('strip').setAttribute('stroke', colour);
+        if (style == 'gzmtr') {
+            var stn_icons = document.getElementById('stations').children;
+            for (i=0; i<stn_icons.length; i++) {
+                stn_icons[i].setAttribute('stroke', colour);
+            }
+        }
     } else if (target.substring(0,13) == 'int_selector') {
         var stn_idx = elem.parentNode.getAttribute('id').substring(3);
         var stn_state = getStnState(Number(stn_idx));
@@ -231,54 +267,84 @@ function setLineColour(elem) {
         // Apply changes
         if (stn_state == -1) {
             document.getElementById('stn_int_'+stn_idx).setAttribute('stroke', '#AAAAAA');
+            document.getElementById('int_bg_'+stn_idx).setAttribute('fill', '#AAAAAA');
         } else {
             document.getElementById('stn_int_'+stn_idx).setAttribute('stroke', change_colour);
+            document.getElementById('int_bg_'+stn_idx).setAttribute('fill', change_colour);
         }
     }
 }
 
-// function setLineColour() {
-//     // Get new value
-//     var colour_city = document.getElementById('colour_city').value;
-//     var colour_list = document.getElementById('colour_cities');
-//     var colour_name = 'c' + colour_list.querySelector('#' + colour_city).value;
+function setStnNum(load=false) {
+    // Get new value
+    var auto_num = document.getElementById('auto_num').value;
+    var n_stn = getNStn();
 
-//     // Log changes
-//     var params_instance = getParams();
-//     params_instance['colour_city'] = colour_city;
-//     params_instance['colour_name'] = colour_name;
-//     putParams(params_instance);
+    if (!load) {
+        // Log changes
+        var params_instance = getParams();
+        params_instance['auto_num'] = auto_num;
+        putParams(params_instance);
+    }
 
-//     // Apply changes
-//     document.getElementById('line_main').setAttribute('class', colour_name);
-//     document.getElementById('strip').setAttribute('class', colour_name);
-// }
+    // Apply changes
+    var stn_nums = document.getElementById('station_number').children;
+    var stns = document.getElementById('stn_list').children;
+    if (auto_num == 'asc') {
+        for (i=0; i<n_stn; i++) {
+            var num = (i+1).toString();
+            if (num.length == 1) {
+                num = '0' + num;
+            }
+            stn_nums[i].querySelector('#stn').textContent = num;
+            stns[i].querySelector('#stn_num').value = num;
+        }
+    }
+    if (auto_num == 'desc') {
+        for (i=0; i<n_stn; i++) {
+            var num = (n_stn - i).toString();
+            if (num.length == 1) {
+                num = '0' + num;
+            }
+            stn_nums[i].querySelector('#stn').textContent = num;
+            stns[i].querySelector('#stn_num').value = num;
+        }
+    }
+}
 
-// function getCity(dropdown) {
-//     // Get new value
-//     var colour_city = dropdown.options[dropdown.selectedIndex].value;
+function setFontWeight(lang=null) {
+    var params_instance = getParams();
+    if (lang == null) {
+        var weight_zh = params_instance['weight_zh'];
+        var weight_en = params_instance['weight_en'];
+        document.getElementById('weight_zh').value = weight_zh;
+        document.getElementById('weight_en').value = weight_en;
+    }
+    if (lang == 'zh') {
+        var weight_zh = document.getElementById('weight_zh').value;
+        params_instance['weight_zh'] = weight_zh;
+        putParams(params_instance);
+    }
+    if (lang == 'en') {
+        var weight_en = document.getElementById('weight_en').value;
+        params_instance['weight_en'] = weight_en;
+        putParams(params_instance);
+    }
 
-//     // Log changes
-//     var params_instance = getParams();
-//     params_instance['colour_city'] = colour_city;
-//     putParams(params_instance);
+    // Apply changes
+    var stn_names = document.getElementById('station_names').children;
+    var int_names = document.getElementById('change_names').children;
+    for (i=0; i<stn_names.length; i++) {
+        if (lang == 'zh' || lang == null) {
+            stn_names[i].querySelector('#field0').setAttribute('font-weight', weight_zh);
+            int_names[i].querySelector('#field0').setAttribute('font-weight', weight_zh);
+        }
+        if (lang == 'en' || lang == null) {
+            stn_names[i].querySelector('#field1').setAttribute('font-weight', weight_en);
+            int_names[i].querySelector('#field1').setAttribute('font-weight', weight_en);
+        }
+    }
 
-//     var cities = document.getElementById('colour_cities').children;
-
-//     for (i=0; i<cities.length; i++) {
-//         if (cities[i].getAttribute('id') == colour_city) {
-//             cities[i].style.display = 'block'
-//         } else {
-//             cities[i].style.display = 'none'
-//         }
-//     }
-//     setLineColour()
-//     // putParams(params_instance);
-// }
-
-function setStyle(elem) {
-    var style = elem.value;
-    alert(style);
 }
 
 function setTxtBGGap(src) {
@@ -321,10 +387,10 @@ function addStn(elem, load=false) {
     // Apply changes
     var new_stn = par.cloneNode(true);
     if (new_stn.children[8]) {
-        new_stn.children[6].checked = false;
+        new_stn.children[7].checked = false;
+        new_stn.removeChild(new_stn.children[10]);
         new_stn.removeChild(new_stn.children[9]);
         new_stn.removeChild(new_stn.children[8]);
-        new_stn.removeChild(new_stn.children[7]);
     } // reset interchange
     var stns = document.getElementById('stn_list').children;
     par.parentNode.insertBefore(new_stn, stns[parseInt(add_idx)]);
@@ -333,6 +399,11 @@ function addStn(elem, load=false) {
     var new_stn_icon = stn_icon.cloneNode(true);
     var stn_icons = document.getElementById('stations').children;
     stn_icon.parentNode.insertBefore(new_stn_icon, stn_icons[parseInt(add_idx)]);
+
+    var stn_num = document.getElementById('stn_num_'+add_idx);
+    var new_stn_num = stn_num.cloneNode(true);
+    var stn_nums = document.getElementById('station_number').children;
+    stn_num.parentNode.insertBefore(new_stn_num, stn_nums[parseInt(add_idx)]);
 
     var stn_int = document.getElementById('stn_int_'+add_idx);
     var new_stn_int = stn_int.cloneNode(true);
@@ -353,6 +424,12 @@ function addStn(elem, load=false) {
     var int_names = document.getElementById('change_names').children;
     int_name.parentNode.insertBefore(new_int_name, int_names[parseInt(add_idx)]);
 
+    var int_bg = document.getElementById('int_bg_'+add_idx);
+    var new_int_bg = int_bg.cloneNode(true);
+    new_int_bg.setAttribute('fill', 'none');
+    var int_bgs = document.getElementById('change_bgs').children;
+    int_bg.parentNode.insertBefore(new_int_bg, int_bgs[parseInt(add_idx)]);
+
     if (!load) {
         reidxStn();
         // redrawStn();
@@ -362,7 +439,7 @@ function addStn(elem, load=false) {
         params_instance['current_stn_idx'] = current_stn_idx;
         putParams(params_instance);
 
-        redrawLinePassed();
+        redrawLines();
         redrawStn();
         reposStnName();
         addCurrentBG();
@@ -388,6 +465,10 @@ function rmStn(elem, load=false) {
     var stn_icon = document.getElementById('stn_icon_'+rm_idx);
     stn_icon.parentNode.removeChild(stn_icon);
 
+    // Remove station number in SVG
+    var stn_num = document.getElementById('stn_num_'+rm_idx);
+    stn_num.parentNode.removeChild(stn_num);
+
     // Remove interchange in SVG
     var stn_int = document.getElementById('stn_int_'+rm_idx);
     stn_int.parentNode.removeChild(stn_int);
@@ -399,6 +480,10 @@ function rmStn(elem, load=false) {
     // Remove int name in SVG
     var int_name = document.getElementById('int_name_'+rm_idx);
     int_name.parentNode.removeChild(int_name);
+
+    // Remove int bg in SVG
+    var int_bg = document.getElementById('int_bg_'+rm_idx);
+    int_bg.parentNode.removeChild(int_bg);
 
     if (!load) {
         reidxStn();
@@ -423,7 +508,7 @@ function rmStn(elem, load=false) {
         putParams(params_instance);
     
         // Apply other changes
-        redrawLinePassed();
+        redrawLines();
         redrawStn();
         reposStnName();
         addCurrentBG();
@@ -432,88 +517,129 @@ function rmStn(elem, load=false) {
 
 function reidxStn() {
     var n_stn = getNStn();
+    var params_instance = getParams();
+    var auto_num = params_instance['auto_num'];
 
     var stns = document.getElementById('stn_list').children;
     var stn_icons = document.getElementById('stations').children;
+    var stn_nums = document.getElementById('station_number').children;
+    // stn_num managed by setStnNum();
     var stn_ints = document.getElementById('station_ints').children;
     var stn_names = document.getElementById('station_names').children;
     var int_names = document.getElementById('change_names').children;
+    var int_bgs = document.getElementById('change_bgs').children;
 
     for (i=0; i<n_stn; i++) {
         stns[i].setAttribute('id', 'stn'+i.toString());
         stn_icons[i].setAttribute('id', 'stn_icon_'+i.toString());
+        stn_nums[i].setAttribute('id', 'stn_num_'+i.toString());
+        // if (auto_num == 'asc') {
+        //     if (i<9) {
+        //         stn_nums[i].querySelector('#stn').textContent = '0' + (i+1).toString();
+        //         stns[i].querySelector('#stn_num').value = '0' + (i+1).toString();
+        //     } else {
+        //         stn_nums[i].querySelector('#stn').textContent = (i+1).toString();
+        //         stns[i].querySelector('#stn_num').value = (i+1).toString();
+        //     }
+        // }
+        
         stn_ints[i].setAttribute('id', 'stn_int_'+i.toString());
         stn_names[i].setAttribute('id', 'stn_name_'+i.toString());
 
-        // if (stns[i].children[8]) {
-        //     stns[i].children[7].setAttribute('id', 'colour_city_int_'+i.toString());
-        //     stns[i].children[8].setAttribute('id', 'colour_cities_int_'+i.toString());
-        // }
-
         int_names[i].setAttribute('id', 'int_name_'+i.toString());
+        int_bgs[i].setAttribute('id', 'int_bg_'+i.toString());
     }
+
+    setStnNum(true);
 }
 
 function redrawStn() {
     // Station names and interchange ticks are also shifted
+    // And station number (if any)
 
     // Read from logs
     var stn_icons = document.getElementById('stations').children;
     var n_stn = stn_icons.length;
     var params_instance = getParams();
+    var style = params_instance['style'];
 
     var y = getY();
 
     // Apply changes
     for (i=0; i<n_stn; i++) {
+        // station icon
         var stn_state = getStnState(i);
         var stn_x = getStnX(i);
         stn_icons[i].setAttribute('transform', 'translate(' + stn_x.toString() + ',' + y.toString() + ')');
-        if (stn_state == -1) {
-            stn_icons[i].setAttribute('xlink:href', '#passedint');
-        } else {
-            stn_icons[i].setAttribute('xlink:href', '#int');
+        if (style == 'mtr') {
+            if (stn_state == -1) {
+                stn_icons[i].setAttribute('xlink:href', '#stn_hk_pass');
+            } else {
+                stn_icons[i].setAttribute('xlink:href', '#stn_hk');
+            }
+            stn_icons[i].setAttribute('stroke', 'none');
+        }
+        if (style == 'gzmtr') {
+            var [theme_city, theme_line] = params_instance['theme'];
+            var theme_colour = colours[theme_city]['line'][theme_line]['colour'];
+            if (stn_state == -1) {
+                stn_icons[i].setAttribute('stroke', '#AAAAAA');
+            } else {
+                stn_icons[i].setAttribute('stroke', theme_colour);
+            }
+            stn_icons[i].setAttribute('xlink:href', '#stn_gz');
         }
 
+        // station number
+        var stn_num = document.getElementById('stn_num_'+i);
+        stn_num.children[0].setAttribute('x', (stn_x-9).toString());
+        stn_num.children[1].setAttribute('x', (stn_x+9).toString());
+        stn_num.children[0].setAttribute('y', y.toString());
+        stn_num.children[1].setAttribute('y', y.toString());
+
         var stn_int = document.getElementById('stn_int_'+i);
+        var int_bg = document.getElementById('int_bg_'+i);
         var [change_city,change_line] = params_instance['stn_list'][i]['change'];
         if (change_line != 'nullLine') {
             var change_colour = colours[change_city]['line'][change_line]['colour'];
             if (stn_state == -1) {
                 stn_int.setAttribute('stroke', '#AAAAAA');
+                int_bg.setAttribute('fill', '#AAAAAA');
             } else {
                 stn_int.setAttribute('stroke', change_colour);
+                int_bg.setAttribute('fill', change_colour);
             }
         }
         stn_int.setAttribute('x', stn_x.toString());
         stn_int.setAttribute('y', y.toString());
 
         var stn_name = document.getElementById('stn_name_'+i);
+        var stn_num = document.getElementById('stn_num_'+i);
         if (stn_state == -1) {
             stn_name.setAttribute('class', 'PassedName');
-        } else if (stn_state == 0) {
+            stn_num.setAttribute('class', 'PassedName');
+        } else if (stn_state == 0 && style == 'mtr') {
             stn_name.setAttribute('class', 'CurrentName');
         } else {
             stn_name.setAttribute('class', 'FutureName');
+            stn_num.setAttribute('class', 'FutureName');
         }
+
 
         var [pre_x, pre_y, pre_d] = stn_name.getAttribute('transform').match(/-?\d+\.?\d*/g);
         var tf_str = 'translate(' + stn_x.toString() + ',' + pre_y + ')rotate(' + pre_d + ')';
         stn_name.setAttribute('transform', tf_str);
-        // for (j=0; j<stn_name.children.length; j++) {
-        //     if (stn_name.children[j].nodeName != 'rect') {
-        //         stn_name.children[j].setAttribute('x', stn_x.toString());
-        //     }
-        //     if (stn_name.children[j].childElementCount) {
-        //         stn_name.children[j].children[0].setAttribute('x', stn_x.toString());
-        //     }
-        // }
 
         var int_name = document.getElementById('int_name_'+i);
-        if (stn_state == -1) {
-            int_name.setAttribute('class','PassedName');
-        } else {
-            int_name.setAttribute('class', 'FutureName');
+        if (style == 'mtr') {
+            if (stn_state == -1) {
+                int_name.setAttribute('class','PassedName');
+            } else {
+                int_name.setAttribute('class', 'FutureName');
+            }
+        }
+        if (style == 'gzmtr') {
+            int_name.setAttribute('class','CurrentName');
         }
         for (j=0; j<int_name.childElementCount; j++) {
             int_name.children[j].setAttribute('x', stn_x.toString());
@@ -531,7 +657,7 @@ function setDirection(elem) {
     putParams(params_instance);
 
     // Apply changes
-    redrawLinePassed();
+    redrawLines();
     redrawStn();
 }
 
@@ -546,7 +672,7 @@ function setCurrentStn(elem) {
 
     // Apply changes
     redrawStn();
-    redrawLinePassed();
+    redrawLines();
     reposStnName();
     addCurrentBG();
 }
@@ -570,66 +696,6 @@ function addCurrentBG() {
     txt_bg.setAttribute("y", (txt_pos.y-2).toString());
     txt_bg.setAttribute("width", (txt_bcr.width+8).toString());
     txt_bg.setAttribute("height", (txt_bcr.height+4).toString());
-
-    // for (i=0; i<stn_names.length; i++) {
-    //     if (i == current_stn_idx) {
-    //         // Add background
-    //         if (stn_names[i].children[0].nodeName == 'rect') {
-    //             stn_names[i].removeChild(stn_names[i].children[0]);
-    //         }
-    //         var txt_dim = stn_names[i].getBBox();
-            
-    //         var txt_bg = document.createElementNS(stn_names[i].namespaceURI, 'rect');
-    //         txt_bg.setAttribute('x', (txt_dim.x-4).toString());
-    //         txt_bg.setAttribute("y", (txt_dim.y-2).toString());
-    //         txt_bg.setAttribute("width", (txt_dim.width+8).toString());
-    //         txt_bg.setAttribute("height", (txt_dim.height+4).toString());
-    //         txt_bg.setAttribute("fill", "black");
-    //         stn_names[i].insertBefore(txt_bg, stn_names[i].children[0]);
-            
-    //         // Change class
-    //         // for (j=1; j<stn_names[i].children.length; j++) {
-    //         //     var class_lang = stn_names[i].children[j].getAttribute('class').slice(-2);
-    //         //     stn_names[i].children[j].setAttribute('class', 'CurrentStnName'+class_lang);
-    //         // }
-    //     } else {
-    //         // Remove BG
-    //         if (stn_names[i].children[0].nodeName == 'rect') {
-    //             stn_names[i].removeChild(stn_names[i].children[0]);
-
-    //             // Change back class
-    //             for (j=0; j<stn_names[i].children.length; j++) {
-    //                 var class_lang = stn_names[i].children[j].getAttribute('class').slice(-2);
-    //                 stn_names[i].children[j].setAttribute('class', 'StnName'+class_lang);
-    //             }
-    //         }
-    //     }
-    // }
-}
-
-function redrawLinePassed() {
-    // Read from log
-    var params_instance = getParams();
-    var current_stn_idx = params_instance['current_stn_idx'];
-    var direction = params_instance['direction'];
-
-    var linePos = getLinePos();
-    var lineStart = linePos[0];
-    var lineLength = linePos[1];
-    var lineEnd = lineStart + lineLength;
-    
-    var current_stn_x = getStnX(current_stn_idx);
-
-    var y = getY();
-    
-    if (direction == 'right') {
-        var path_str = 'M ' + current_stn_x.toString() + ',' + y.toString() + ' H ' + lineStart.toString();
-    }
-    if (direction == 'left') {
-        var path_str = 'M ' + current_stn_x.toString() + ',' + y.toString() + ' H ' + lineEnd.toString();
-    }
-
-    document.getElementById('line_passed').setAttribute('d', path_str);
 }
 
 function setStnName(elem, target) {
@@ -645,9 +711,9 @@ function setStnName(elem, target) {
     // Apply changes
     var stn_name = document.getElementById('stn_name_'+stn_idx);
     if (wrap && target == 1) {
-        var [str1, str2] = splitText(elem.parentNode.children[2].value);
+        var [str1, str2] = splitText(elem.parentNode.querySelector('#field1').value);
         var stn_x = getStnX(stn_idx);
-        var stn_name_html = str1 + '<tspan x="' + stn_x.toString() + '" dy="15">' + str2 + '</tspan>';
+        var stn_name_html = str1 + '<tspan x="0" dy="15">' + str2 + '</tspan>';
         stn_name.querySelector('#field1').innerHTML = stn_name_html;
     } else {
         stn_name.querySelector('#field'+target.toString()).textContent = elem.value;
@@ -663,23 +729,23 @@ function reposStnName() {
     var y = getY();
     var txt_bg_gap = params_instance['txt_bg_gap'];
     var txt_flip = params_instance['txt_flip'];
+    var style = params_instance['style'];
 
     var stn_names = document.getElementById('station_names').children;
     for (i=0; i<stn_names.length; i++) {
         var bg_y = getBGY(i);
         var bg_lower_y = bg_y[0];
         var bg_upper_y = bg_y[1];
+        var stn_x = getStnX(i);
 
 
-        if (i%2 == txt_flip) {
-            var dy = y - Number(txt_bg_gap) - bg_lower_y;
-            document.getElementById('stn_int_'+i).setAttribute('xlink:href', '#intline_down');
-        } else {
+        if (i%2 != txt_flip && style=='mtr') {
             var dy = y + Number(txt_bg_gap) - bg_upper_y;
-            document.getElementById('stn_int_'+i).setAttribute('xlink:href', '#intline_up');
+        } else {
+            var dy = y - Number(txt_bg_gap) - bg_lower_y;
         }
 
-        var stn_name = stn_names[i].children;
+        // var stn_name = stn_names[i].children;
         // for (j=0; j<stn_name.length; j++) {
         //     var new_y = Number(stn_name[j].getAttribute('y')) + dy;
         //     stn_name[j].setAttribute('y', new_y.toString());
@@ -687,15 +753,30 @@ function reposStnName() {
 
         var [pre_x, pre_y, pre_d] = stn_names[i].getAttribute('transform').match(/-?\d+\.?\d*/g);
         var new_y = Number(pre_y) + dy;
-        stn_names[i].setAttribute('transform', 'translate('+pre_x+','+new_y.toString()+')rotate('+pre_d+')');
+        if (style == 'gzmtr') {
+            var pt = document.getElementById('root').createSVGPoint();
+            var ctm = document.getElementById('root').getScreenCTM();
+            var bcr = stn_names[i].getBoundingClientRect();
+            var bb = stn_names[i].getBBox();
+            pt.x = bcr.left;
+            pt.y = bcr.top;
+            var pos = pt.matrixTransform(ctm.inverse());
+            x = stn_x - bb.height * Math.cos(Number(pre_d)) * 0.8;
+        }
+        if (style == 'mtr') {
+            x = stn_x;
+        }
+        stn_names[i].setAttribute('transform', 'translate('+x.toString()+','+new_y.toString()+')rotate('+pre_d+')');
 
         // interchange line name
         var [int_lower_y,int_upper_y] = getIntLineY(i);
         // alert([y,int_upper_y,int_lower_y]);
-        if (i%2 == txt_flip) {
-            var int_dy = y + 25 - int_upper_y;
-        } else {
+        if (i%2 != txt_flip && style == 'mtr') {
             var int_dy = y - 25 - int_lower_y;
+            document.getElementById('stn_int_'+i).setAttribute('xlink:href', '#intline_up');
+        } else {
+            var int_dy = y + 25 - int_upper_y;
+            document.getElementById('stn_int_'+i).setAttribute('xlink:href', '#intline_down');
         }
         // alert(int_dy);
         var int_name = document.getElementById('int_name_'+i.toString());
@@ -703,6 +784,19 @@ function reposStnName() {
             var new_int_y = Number(int_name.children[j].getAttribute('y')) + int_dy;
             int_name.children[j].setAttribute('y', new_int_y.toString());
         }
+
+        // interchange bg
+        var int_name_bb = int_name.getBBox();
+        var int_name_bg_y = int_name_bb.y + int_name_bb.height/2 - 10;
+        if (int_name_bb.width > 29) {
+            int_name_bb_x = stn_x - int_name_bb.width/2 - 4;
+            document.getElementById('int_bg_'+i.toString()).setAttribute('width', (int_name_bb.width+8).toString());
+        } else {
+            int_name_bb_x = stn_x - 18.5;
+            document.getElementById('int_bg_'+i.toString()).setAttribute('width', '37');
+        }
+        document.getElementById('int_bg_'+i.toString()).setAttribute('y', int_name_bg_y.toString());
+        document.getElementById('int_bg_'+i.toString()).setAttribute('x', int_name_bb_x.toString());
     }
     // addCurrentBG();
 }
@@ -730,7 +824,7 @@ function wrapStnName(elem) {
     putParams(params_instance);
 
     // Apply changes
-    setStnName(elem.parentNode.children[2], 1);
+    setStnName(elem.parentNode.querySelector('#field1'), 1);
 }
 
 
@@ -740,7 +834,7 @@ function getChangeCity(elem) {
     var change_city = elem.value;
     for (i=0; i<colour_list.length; i++) {
         if (colour_list[i].getAttribute('id') == change_city) {
-            colour_list[i].style.display = 'block'
+            colour_list[i].style.display = 'inline'
         } else {
             colour_list[i].style.display = 'none'
         }
@@ -764,11 +858,20 @@ function setChangeName(elem, i) {
     reposStnName();
 }
 
-// function test() {
-//     for (i=0;i<3;i++)
-//     alert(getIntLineY(i));
-//     // var a = document.getElementById('stn_name_2').children;
-//     // alert(a[1].children[0].getAttribute('x'));
-//     // alert(JSON.stringify(getParams()));
+function setLineNum(load=false) {
+    // Get new value
+    var line_num = document.getElementById('line_num').value;
 
-// }
+    if (!load) {
+        // Log changes
+        var params_instance = getParams();
+        params_instance['line_num'] = line_num;
+        putParams(params_instance);
+    }
+
+    // Apply changes
+    var stn_nums = document.getElementById('station_number').children;
+    for (i=0; i<stn_nums.length; i++) {
+        stn_nums[i].querySelector('#ln').textContent = line_num;
+    }
+}

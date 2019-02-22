@@ -16,6 +16,12 @@ function loadTemplate(line) {
 function loadSVGSize() {
     var params_instance = getParams();
 
+    // reset style
+    // if (document.getElementById('style').value != 'mtr') {
+    //     document.getElementById('style').value = 'mtr';
+    //     setStyle(true);
+    // }
+
     var svg_width = params_instance['svg_width'];
     document.getElementById('svg_width').value = svg_width;
     document.getElementById('root').setAttribute('width', svg_width);
@@ -56,14 +62,20 @@ function loadSVGSize() {
     // theme.querySelector('#line').value = theme_line;
     // loadColour(theme);
 
-    redrawLineMain();
+    redrawLines('main');
 
     var style = params_instance['style'];
-    var style_selector = document.getElementById('style');
-    style_selector.value = style;
+    // var style_selector = document.getElementById('style');
+    // style_selector.value = style;
+
+    var line_num = params_instance['line_num'];
+    document.getElementById('line_num').value = line_num;
+    setLineNum(true);
 
     var direction = params_instance['direction'];
     document.getElementById('direc_'+direction.substring(0,1)).checked = true;
+
+    setFontWeight();
 
     var txt_bg_gap = params_instance['txt_bg_gap'];
     document.getElementById('txt_bg_gap_text').value = txt_bg_gap;
@@ -77,11 +89,11 @@ function loadSVGSize() {
         rmStn(stns[1].children[2], true);
     }
 
-    stns[0].children[6].checked = false;
+    stns[0].children[7].checked = false;
     if (stns[0].children[8]) {
+        stns[0].removeChild(stns[0].children[10]);
         stns[0].removeChild(stns[0].children[9]);
         stns[0].removeChild(stns[0].children[8]);
-        stns[0].removeChild(stns[0].children[7]);
     }
     document.getElementById('stn_int_0').setAttribute('stroke', 'none');
 
@@ -100,15 +112,15 @@ function loadSVGSize() {
     var current_stn_idx = params_instance['current_stn_idx'];
     document.getElementById('stn'+current_stn_idx).children[0].checked = true;
     // document.getElementById('stn_list').children[current_stn_idx].children[0].checked = true;
-    redrawLinePassed();
+    redrawLines('passed');
     for (k=0; k<n_stn; k++) {
         // Wrap
         var wrap = stn_list[k]['wrap'];
         document.getElementById('stn'+k).children[3].checked = wrap;
 
         // Name in list
-        document.getElementById('stn'+k).children[1].value = stn_list[k]['name'][0];
-        document.getElementById('stn'+k).children[2].value = stn_list[k]['name'][1];
+        document.getElementById('stn'+k).querySelector('#field0').value = stn_list[k]['name'][0];
+        document.getElementById('stn'+k).querySelector('#field1').value = stn_list[k]['name'][1];
         if (stn_list[k]['change'][0] != 'nullCity') {
             var elem = document.getElementById('stn'+k).children[6];
             elem.checked = true;
@@ -149,15 +161,15 @@ function loadSVGSize() {
         if (wrap) {
             var [str1, str2] = splitText(stn_list[k]['name'][1]);
             var stn_x = getStnX(k);
-            var stn_name_html = str1 + '<tspan x="' + stn_x.toString() + '" dy="15">' + str2 + '</tspan>';
+            var stn_name_html = str1 + '<tspan x="0" dy="15">' + str2 + '</tspan>';
             stn_name.querySelector('#field1').innerHTML = stn_name_html;
         } else {
             stn_name.querySelector('#field1').textContent = stn_list[k]['name'][1];
         }
 
         // Name in HTML
-        document.getElementById('stn'+k.toString()).children[1].value = stn_list[k]['name'][0];
-        document.getElementById('stn'+k.toString()).children[2].value = stn_list[k]['name'][1];
+        // document.getElementById('stn'+k.toString()).children[1].value = stn_list[k]['name'][0];
+        // document.getElementById('stn'+k.toString()).children[2].value = stn_list[k]['name'][1];
 
         // Int name in SVG
         var int_name = document.getElementById('int_name_'+k);
@@ -170,6 +182,10 @@ function loadSVGSize() {
     reposStnName();
     addCurrentBG();
 
+    if (style != document.getElementById('style').value) {
+        document.getElementById('style').value = style;
+        setStyle();
+    }
 }
 
 function save() {
@@ -247,6 +263,30 @@ function checkDataVer() {
 
     if (params_instance['style'] == null) {
         params_instance['style'] = 'mtr';
+
+        return_value = false;
+    }
+
+    if (params_instance['line_num'] == null) {
+        params_instance['line_num'] = '1';
+
+        return_value = false;
+    }
+
+    if (params_instance['auto_num'] == null) {
+        params_instance['auto_num'] = 'asc';
+
+        return_value = false;
+    }
+
+    if (params_instance['weight_zh'] == null) {
+        params_instance['weight_zh'] = 'bold';
+
+        return_value = false;
+    }
+
+    if (params_instance['weight_en'] == null) {
+        params_instance['weight_en'] = 'bold';
 
         return_value = false;
     }

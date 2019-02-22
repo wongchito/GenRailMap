@@ -18,7 +18,7 @@ var colours = {
             },
             "mol":{"name":["Ma On Shan Line","馬鞍山綫"],"colour":"#9A3820"},
             "nol":{"name":["Northern Link","北環綫"],"colour":"#FF0066"},
-            "360":{"name":["Ngong Ping 360","昂坪360"],"colour":"#94989A"},
+            "np360":{"name":["Ngong Ping 360","昂坪360"],"colour":"#94989A"},
             "lrl":{"name":["Light Rail","輕鐵"],"colour":"#CD9700"},
             "efls":{"name":["Environmentally Friendly Linkage System","環保連接系統"],"colour":"#000000"}
         }

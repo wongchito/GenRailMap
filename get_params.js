@@ -80,11 +80,12 @@ function getBGY(idx) {
     var stn_name = document.getElementById('stn_name_'+idx.toString());
     var pt = document.getElementById('root').createSVGPoint();
     var bb = stn_name.getBBox();
-    pt.x = bb.x;
-    pt.y = bb.y;
-    var ctm = stn_name.getCTM();
-    var pos = pt.matrixTransform(ctm);
-    var bg_lower_y = pos.y + bb.height + 2;
+    var bcr = stn_name.getBoundingClientRect();
+    pt.x = bcr.left;
+    pt.y = bcr.top;
+    var ctm = document.getElementById('root').getScreenCTM();
+    var pos = pt.matrixTransform(ctm.inverse());
+    var bg_lower_y = pos.y + bcr.height + 2;
     var bg_upper_y = pos.y - 2;
     // if (stn_name.children[0].nodeName == 'rect') {
     //     var bg_lower_y = pos.y + bb.height;

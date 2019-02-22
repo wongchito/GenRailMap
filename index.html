@@ -7,6 +7,7 @@
     <script src="load_params.js"></script>
     <script src="get_params.js"></script>
     <script src="layout.js"></script>
+    <script src="styling.js"></script>
     <script src="colours.js"></script>
     <script src="params.js"></script>
     <script src="fontlist.js"></script>
@@ -142,14 +143,31 @@
 </div> -->
 
 <p>Style</p>
-<select id="style" onchange="setStyle(this)">
+<select id="style" onchange="setStyle()">
     <option value="gzmtr">Guangzhou Metro - 广州地铁</option>
     <option value="mtr">MTR - 港鐵</option>
+</select>
+<input id="line_num" type="text" value style="display: none;" onchange="setLineNum()"/>
+<select id="auto_num" style="display: none;" onchange="setStnNum()">
+    <option value="asc">Ascending</option>
+    <option value="desc">Descending</option>
 </select>
 
 <p>Direction</p>
 <input id="direc_l" type="radio" name="direction" value="left" onchange="setDirection(this)">left &lt;--</input>
 <input id="direc_r" type="radio" name="direction" value="right" onchange="setDirection(this)" checked>right --&gt;</input>
+
+<p>Chinese characters</p>
+<select id="weight_zh" onchange="setFontWeight('zh')">
+    <option value="regular">Regular</option>
+    <option value="bold">Bold</option>
+</select>
+
+<p>Latin characters</p>
+<select id="weight_en" onchange="setFontWeight('en')">
+    <option value="regular">Regular</option>
+    <option value="bold">Bold</option>
+</select>
 
 <p>Text background gap</p>
 <input id="txt_bg_gap_slider" type="range" value="15" min="0" max="30" onchange="setTxtBGGap('slider')"/>
@@ -161,8 +179,9 @@
 <div id="stn_list">
     <div id="stn0">
         <input type="radio" name="current" onchange="setCurrentStn(this)">
-        <input type="text" onchange="setStnName(this, 0)">
-        <input type="text" onchange="setStnName(this, 1)">
+        <input id="stn_num" type="text" value style="display: none;">
+        <input id="field0" type="text" onchange="setStnName(this, 0)">
+        <input id="field1" type="text" onchange="setStnName(this, 1)">
         <input type="checkbox" onchange="wrapStnName(this)">Wrap</input>
         <button onclick="addStn(this)">+</button>
         <button onclick="rmStn(this)">-</button>
@@ -204,8 +223,11 @@ xmlns="http://www.w3.org/2000/svg"
 xmlns:xlink="http://www.w3.org/1999/xlink" 
 id="root" width="500" height="200" onload="initSVG()">
     <style type="text/css">
-        .LineDiagram {fill:none;stroke-width:11}
-        .LineDiagramChange {fill:none; stroke-width:10}
+        .LineDiagramHK {fill:none;stroke-width:11}
+        .LineDiagramGZ {fill:none;stroke-width:4}
+        .LineDiagramPassGZ {stroke-dasharray:4,4;stroke-width:4;fill:none;}
+        .LineDiagramChangeHK {fill:none; stroke-width:10}
+        .LineDiagramChangeGZ {fill:none; stroke-width:4}
         .Strip {fill:none;stroke-width:20}
 
         .PassedName {
@@ -219,25 +241,28 @@ id="root" width="500" height="200" onload="initSVG()">
         }
 
         .StnNameEN {
-            font-weight:bold;
             font-size:11px;
             alignment-baseline:middle;
         }
         .StnNameZH {
-            font-weight:bold;
             font-size:18px;
             alignment-baseline:central;
         }
 
         .IntNameEN {
-            font-weight:bold;
-            font-size:6px;
+            font-size:7px;
             alignment-baseline:middle;
         }
         .IntNameZH {
-            font-weight:bold;
             font-size:10px;
             alignment-baseline:central;
+        }
+
+        .StnNum{
+            font-family: Arial;
+            font-size: 14px;
+            text-anchor: middle;
+            alignment-baseline: central;
         }
 
         .cpassed {stroke:#AAAAAA}
@@ -249,20 +274,25 @@ id="root" width="500" height="200" onload="initSVG()">
     <defs>
         <path id="st" class="StationTick" d="M 2,0 H 7"/>
         <path id="term" class="StationTick" d="M -7,0 H 7"/>
-        <g id="int">
+        <g id="stn_hk">
             <circle cx="0" cy="0" r="10.5" fill="#000"/>
             <circle cx="0" cy="0" r="8" fill="#fff"/>
         </g>
-        <g id="passedint">
+        <g id="stn_hk_pass">
             <circle cx="0" cy="0" r="10.5" fill="#AAAAAA"/>
             <circle cx="0" cy="0" r="8" fill="#fff"/>
         </g>
+        <path id="stn_gz" stroke-width="2" fill="#fff" d="M 0,9.25 V -9.25 H -9.25 a 9.25,9.25 0 0,0 0,18.5 h 18.5 a 9.25,9.25 0 0,0 0,-18.5 H 0 "/>
+
         <path id="intline_up" d="M 0,0 v -17" stroke-linecap="round"/>
         <path id="intline_down" d="M 0,0 v 17" stroke-linecap="round"/>
     </defs>
 
-    <g class="LineDiagram">
+    <g class="LineDiagramHK">
         <path id="line_main" stroke="#F3D03E" d="M 25,100 h 450"/>
+    </g>
+    
+    <g class="LineDiagramHK">
         <path id="line_passed" class="cpassed" d="M 250,100 H 25"/>
     </g>
 
@@ -270,16 +300,23 @@ id="root" width="500" height="200" onload="initSVG()">
         <path id="strip" stroke="#F3D03E" d="M 0,190 H 500"/>
     </g>
 
-    <g class="LineDiagramChange" id="station_ints">
+    <g class="LineDiagramChangeHK" id="station_ints">
         <use id="stn_int_0" xlink:href="#intline_down" stroke="none" x="25" y="100"/>
         <!-- <use id="stn_int_1" xlink:href="#intline_up" stroke="none" x="250" y="100"/>
         <use id="stn_int_2" xlink:href="#intline_down" stroke="none" x="475" y="100"/> -->
     </g>
 
     <g id="stations">
-        <use xlink:href="#int" transform="translate(25,100)" id="stn_icon_0"/>
+        <use xlink:href="#stn_hk" stroke="none" transform="translate(25,100)" id="stn_icon_0"/>
         <!-- <use xlink:href="#int" transform="translate(250,100)" id="stn_icon_1"/>
         <use xlink:href="#int" transform="translate(475,100)" id="stn_icon_2"/> -->
+    </g>
+
+    <g id="station_number" style="display:none">
+        <g id="stn_num_0" class="FutureName">
+            <text x="16" y="100" class="StnNum" id="ln">1</text>
+            <text x="34" y="100" class="StnNum" id="stn">01</text>
+        </g>
     </g>
 
     <g>
@@ -301,10 +338,14 @@ id="root" width="500" height="200" onload="initSVG()">
         </g> -->
     </g>
 
+    <g id="change_bgs" style="display:none;">
+        <rect id="int_bg_0" x="25" y="0" rx="3" ry="3" width="37" height="20" fill="none"/>
+    </g>
+
     <g id="change_names">
         <g id="int_name_0" class="PassedName">
             <text id="field0" x="25" y="0" class="IntNameZH" text-anchor="middle"></text>
-            <text id="field1" x="25" y="8" class="IntNameEN" text-anchor="middle"></text>
+            <text id="field1" x="25" y="9" class="IntNameEN" text-anchor="middle"></text>
         </g>
         <!-- <g id="int_name_1" class="FutureName">
             <text id="field0" x="250" y="0" class="IntNameZH" text-anchor="middle"></text>
