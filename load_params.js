@@ -254,7 +254,13 @@ function checkDataVer() {
             if (stn_list[i]['change'] == 'cnone') {
                 stn_list[i]['change'] = ['nullCity', 'nullLine'];
             } else {
-                stn_list[i]['change'] = [params_instance['theme'][0], stn_list[i]['change'].substring(1,stn_list[i]['change'].length)];
+                var cities = Object.keys(colours);
+                for (j=0; j<cities.length; j++) {
+                    if (colours[cities[j]]['line'][stn_list[i]['change'].substring(1,stn_list[i]['change'].length)] != null) {
+                        stn_list[i]['change'] = [cities[j], stn_list[i]['change'].substring(1,stn_list[i]['change'].length)];
+                        break;
+                    }
+                }
             }
         }
 
@@ -279,17 +285,12 @@ function checkDataVer() {
         return_value = false;
     }
 
-    if (params_instance['weight_zh'] == null) {
-        params_instance['weight_zh'] = 'bold';
+    if (params_instance['weight'] == null) {
+        params_instance['weight'] = ['',''];
 
         return_value = false;
     }
 
-    if (params_instance['weight_en'] == null) {
-        params_instance['weight_en'] = 'bold';
-
-        return_value = false;
-    }
 
     if (!return_value) {
         document.getElementById('params_string').value = JSON.stringify(params_instance);

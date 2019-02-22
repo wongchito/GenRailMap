@@ -12,8 +12,8 @@ var default_params = {
     "auto_num":"asc",
 
     'direction': 'left', 
-    "weight_zh": "bold",
-    "weight_en": "bold",
+    "myfonts": [],
+    "weight": ["bold","bold"],
     'txt_bg_gap': '15',
     'txt_flip': false,
     'stn_list': [
@@ -38,8 +38,7 @@ var template_wrl_params = {
     "auto_num":"asc",
     
     "direction":"right",
-    "weight_zh": "bold",
-    "weight_en": "bold",
+    "weight": ["bold","bold"],
     "txt_bg_gap":"16",
     "txt_flip":false,
     "stn_list":[
@@ -73,8 +72,7 @@ var template_gz8_params = {
     "auto_num":"asc",
 
     "direction":"left",
-    "weight_zh": "regular",
-    "weight_en": "regular",
+    "weight": ["regular","regular"],
     "txt_bg_gap":"12",
     "txt_flip":false,
     "stn_list":[
@@ -124,8 +122,7 @@ var template_edi24_params = {
     "auto_num":"asc",
 
     "direction":"right",
-    "weight_zh": "bold",
-    "weight_en": "regular",
+    "weight": ["bold","regular"],
     "txt_bg_gap":"13",
     "txt_flip":false,
     "stn_list":[

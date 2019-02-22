@@ -116,7 +116,7 @@ function setStyle(load=false) {
     }
     if (style == 'mtr') {
         document.getElementById('station_number').style.display = 'none';
-        addCurrentBG();
+        // addCurrentBG();
     }
 
     // Show/Hide text bg
@@ -125,26 +125,21 @@ function setStyle(load=false) {
     }
     if (style == 'mtr') {
         document.getElementById('current_bg').setAttribute('fill', '#000');
-        if (!load) {
-            addCurrentBG();
-        }
     }
 
-    // Set fonts
-    var fontEN = getFonts('en');
-    var fontZH = getFonts('zh');
     if (style == 'gzmtr') {
-        fontEN.unshift(fontEN.splice(fontEN.indexOf('Arial'), 1)[0]);
-        fontZH.unshift(fontZH.splice(fontZH.indexOf('Heiti SC'), 1)[0]);
-        fontZH.unshift(fontZH.splice(fontZH.indexOf('STHeiti'), 1)[0]);
+        pullFont('Arial', 'en');
+        pullFont('Heiti SC', 'zh');
+        pullFont('STHeiti', 'zh');
     }
     if (style == 'mtr') {
-        fontEN.unshift(fontEN.splice(fontEN.indexOf('Myriad Pro'), 1)[0]);fontZH.unshift(fontZH.splice(fontZH.indexOf('Noto Serif CJK JP'), 1)[0]);
-        fontZH.unshift(fontZH.splice(fontZH.indexOf('Source Han Serif'), 1)[0]);fontZH.unshift(fontZH.splice(fontZH.indexOf('Hiragino Mincho ProN'), 1)[0]);
+        pullFont('Myriad Pro', 'en');
+        pullFont('Noto Serif CJK JP', 'zh');
+        pullFont('Source Han Serif', 'zh');
+        pullFont('Hiragino Mincho ProN', 'zh');
     }
-    putFonts(fontEN, 'en');
-    putFonts(fontZH, 'zh');
-    setFont();
+
 
     reposStnName();
+    addCurrentBG();
 }

@@ -109,7 +109,7 @@ function loadChangeColourSelector(elem) {
 function init() {
     // checkVer();
     sessionStorage.all_params = JSON.stringify(default_params);
-    sessionStorage.myfonts = JSON.stringify(myfonts);
+    sessionStorage.myfonts = JSON.stringify(default_fonts);
     loadCity(document.getElementById('theme'), default_params['theme'][0], default_params['theme'][1]);
     setFont();
     setFontWeight();

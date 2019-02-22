@@ -315,19 +315,18 @@ function setStnNum(load=false) {
 function setFontWeight(lang=null) {
     var params_instance = getParams();
     if (lang == null) {
-        var weight_zh = params_instance['weight_zh'];
-        var weight_en = params_instance['weight_en'];
+        var [weight_zh,weight_en] = params_instance['weight'];
         document.getElementById('weight_zh').value = weight_zh;
         document.getElementById('weight_en').value = weight_en;
     }
     if (lang == 'zh') {
         var weight_zh = document.getElementById('weight_zh').value;
-        params_instance['weight_zh'] = weight_zh;
+        params_instance['weight'][0] = weight_zh;
         putParams(params_instance);
     }
     if (lang == 'en') {
         var weight_en = document.getElementById('weight_en').value;
-        params_instance['weight_en'] = weight_en;
+        params_instance['weight'][1] = weight_en;
         putParams(params_instance);
     }
 

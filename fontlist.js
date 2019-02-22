@@ -12,7 +12,7 @@ var fontEN = [
     "sans-serif"
 ]
 
-var myfonts = {
+var default_fonts = {
     'zh': [
         "Hiragino Mincho ProN", 
         "Source Han Serif", 
@@ -36,4 +36,18 @@ function putFonts(instance, lang) {
     var pre_font = JSON.parse(sessionStorage.myfonts);
     pre_font[lang] = instance;
     sessionStorage.myfonts = JSON.stringify(pre_font);
+}
+
+function pullFont(name, lang) {
+    if (lang == 'zh') {
+        var fontZH = getFonts('zh');
+        fontZH.unshift(fontZH.splice(fontZH.indexOf(name), 1)[0]);
+        putFonts(fontZH, 'zh');
+    }
+    if (lang == 'en') {
+        var fontEN = getFonts('en');
+        fontEN.unshift(fontEN.splice(fontEN.indexOf(name), 1)[0]);
+        putFonts(fontEN, 'en');
+    }
+    setFont();
 }
