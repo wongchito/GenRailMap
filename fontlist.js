@@ -18,6 +18,7 @@ var myfonts = {
         "Source Han Serif", 
         "Noto Serif CJK JP",
         "STHeiti",
+        "Heiti SC",
         "sans-serif"
     ], 
     'en': [

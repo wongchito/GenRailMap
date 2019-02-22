@@ -135,6 +135,7 @@ function setStyle(load=false) {
     var fontZH = getFonts('zh');
     if (style == 'gzmtr') {
         fontEN.unshift(fontEN.splice(fontEN.indexOf('Arial'), 1)[0]);
+        fontZH.unshift(fontZH.splice(fontZH.indexOf('Heiti SC'), 1)[0]);
         fontZH.unshift(fontZH.splice(fontZH.indexOf('STHeiti'), 1)[0]);
     }
     if (style == 'mtr') {
