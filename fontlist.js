@@ -19,6 +19,7 @@ var default_fonts = {
         "Noto Serif CJK JP",
         "STHeiti",
         "Heiti SC",
+        "HeiTi",
         "sans-serif"
     ], 
     'en': [

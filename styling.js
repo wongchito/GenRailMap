@@ -130,9 +130,10 @@ function setStyle(load=false) {
     }
 
     if (style == 'gzmtr') {
-        pullFont('Arial', 'en');
+        pullFont('HeiTi', 'zh');
         pullFont('Heiti SC', 'zh');
         pullFont('STHeiti', 'zh');
+        pullFont('Arial', 'en');
     }
     if (style == 'mtr') {
         pullFont('Myriad Pro', 'en');
