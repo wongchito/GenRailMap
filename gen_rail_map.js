@@ -318,14 +318,14 @@ function setFontWeight(lang=null) {
     if (lang == null) {
         var [weight_zh,weight_en] = params_instance['weight'];
         if (weight_zh == 'bold') {
-            document.getElementById('weight_zh').checked = true;
+            document.getElementById('weight_zh').parentNode.MaterialIconToggle.check();
         } else {
-            document.getElementById('weight_zh').checked = false;
+            document.getElementById('weight_zh').parentNode.MaterialIconToggle.uncheck();
         }
         if (weight_en == 'bold') {
-            document.getElementById('weight_en').checked = true;
+            document.getElementById('weight_en').parentNode.MaterialIconToggle.check();
         } else {
-            document.getElementById('weight_en').checked = false;
+            document.getElementById('weight_en').parentNode.MaterialIconToggle.uncheck();
         }
     }
     if (lang == 'zh') {

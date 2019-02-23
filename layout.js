@@ -20,6 +20,7 @@ function loadCity(elem, city=null, line=null) {
     }
 
     if (city != null) {
+        // city_selector.MaterialTextfield.change(city);
         city_selector.value = city;
     }
 

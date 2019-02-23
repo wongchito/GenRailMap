@@ -11,7 +11,7 @@ function setStyle(load=false) {
 
     // Toggle line/station number input
     if (style == 'gzmtr') {
-        document.getElementById('style').parentNode.setAttribute('class', 'mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-focused');
+        document.getElementById('style').parentNode.setAttribute('class', 'mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-dirty');
         document.getElementById('line_num').parentNode.style.display = 'inline';
         document.getElementById('auto_num').parentNode.style.display = 'inline';
         var stn_list = document.getElementById('stn_list').children;
@@ -20,7 +20,7 @@ function setStyle(load=false) {
         }
     }
     if (style == 'mtr') {
-        document.getElementById('style').parentNode.setAttribute('class', 'mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-focused');
+        document.getElementById('style').parentNode.setAttribute('class', 'mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-dirty');
         document.getElementById('line_num').parentNode.style.display = 'none';
         document.getElementById('auto_num').parentNode.style.display = 'none';
         var stn_list = document.getElementById('stn_list').children;
