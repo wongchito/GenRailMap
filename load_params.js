@@ -73,7 +73,13 @@ function loadSVGSize() {
     setLineNum(true);
 
     var direction = params_instance['direction'];
-    document.getElementById('direc_'+direction.substring(0,1)).checked = true;
+    if (direction.substring(0,1) == 'r') {
+        document.getElementById('direc_r').disabled = true;
+        document.getElementById('direc_l').disabled = false;
+    } else {
+        document.getElementById('direc_r').disabled = false;
+        document.getElementById('direc_l').disabled = true;
+    }
 
     setFontWeight();
 
@@ -86,20 +92,20 @@ function loadSVGSize() {
     var stns = document.getElementById('stn_list').children;
 
     while (stns.length - 1) {
-        rmStn(stns[1].children[2], true);
+        rmStn(stns[1].children[3].children[3], true);
     }
 
-    stns[0].children[7].checked = false;
+    stns[0].querySelector('#change').checked = false;
     if (stns[0].children[8]) {
-        stns[0].removeChild(stns[0].children[10]);
-        stns[0].removeChild(stns[0].children[9]);
-        stns[0].removeChild(stns[0].children[8]);
+        stns[0].removeChild(stns[0].children[6]);
+        stns[0].removeChild(stns[0].children[5]);
+        stns[0].removeChild(stns[0].children[4]);
     }
     document.getElementById('stn_int_0').setAttribute('stroke', 'none');
 
     var stn_to_add = n_stn - 1;
     while (stn_to_add != 0) {
-        addStn(document.getElementById('stn0').children[2], true);
+        addStn(document.getElementById('stn0').querySelector('#rm'), true);
         // } else if (n_stn < n_stn_pre) {
         //     rmStn(document.getElementById('stn_list').children[1].children[2], true);
         // // }
@@ -110,7 +116,7 @@ function loadSVGSize() {
     reidxStn();
 
     var current_stn_idx = params_instance['current_stn_idx'];
-    document.getElementById('stn'+current_stn_idx).children[0].checked = true;
+    document.getElementById('stn'+current_stn_idx).querySelector('#current').checked = true;
     // document.getElementById('stn_list').children[current_stn_idx].children[0].checked = true;
     redrawLines('passed');
     for (k=0; k<n_stn; k++) {
@@ -122,7 +128,7 @@ function loadSVGSize() {
         document.getElementById('stn'+k).querySelector('#field0').value = stn_list[k]['name'][0];
         document.getElementById('stn'+k).querySelector('#field1').value = stn_list[k]['name'][1];
         if (stn_list[k]['change'][0] != 'nullCity') {
-            var elem = document.getElementById('stn'+k).children[6];
+            var elem = document.getElementById('stn'+k).querySelector('#change');
             elem.checked = true;
 
             var selector = document.getElementById('theme').cloneNode(true);

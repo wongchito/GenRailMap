@@ -67,7 +67,7 @@ function loadColour(elem) {
 
 function loadChangeColourSelector(elem) {
     var change = elem.checked;
-    var stn_idx = elem.parentNode.getAttribute('id').substring(3);
+    var stn_idx = elem.parentNode.parentNode.getAttribute('id').substring(3);
     var params_instance = getParams();
 
     if (change) {
@@ -81,9 +81,9 @@ function loadChangeColourSelector(elem) {
         var int_name_field1 = int_name_field0.cloneNode(true);
         int_name_field1.setAttribute('onchange', 'setChangeName(this,1)');
 
-        elem.parentNode.appendChild(selector);
-        elem.parentNode.appendChild(int_name_field0);
-        elem.parentNode.appendChild(int_name_field1);
+        elem.parentNode.parentNode.appendChild(selector);
+        elem.parentNode.parentNode.appendChild(int_name_field0);
+        elem.parentNode.parentNode.appendChild(int_name_field1);
 
         var theme_city = params_instance['theme'][0];
         loadCity(selector, theme_city);
@@ -91,10 +91,10 @@ function loadChangeColourSelector(elem) {
         params_instance['stn_list'][stn_idx]['change'] = ['nullCity','nullLine'];
         putParams(params_instance);
 
-        if (elem.parentNode.children[7]) {
-            elem.parentNode.removeChild(elem.parentNode.children[9]);
-            elem.parentNode.removeChild(elem.parentNode.children[8]);
-            elem.parentNode.removeChild(elem.parentNode.children[7]);
+        if (elem.parentNode.parentNode.children[4]) {
+            elem.parentNode.parentNode.removeChild(elem.parentNode.parentNode.children[6]);
+            elem.parentNode.parentNode.removeChild(elem.parentNode.parentNode.children[5]);
+            elem.parentNode.parentNode.removeChild(elem.parentNode.parentNode.children[4]);
         }
 
         document.getElementById('stn_int_'+stn_idx).setAttribute('stroke', 'none');

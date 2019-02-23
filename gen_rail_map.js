@@ -114,7 +114,7 @@ function setPadding(src) {
     }
     if (src == 'text') {
         var padding = document.getElementById('padding_text').value;
-        document.getElementById('padding_slider').value = padding;
+        document.getElementById('padding_slider').MaterialSlider.change(padding);
     }
 
     // Log changes
@@ -188,7 +188,8 @@ function setY(src) {
     }
     if (src == 'text') {
         var y_pc = document.getElementById('y_text').value;
-        document.getElementById('y_slider').value = y_pc;
+        document.getElementById('y_slider').MaterialSlider.change(y_pc);
+        // document.getElementById('y_slider').value = y_pc;
     }
 
     // Log changes
@@ -211,7 +212,7 @@ function setStripY(src) {
     }
     if (src == 'text') {
         var strip_pc = document.getElementById('strip_text').value;
-        document.getElementById('strip_slider').value = strip_pc;
+        document.getElementById('strip_slider').MaterialSlider.change(strip_pc);
     }
 
     // Log changes
@@ -316,16 +317,32 @@ function setFontWeight(lang=null) {
     var params_instance = getParams();
     if (lang == null) {
         var [weight_zh,weight_en] = params_instance['weight'];
-        document.getElementById('weight_zh').value = weight_zh;
-        document.getElementById('weight_en').value = weight_en;
+        if (weight_zh == 'bold') {
+            document.getElementById('weight_zh').checked = true;
+        } else {
+            document.getElementById('weight_zh').checked = false;
+        }
+        if (weight_en == 'bold') {
+            document.getElementById('weight_en').checked = true;
+        } else {
+            document.getElementById('weight_en').checked = false;
+        }
     }
     if (lang == 'zh') {
-        var weight_zh = document.getElementById('weight_zh').value;
+        if (document.getElementById('weight_zh').checked) {
+            var weight_zh = 'bold';
+        } else {
+            var weight_zh = 'regular';
+        }
         params_instance['weight'][0] = weight_zh;
         putParams(params_instance);
     }
     if (lang == 'en') {
-        var weight_en = document.getElementById('weight_en').value;
+        if (document.getElementById('weight_en').checked) {
+            var weight_en = 'bold';
+        } else {
+            var weight_en = 'regular';
+        }
         params_instance['weight'][1] = weight_en;
         putParams(params_instance);
     }
@@ -369,7 +386,7 @@ function setTxtBGGap(src) {
 
 function addStn(elem, load=false) {
     // Get new value
-    var par = elem.parentNode;
+    var par = elem.parentNode.parentNode;
     var add_idx = par.getAttribute('id').substring(3);
     
     if (!load) {
@@ -385,11 +402,11 @@ function addStn(elem, load=false) {
 
     // Apply changes
     var new_stn = par.cloneNode(true);
-    if (new_stn.children[8]) {
-        new_stn.children[7].checked = false;
-        new_stn.removeChild(new_stn.children[10]);
-        new_stn.removeChild(new_stn.children[9]);
-        new_stn.removeChild(new_stn.children[8]);
+    if (new_stn.children[4]) {
+        new_stn.querySelector('#change').checked = false;
+        new_stn.removeChild(new_stn.children[6]);
+        new_stn.removeChild(new_stn.children[5]);
+        new_stn.removeChild(new_stn.children[4]);
     } // reset interchange
     var stns = document.getElementById('stn_list').children;
     par.parentNode.insertBefore(new_stn, stns[parseInt(add_idx)]);
@@ -434,7 +451,7 @@ function addStn(elem, load=false) {
         // redrawStn();
 
         // Fix radio input
-        var current_stn_idx = document.querySelector('input[name="current"]:checked').parentNode.getAttribute('id').substring(3);
+        var current_stn_idx = document.querySelector('input[name="current"]:checked').parentNode.parentNode.getAttribute('id').substring(3);
         params_instance['current_stn_idx'] = current_stn_idx;
         putParams(params_instance);
 
@@ -445,9 +462,9 @@ function addStn(elem, load=false) {
     }
 }
 
-function rmStn(elem, load=false) { 
+function rmStn(elem, load=false) {
     // Get value to remove
-    var par = elem.parentNode;
+    var par = elem.parentNode.parentNode;
     var rm_idx = par.getAttribute('id').substring(3);
 
     if (!load) {
@@ -491,7 +508,7 @@ function rmStn(elem, load=false) {
         // Fix radio input
         var current_stn = document.querySelector('input[name="current"]:checked');
         if (current_stn != null) {
-            var current_stn_idx = current_stn.parentNode.getAttribute('id').substring(3);
+            var current_stn_idx = current_stn.parentNode.parentNode.getAttribute('id').substring(3);
         } else {
             var n_stn = params_instance['stn_list'].length;
             if (rm_idx >= n_stn) {
@@ -499,7 +516,7 @@ function rmStn(elem, load=false) {
             } else {
                 current_stn_idx = rm_idx;
             }
-            document.getElementById('stn_list').children[current_stn_idx].children[0].checked = true;
+            document.getElementById('stn_list').children[current_stn_idx].querySelector('#current').checked = true;
         }
     
         // Log changes
@@ -648,7 +665,17 @@ function redrawStn() {
 
 function setDirection(elem) {
     // Get new value
-    var direction = elem.value;
+    var direction = elem.getAttribute('id');
+    if (direction == 'direc_l') {
+        direction = 'left';
+        document.getElementById('direc_l').disabled = true;
+        document.getElementById('direc_r').disabled = false;
+    }
+    if (direction == 'direc_r') {
+        direction = 'right';
+        document.getElementById('direc_r').disabled = true;
+        document.getElementById('direc_l').disabled = false;
+    }
 
     // Log changes
     var params_instance = getParams();

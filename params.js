@@ -116,7 +116,7 @@ var template_edi24_params = {
     "y_pc":"48",
     "strip_pc":"97",
 
-    "theme":["edinburgh","24"],
+    "theme":["edinburgh","l24"],
     "style":"mtr",
     "line_num":"24",
     "auto_num":"asc",

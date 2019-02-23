@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="mdl/material.min.css">
+    <script src="mdl/material.min.js"></script>
+    <link rel="stylesheet" href="mdl/icons.css">
     <script src="gen_rail_map.js"></script>
     <script src="load_params.js"></script>
     <script src="get_params.js"></script>
@@ -11,212 +15,288 @@
     <script src="colours.js"></script>
     <script src="params.js"></script>
     <script src="fontlist.js"></script>
+    <style>
+        .test:after {
+            transition-duration:.2s;
+            transition-timing-function:cubic-bezier(.4,0,.2,1);
+        }
+
+        .mdl-layout__drawer {
+            width: 350px;
+            -webkit-transform:translateX(-360px);
+            transform:translateX(-360px);
+        }
+
+        .mdl-layout--fixed-drawer.is-upgraded:not(.is-small-screen)>.mdl-layout__header {
+            margin-left: 350px;
+            width:calc(100% - 350px);
+        }
+
+        .mdl-layout--fixed-drawer>.mdl-layout__content{margin-left:350px}
+ 
+        .mdl-layout__container.has-scrolling-header .mdl-layout__content{overflow:visible}@media screen and (max-width:1024px){.mdl-layout--fixed-drawer>.mdl-layout__content{margin-left:0}.mdl-layout__container.has-scrolling-header .mdl-layout__content{overflow-y:auto;overflow-x:hidden}}
+    </style>
 </head>
 
 <body onload="init()">
 
-<div style="display: flex; flex-wrap: nowrap;">
-<div>
+<!-- <div class="w3-row"> -->
 
-<!-- <button onclick="test()">TEST FUNCTION</button> -->
-
-<input id="svg_width" type="text" value="500" onchange="setSVGWidth()">width</input>
-<input id="svg_height" type="text" value="200" onchange="setSVGHeight()">height</input>
-
-<input id="outer_checkbox" type="checkbox" onchange="showOuter(this)" checked>Show border</input>
-
-<!-- <p>Zoom (%)</p>
-<input id="zoom_slider" type="range" value="2" min="1" max="3" step="0.01" onchange="setZoom('slider')"/>
-<input id="zoom_text" type="text" value="100" onchange="setZoom('text')"/> -->
-
-<p>Padding (%)</p>
-<input id="padding_slider" type="range" value="10" min="0" max="50" onchange="setPadding('slider')"/>
-<input id="padding_text" type="text" value="10" onchange="setPadding('text')"/>
-<!-- <p id="padding_text">10</p> -->
-
-<p>y position (%)</p>
-<input id="y_slider" type="range" value="50" min="0" max="100" onchange="setY('slider')"/>
-<input id="y_text" type="text" value="50" onchange="setY('text')"/>
-
-<p>Banner strip y position (%)</p>
-<input id="strip_slider" type="range" value="95" min="80" max="100" onchange="setStripY('slider')"/>
-<input id="strip_text" type="text" value="95" onchange="setStripY('text')"/>
-
-<p>Colour theme</p>
-<div id="theme" style="display:block;">
-    <select id="city" onchange="loadLine(this.parentNode)">
-    </select>
-    <select id="line" onchange="loadColour(this.parentNode)">
-    </select>
-    <input id="colour" type="color" onchange="notImplement()">
-</div>
-
-<!-- <select id="colour_city" onchange="getCity(this)" style="display:none">
-    <optgroup label="CHINA - 中國">
-        <option value="fs">Foshan - 佛山</option>
-        <option value="gz">Guangzhou - 广州</option>
-        <option value="sz">Shenzhen - 深圳</option>
-    </optgroup>
-    <optgroup label="HONG KONG - 香港">
-        <option value="hk" selected="selected">Hong Kong - 香港</option>
-    </optgroup>
-    <optgroup label="UNITED KINGDOM - 英國">
-        <option value="london">London - 倫敦</option>
-    </optgroup>
-</select>
-
-<div id="colour_cities">
-    <select id="hk" style="display:none" onchange="setLineColour()">
-        <option value="twl">Tsuen Wan Line - 荃灣綫</option>
-        <option value="ktl">Kwun Tong Line - 觀塘綫</option>
-        <option value="isl">Island Line - 港島綫</option>
-        <option value="tkl">Tseung Kwan O Line - 將軍澳綫</option>
-        <option value="tcl">Tung Chung Line - 東涌綫</option>
-        <option value="drl">Disneyland Resort Line - 迪士尼綫</option>
-        <option value="ael">Airport Express - 機場快綫</option>
-        <option value="sile">South Island Line - 南港島綫（東段）</option>
-        <option value="silw">South Island Line - 南港島綫（西段）</option>
-        <option value="ekl">East Kowloon Line - 東九龍綫</option>
-        <option value="erl">East Rail Line - 東鐵綫</option>
-        <option value="wrl">West Rail Line - 西鐵綫</option>
-        <option value="lrl">Light Rail - 輕鐵</option>
-    </select>
-    
-    <select id="gz" style="display:none" onchange="setLineColour()">
-        <option value="gz1">Line 1 - 1号线</option>
-        <option value="gz2">Line 2 - 2号线</option>
-        <option value="gz3">Line 3 - 3号线</option>
-        <option value="gz4">Line 4 - 4号线</option>
-        <option value="gz5">Line 5 - 5号线</option>
-        <option value="gz6">Line 6 - 6号线</option>
-        <option value="gz7">Line 7 - 7号线</option>
-        <option value="gz8">Line 8 - 8号线</option>
-        <option value="gz9">Line 9 - 9号线</option>
-        <option value="gz10">Line 10 - 10号线</option>
-        <option value="gz11">Line 11 - 11号线</option>
-        <option value="gz12">Line 12 - 12号线</option>
-        <option value="gz13">Line 13 - 13号线</option>
-        <option value="gz14">Line 14 - 14号线</option>
-        <option value="gz18">Line 18 - 18号线</option>
-        <option value="gz19">Line 19 - 19号线</option>
-        <option value="gz21">Line 21 - 21号线</option>
-        <option value="gz22">Line 22 - 22号线</option>
-        <option value="gf">Guangfo Line - 广佛线</option>
-        <option value="gzapm">APM Line - APM线</option>
-        <option value="gzthz1">THZ1</option>
-    </select>
-
-    <select id="fs" style="display:none" onchange="setLineColour()">
-        <option value="gf">Guangfo Line - 广佛线</option>
-        <option value="fs2">Line 2 - 2号线</option>
-        <option value="fs3">Line 3 - 3号线</option>
-        <option value="fs4">Line 4 - 4号线</option>
-        <option value="fs6">Line 6 - 6号线</option>
-        <option value="fs9">Line 9 - 9号线</option>
-        <option value="fs11">Line 11 - 11号线</option>
-        <option value="sz13">Line 13 - 13号线</option>
-    </select>
-
-    <select id="sz" style="display:none" onchange="setLineColour()">
-        <option value="sz1">Line 1 - 1号线</option>
-        <option value="sz2">Line 2 - 2号线</option>
-        <option value="sz3">Line 3 - 3号线</option>
-        <option value="sz4">Line 4 - 4号线</option>
-        <option value="sz5">Line 5 - 5号线</option>
-        <option value="sz6">Line 6 - 6号线</option>
-        <option value="sz7">Line 7 - 7号线</option>
-        <option value="sz8">Line 8 - 8号线</option>
-        <option value="sz9">Line 9 - 9号线</option>
-        <option value="sz10">Line 10 - 10号线</option>
-        <option value="sz11">Line 11 - 11号线</option>
-        <option value="sz12">Line 12 - 12号线</option>
-        <option value="sz13">Line 13 - 13号线</option>
-        <option value="sz14">Line 14 - 14号线</option>
-        <option value="sz15">Line 15 - 15号线</option>
-        <option value="sz16">Line 16 - 16号线</option>
-        <option value="sz20">Line 20 - 20号线</option>
-    </select>
-    
-    <select id="london" style="display:none" onchange="setLineColour()">
-        <option value="ctl">Central Line</option>
-    </select>
-</div> -->
-
-<p>Style</p>
-<select id="style" onchange="setStyle()">
-    <option value="gzmtr">Guangzhou Metro - 广州地铁</option>
-    <option value="mtr">MTR - 港鐵</option>
-</select>
-<input id="line_num" type="text" value style="display: none;" onchange="setLineNum()"/>
-<select id="auto_num" style="display: none;" onchange="setStnNum()">
-    <option value="asc">Ascending</option>
-    <option value="desc">Descending</option>
-</select>
-
-<p>Direction</p>
-<input id="direc_l" type="radio" name="direction" value="left" onchange="setDirection(this)">left &lt;--</input>
-<input id="direc_r" type="radio" name="direction" value="right" onchange="setDirection(this)" checked>right --&gt;</input>
-
-<p>Chinese characters</p>
-<select id="weight_zh" onchange="setFontWeight('zh')">
-    <option value="regular">Regular</option>
-    <option value="bold">Bold</option>
-</select>
-
-<p>Latin characters</p>
-<select id="weight_en" onchange="setFontWeight('en')">
-    <option value="regular">Regular</option>
-    <option value="bold">Bold</option>
-</select>
-
-<p>Text background gap</p>
-<input id="txt_bg_gap_slider" type="range" value="15" min="0" max="30" onchange="setTxtBGGap('slider')"/>
-<input id="txt_bg_gap_text" type="text" value="15" onchange="setTxtBGGap('text')"/>
-
-<button onclick="flipStnPos()">Flip</button>
-
-<p>Station list</p>
-<div id="stn_list">
-    <div id="stn0">
-        <input type="radio" name="current" onchange="setCurrentStn(this)">
-        <input id="stn_num" type="text" value style="display: none;">
-        <input id="field0" type="text" onchange="setStnName(this, 0)">
-        <input id="field1" type="text" onchange="setStnName(this, 1)">
-        <input type="checkbox" onchange="wrapStnName(this)">Wrap</input>
-        <button onclick="addStn(this)">+</button>
-        <button onclick="rmStn(this)">-</button>
-        <input type="checkbox" onchange="loadChangeColourSelector(this)">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
+<header class="mdl-layout__header">
+<div class="mdl-layout__header-row">
+    <span class="mdl-layout-title">Rail Map Generator</span>
+    <div class="mdl-layout-spacer"></div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+    <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
+        <i class="material-icons">search</i>
+    </label>
+    <div class="mdl-textfield__expandable-holder">
+        <input class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp">
     </div>
-    <!-- <div id="stn1">
-        <input type="radio" name="current" onchange="setCurrentStn(this)" checked>
-        <input type="text" onchange="setStnName(this, 0)">
-        <input type="text" onchange="setStnName(this, 1)">
-        <input type="checkbox" onchange="wrapStnName(this)">Wrap</input>
-        <button onclick="addStn(this)">+</button>
-        <button onclick="rmStn(this)">-</button>
-        <input type="checkbox" onchange="loadChangeColourSelector(this)">
     </div>
-    <div id="stn2">
-        <input type="radio" name="current" onchange="setCurrentStn(this)">
-        <input type="text" onchange="setStnName(this, 0)">
-        <input type="text" onchange="setStnName(this, 1)">
-        <input type="checkbox" onchange="wrapStnName(this)">Wrap</input>
-        <button onclick="addStn(this)">+</button>
-        <button onclick="rmStn(this)">-</button>
-        <input type="checkbox" onchange="loadChangeColourSelector(this)">
-    </div> -->
+</div>
+</header>
+<div class="mdl-layout__drawer">
+<span class="mdl-layout-title">Configurations</span>
+<nav class="mdl-navigation">
+
+<div class="mdl-grid">
+    <button class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="showConfig('nav_layout')">Layout</button>
+    <button class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="showConfig('nav_design')">Design</button>
+    <button class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="showConfig('nav_font')">Font</button>
+    <button class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="showConfig('nav_station')">Station</button>
+    <button class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="showConfig('nav_template')">Template</button>
+    <button class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="showConfig('nav_save')">Save</button>
+</div>
+            
+<div style="display: none" id="nav_layout">
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" value="500" id="svg_width" onchange="setSVGWidth()">
+        <label class="mdl-textfield__label" for="svg_width">Width</label>
+    </div>
+    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" value="200" id="svg_height" onchange="setSVGHeight()">
+        <label class="mdl-textfield__label" for="svg_height">Height</label>
+    </div>
+    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="outer_checkbox">
+            <input type="checkbox" id="outer_checkbox" class="mdl-switch__input" onchange="showOuter(this)" checked>
+            <span class="mdl-switch__label">Border</span>
+        </label>
+    </div>
+    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" value="10" id="padding_text" onchange="setPadding('text')">
+        <label class="mdl-textfield__label" for="padding_text">Padding</label>
+    </div>
+    <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone mdl-cell--middle">
+        <input class="mdl-slider mdl-js-slider" id="padding_slider" type="range" min="0" max="50" value="10" tabindex="0" onchange="setPadding('slider')">
+    </div>
+    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" value="50" id="y_text" onchange="setY('text')">
+        <label class="mdl-textfield__label" for="y_text">y</label>
+    </div>
+    <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone mdl-cell--middle">
+        <input class="mdl-slider mdl-js-slider" id="y_slider" type="range" min="0" max="100" value="50" tabindex="0" onchange="setY('slider')">
+    </div>
+    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" value="95" id="strip_text" onchange="setStripY('text')">
+        <label class="mdl-textfield__label" for="strip_text">Banner</label>
+    </div>
+    <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone mdl-cell--middle">
+        <input class="mdl-slider mdl-js-slider" id="strip_slider" type="range" min="80" max="100" value="95" tabindex="0" onchange="setStripY('slider')">
+    </div>
+
+    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onclick="this.parentNode.parentNode.style.display='none'">
+        <i class="material-icons">expand_less</i>
+    </button>
+</div>
 </div>
 
-<p>Load templates</p>
-<select id="template">
-    <option value="wrl">West Rail Line - 西鐵綫</option>
-    <option value="gz8">Line 8 - 8号线</option>
-    <option value="edi24">Edinburgh Lothian Service 24</option>
-</select>
-<button onclick="loadTemplate(document.getElementById('template').value)">Load</button>
+<div style="display: none" id="nav_design">
+<div class="mdl-grid">
+    <div id="theme">
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <select id="city" class="mdl-textfield__input" onchange="loadLine(this.parentNode.parentNode)">
+        </select>
+        <label class="mdl-textfield__label" for="city">City</label>
+    </div>
+    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <select id="line" class="mdl-textfield__input" onchange="loadColour(this.parentNode.parentNode)">
+        </select>
+        <label class="mdl-textfield__label" for="line">Line</label>
+    </div>
+    <div class="mdl-cell mdl-cell--5-col mdl-cell--3-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input id="colour" class="mdl-textfield__input" type="color" onchange="notImplement()">
+        <label class="mdl-textfield__label" for="colour">Colour</label>
+    </div>
+    </div>
 
+    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <select id="style" class="mdl-textfield__input" onchange="setStyle()">
+            <option value="gzmtr">Guangzhou Metro - 广州地铁</option>
+            <option value="mtr">MTR - 港鐵</option>
+        </select>
+        <label class="mdl-textfield__label" for="style">Style</label>
+    </div>
+    <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="display: none;">
+        <input class="mdl-textfield__input" type="text" value="T" id="line_num" onchange="setLineNum()">
+        <label class="mdl-textfield__label" for="strip_text">Line</label>
+    </div>
+    <div class="mdl-cell mdl-cell--4-col mdl-cell--3-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="display: none;">
+        <select id="auto_num" class="mdl-textfield__input" onchange="setStnNum()">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+        <label class="mdl-textfield__label" for="auto_num">Numbering</label>
+    </div>
+    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle">
+        <button class="mdl-button mdl-js-button mdl-button--primary" disabled>
+            Direction
+        </button>   
+    </div>
+    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="setDirection(this)" id="direc_l">
+            <i class="material-icons">arrow_back</i>
+        </button>
+    </div>
+    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="setDirection(this)" id="direc_r" disabled>
+            <i class="material-icons">arrow_forward</i>
+        </button>
+    </div>
+
+
+    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onclick="this.parentNode.parentNode.style.display='none'">
+        <i class="material-icons">expand_less</i>
+    </button>
 </div>
-<div>
+</div>
+
+<div style="display: none" id="nav_font">
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+        <span class="mdl-chip mdl-chip--contact">
+            <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">字</span>
+            <span class="mdl-chip__text">HAN</span>
+        </span>
+    </div>
+    <div class="mdl-cell mdl-cell--7-col mdl-cell--5-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <select id="font_zh" class="mdl-textfield__input">
+            <option value="na">N/A</option>
+        </select>
+        <label class="mdl-textfield__label" for="font_zh">Font</label>
+    </div>
+    <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+        <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="weight_zh">
+            <input type="checkbox" id="weight_zh" class="mdl-icon-toggle__input" onchange="setFontWeight('zh')" checked>
+            <i class="mdl-icon-toggle__label material-icons">format_bold</i>
+        </label>
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+        <span class="mdl-chip mdl-chip--contact">
+            <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">A</span>
+            <span class="mdl-chip__text">LAT</span>
+        </span>
+    </div>
+    <div class="mdl-cell mdl-cell--7-col mdl-cell--5-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <select id="font_en" class="mdl-textfield__input">
+            <option value="na">N/A</option>
+        </select>
+        <label class="mdl-textfield__label" for="font_en">Font</label>
+    </div>
+    <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+        <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="weight_en">
+            <input type="checkbox" id="weight_en" class="mdl-icon-toggle__input" onchange="setFontWeight('en')" checked>
+            <i class="mdl-icon-toggle__label material-icons">format_bold</i>
+        </label>
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" value="15" id="txt_bg_gap_text" onchange="setTxtBGGap('text')">
+        <label class="mdl-textfield__label" for="txt_bg_gap_text">Padding</label>
+    </div>
+    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle">
+        <input class="mdl-slider mdl-js-slider" id="txt_bg_gap_slider" type="range" min="0" max="30" value="15" tabindex="0" onchange="setTxtBGGap('slider')">
+    </div>
+    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+        <button class="mdl-button mdl-js-button mdl-button--primary" onclick="flipStnPos()">
+            Flip
+        </button>   
+    </div>
+
+    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onclick="this.parentNode.parentNode.style.display='none'">
+        <i class="material-icons">expand_less</i>
+    </button>
+</div>
+</div>
+
+<div style="display: none" id="nav_station">
+<div class="mdl-grid">
+        <ul class="w3-ul" id="stn_list">
+
+                <li class="w3-row-padding" id="stn0">
+                <div class="w3-col" style="width:10%;">
+                    <input type="radio" class="w3-radio" id="current" name="current" onchange="setCurrentStn(this)">
+                </div>
+                <div class="w3-col" style="width:45%;">
+                    <input id="field0" class="w3-input" type="text" onchange="setStnName(this, 0)">
+                </div>
+                <div class="w3-col" style="width:45%;">
+                    <input id="field1" class="w3-input" type="text" onchange="setStnName(this, 1)">
+                </div>
+                <div class="w3-right">
+                    <input id="stn_num" class="w3-input" type="text" value style="display: none;">
+                    <input id="change" type="checkbox" class="w3-check" onchange="loadChangeColourSelector(this)">
+                    <button class="w3-button" id="add" onclick="addStn(this)">&plus;</button>
+                    <button class="w3-button" id="rm" onclick="rmStn(this)">&times;</button>
+                </div>
+                </li>
+                
+                </ul>
+
+    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onclick="this.parentNode.parentNode.style.display='none'">
+        <i class="material-icons">expand_less</i>
+    </button>
+</div>
+</div>
+
+<div style="display: none" id="nav_template">
+<div class="mdl-grid">
+        <select id="template">
+                <option value="wrl">West Rail Line - 西鐵綫</option>
+                <option value="gz8">Line 8 - 8号线</option>
+                <option value="edi24">Edinburgh Lothian Service 24</option>
+            </select>
+            <button onclick="loadTemplate(document.getElementById('template').value)">Load</button>
+
+    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onclick="this.parentNode.parentNode.style.display='none'">
+        <i class="material-icons">expand_less</i>
+    </button>
+</div>
+</div>
+
+<div style="display: none" id="nav_save">
+<div class="mdl-grid">
+        <button onclick="save()">Save state</button> Copy the configuration script below and save it!
+<br/>
+<textarea id="params_string" rows="30" cols="50"></textarea>
+<br/>
+<button onclick="load()">Load state</button> Refresh this page, paste your configuration script above and load your work!
+
+    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onclick="this.parentNode.parentNode.style.display='none'">
+        <i class="material-icons">expand_less</i>
+    </button>
+</div>
+</div>
+
+
+</nav>
+</div>
+<main class="mdl-layout__content">
+    <div class="page-content" style="overflow-x:auto;">
 
 <svg 
 xmlns="http://www.w3.org/2000/svg"
@@ -360,22 +440,22 @@ id="root" width="500" height="200" onload="initSVG()">
     <rect id="outer" x="0" y="0" width="500" height="200" fill="none" stroke="black"/>
 </svg>
 
-<br/>
-<button onclick="save()">Save state</button> Copy the configuration script below and save it!
-<br/>
-<textarea id="params_string" rows="30" cols="50"></textarea>
-<br/>
-<button onclick="load()">Load state</button> Refresh this page, paste your configuration script above and load your work!
-
-<br/>
-<a href="https://github.com/wongchito/GenRailMap">Improve this page</a>
-
-
-</div>
+    </div>
+</main>
 </div>
 
-
-<br/>
+<script>
+function showConfig(nav) {
+    var all_nav = ['nav_layout', 'nav_design', 'nav_font', 'nav_station', 'nav_template', 'nav_save'];
+    for (i=0; i<all_nav.length; i++) {
+        if (all_nav[i] == nav) {
+            document.getElementById(all_nav[i]).style.display = 'inline';
+        } else {
+            document.getElementById(all_nav[i]).style.display = 'none';
+        }
+    }
+}
+</script>
 
 </body>
 </html>
