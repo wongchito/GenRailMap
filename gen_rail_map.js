@@ -689,7 +689,7 @@ function setDirection(elem) {
 
 function setCurrentStn(elem) {
     // Get new value
-    var current_stn_idx = elem.parentNode.getAttribute('id').substring(3);
+    var current_stn_idx = elem.parentNode.parentNode.getAttribute('id').substring(3);
 
     // Log changes
     var params_instance = getParams();
@@ -726,7 +726,7 @@ function addCurrentBG() {
 
 function setStnName(elem, target) {
     // Get new value
-    var stn_idx = elem.parentNode.getAttribute('id').substring(3);
+    var stn_idx = elem.parentNode.parentNode.getAttribute('id').substring(3);
 
     // Log changes
     var params_instance = getParams();
