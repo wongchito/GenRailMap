@@ -110,7 +110,7 @@ function setPadding(src) {
     // Get new value
     if (src == 'slider') {
         var padding = document.getElementById('padding_slider').value;
-        document.getElementById('padding_text').value = padding;
+        document.getElementById('padding_text').parentElement.MaterialTextfield.change(padding);
     }
     if (src == 'text') {
         var padding = document.getElementById('padding_text').value;
@@ -184,7 +184,7 @@ function setY(src) {
     // Get new value
     if (src == 'slider') {
         var y_pc = document.getElementById('y_slider').value;
-        document.getElementById('y_text').value = y_pc;
+        document.getElementById('y_text').parentElement.MaterialTextfield.change(y_pc);
     }
     if (src == 'text') {
         var y_pc = document.getElementById('y_text').value;
@@ -402,7 +402,11 @@ function addStn(elem, load=false) {
 
     // Apply changes
     var new_stn = par.cloneNode(true);
-    // new_stn.children[1].className = 'mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label';
+    new_stn.querySelector('#field0').className = new_stn.querySelector('.mdl-js-textfield').className.replace(/is-upgraded/g, '');
+    new_stn.querySelector('#field0').setAttribute('data-upgraded', '');
+
+    new_stn.querySelector('#field1').className = new_stn.querySelector('.mdl-js-textfield').className.replace(/is-upgraded/g, '');
+    new_stn.querySelector('#field1').setAttribute('data-upgraded', '');
 
     if (new_stn.children[4]) {
         new_stn.querySelector('#change').checked = false;
@@ -553,10 +557,10 @@ function reidxStn() {
 
     for (i=0; i<n_stn; i++) {
         stns[i].setAttribute('id', 'stn'+i.toString());
-        // stns[i].children[1].children[0].setAttribute('id', 'stn'+i.toString()+'_field0');
-        // stns[i].children[1].children[1].setAttribute('for', 'stn'+i.toString()+'_field0');
-        // stns[i].children[2].children[0].setAttribute('id', 'stn'+i.toString()+'_field1');
-        // stns[i].children[2].children[1].setAttribute('for', 'stn'+i.toString()+'_field1');
+        stns[i].querySelector('#field0').querySelector('.mdl-textfield__input').setAttribute('id', 'stn'+i.toString()+'_field0');
+        stns[i].querySelector('#field0').querySelector('.mdl-textfield__label').setAttribute('for', 'stn'+i.toString()+'_field0');
+        stns[i].querySelector('#field1').querySelector('.mdl-textfield__input').setAttribute('id', 'stn'+i.toString()+'_field1');
+        stns[i].querySelector('#field1').querySelector('.mdl-textfield__label').setAttribute('for', 'stn'+i.toString()+'_field1');
         stn_icons[i].setAttribute('id', 'stn_icon_'+i.toString());
         stn_nums[i].setAttribute('id', 'stn_num_'+i.toString());
         // if (auto_num == 'asc') {
@@ -575,7 +579,7 @@ function reidxStn() {
         int_names[i].setAttribute('id', 'int_name_'+i.toString());
         int_bgs[i].setAttribute('id', 'int_bg_'+i.toString());
     }
-
+    componentHandler.upgradeDom();
     setStnNum(true);
 }
 

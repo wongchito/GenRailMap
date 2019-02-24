@@ -133,11 +133,13 @@ function loadSVGSize() {
         document.getElementById('stn'+k).querySelector('#wrap').checked = wrap;
 
         // Name in list
-        // document.getElementById('stn'+k+'_field0').parentElement.MaterialTextfield.change(stn_list[k]['name'][0]);
-        // document.getElementById('stn'+k+'_field1').parentElement.MaterialTextfield.change(stn_list[k]['name'][1]);
-        document.getElementById('stn'+k).querySelector('#field0').value = stn_list[k]['name'][0];
+        // document.getElementById('stn'+k+'_field0').value = stn_list[k]['name'][0];
+        // document.getElementById('stn'+k+'_field1').value = stn_list[k]['name'][1];
+        document.getElementById('stn'+k+'_field0').parentElement.MaterialTextfield.change(stn_list[k]['name'][0]);
+        document.getElementById('stn'+k+'_field1').parentElement.MaterialTextfield.change(stn_list[k]['name'][1]);
+        // document.getElementById('stn'+k).querySelector('#field0').value = stn_list[k]['name'][0];
         // document.getElementById('stn'+k).querySelector('#field0').parentElement.MaterialTextfield.change(stn_list[k]['name'][0]);
-        document.getElementById('stn'+k).querySelector('#field1').value = stn_list[k]['name'][1];
+        // document.getElementById('stn'+k).querySelector('#field1').value = stn_list[k]['name'][1];
         if (stn_list[k]['change'][0] != 'nullCity') {
             var elem = document.getElementById('stn'+k).querySelector('#change');
             elem.checked = true;
