@@ -110,7 +110,7 @@ function setPadding(src) {
     // Get new value
     if (src == 'slider') {
         var padding = document.getElementById('padding_slider').value;
-        document.getElementById('padding_text').parentElement.MaterialTextField.change(padding);
+        document.getElementById('padding_text').value = padding;
     }
     if (src == 'text') {
         var padding = document.getElementById('padding_text').value;
@@ -278,7 +278,7 @@ function setLineColour(elem) {
 
 function setStnNum(load=false) {
     // Get new value
-    var auto_num = document.getElementById('auto_num').value;
+    var auto_num = document.getElementById('auto_num').parentNode.querySelector('input[name="auto_num"]').value;
     var n_stn = getNStn();
 
     if (!load) {
@@ -367,7 +367,7 @@ function setTxtBGGap(src) {
     // Get new value
     if (src == 'slider') {
         var txt_bg_gap = document.getElementById('txt_bg_gap_slider').value;
-        document.getElementById('txt_bg_gap_text').parentElement.MaterialTextField.change(txt_bg_gap);
+        document.getElementById('txt_bg_gap_text').value = txt_bg_gap;
     }
     if (src == 'text') {
         var txt_bg_gap = document.getElementById('txt_bg_gap_text').value;
@@ -402,6 +402,8 @@ function addStn(elem, load=false) {
 
     // Apply changes
     var new_stn = par.cloneNode(true);
+    // new_stn.children[1].className = 'mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label';
+
     if (new_stn.children[4]) {
         new_stn.querySelector('#change').checked = false;
         new_stn.removeChild(new_stn.children[6]);
@@ -410,6 +412,10 @@ function addStn(elem, load=false) {
     } // reset interchange
     var stns = document.getElementById('stn_list').children;
     par.parentNode.insertBefore(new_stn, stns[parseInt(add_idx)]);
+
+    // componentHandler.upgradeDom();
+    // componentHandler.upgradeElement(new_stn.children[1]);
+    // componentHandler.upgradeElement(new_stn.children[2]);
 
     var stn_icon = document.getElementById('stn_icon_'+add_idx);
     var new_stn_icon = stn_icon.cloneNode(true);
@@ -547,6 +553,10 @@ function reidxStn() {
 
     for (i=0; i<n_stn; i++) {
         stns[i].setAttribute('id', 'stn'+i.toString());
+        // stns[i].children[1].children[0].setAttribute('id', 'stn'+i.toString()+'_field0');
+        // stns[i].children[1].children[1].setAttribute('for', 'stn'+i.toString()+'_field0');
+        // stns[i].children[2].children[0].setAttribute('id', 'stn'+i.toString()+'_field1');
+        // stns[i].children[2].children[1].setAttribute('for', 'stn'+i.toString()+'_field1');
         stn_icons[i].setAttribute('id', 'stn_icon_'+i.toString());
         stn_nums[i].setAttribute('id', 'stn_num_'+i.toString());
         // if (auto_num == 'asc') {
@@ -637,10 +647,14 @@ function redrawStn() {
         if (stn_state == -1) {
             stn_name.setAttribute('class', 'PassedName');
             stn_num.setAttribute('class', 'PassedName');
-        } else if (stn_state == 0 && style == 'mtr') {
-            stn_name.setAttribute('class', 'CurrentNameHK');
-        } else if (stn_state == 0 && style == 'gzmtr') {
-            stn_name.setAttribute('class', 'CurrentNameGZ');
+        } else if (stn_state == 0) {
+            stn_num.setAttribute('class', 'FutureName');
+            if (style == 'mtr') {
+                stn_name.setAttribute('class', 'CurrentNameHK');
+            }
+            if (style == 'gzmtr') {
+                stn_name.setAttribute('class', 'CurrentNameGZ');
+            }
         } else {
             stn_name.setAttribute('class', 'FutureName');
             stn_num.setAttribute('class', 'FutureName');
@@ -660,7 +674,7 @@ function redrawStn() {
             }
         }
         if (style == 'gzmtr') {
-            int_name.setAttribute('class','CurrentName');
+            int_name.setAttribute('class','CurrentNameHK');
         }
         for (j=0; j<int_name.childElementCount; j++) {
             int_name.children[j].setAttribute('x', stn_x.toString());
@@ -690,6 +704,7 @@ function setDirection(elem) {
     // Apply changes
     redrawLines();
     redrawStn();
+    reposStnName();
 }
 
 function setCurrentStn(elem) {
@@ -855,7 +870,7 @@ function wrapStnName(elem) {
     putParams(params_instance);
 
     // Apply changes
-    setStnName(elem.parentNode.querySelector('#field1'), 1);
+    setStnName(elem.parentNode.parentNode.querySelector('#field1'), 1);
 }
 
 

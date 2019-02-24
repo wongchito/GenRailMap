@@ -8,7 +8,7 @@ var default_params = {
 
     "theme":["hongkong","twl"],
     "style":"mtr",
-    "line_num":"T",
+    "line_num":"TW",
     "auto_num":"asc",
 
     'direction': 'left', 

@@ -36,9 +36,12 @@ function loadSVGSize() {
 
     var show_outer = params_instance['show_outer'];
     document.getElementById('outer_checkbox').checked = show_outer;
+    // document.getElementById('outer_checkbox').checked = show_outer;
     if (show_outer) {
+        document.getElementById('outer_checkbox').parentNode.MaterialSwitch.on();
         document.getElementById('outer').setAttribute('stroke', 'black');
     } else {
+        document.getElementById('outer_checkbox').parentNode.MaterialSwitch.off();
         document.getElementById('outer').setAttribute('stroke', 'none');
     }
 
@@ -120,6 +123,7 @@ function loadSVGSize() {
     reidxStn();
 
     var current_stn_idx = params_instance['current_stn_idx'];
+    // document.getElementById('stn'+current_stn_idx).querySelector('#current').parentNode.MaterialRadio.check();
     document.getElementById('stn'+current_stn_idx).querySelector('#current').checked = true;
     // document.getElementById('stn_list').children[current_stn_idx].children[0].checked = true;
     redrawLines('passed');
@@ -129,7 +133,10 @@ function loadSVGSize() {
         document.getElementById('stn'+k).querySelector('#wrap').checked = wrap;
 
         // Name in list
+        // document.getElementById('stn'+k+'_field0').parentElement.MaterialTextfield.change(stn_list[k]['name'][0]);
+        // document.getElementById('stn'+k+'_field1').parentElement.MaterialTextfield.change(stn_list[k]['name'][1]);
         document.getElementById('stn'+k).querySelector('#field0').value = stn_list[k]['name'][0];
+        // document.getElementById('stn'+k).querySelector('#field0').parentElement.MaterialTextfield.change(stn_list[k]['name'][0]);
         document.getElementById('stn'+k).querySelector('#field1').value = stn_list[k]['name'][1];
         if (stn_list[k]['change'][0] != 'nullCity') {
             var elem = document.getElementById('stn'+k).querySelector('#change');

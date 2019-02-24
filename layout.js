@@ -3,6 +3,9 @@ function loadCity(elem, city=null, line=null) {
     while (city_selector.length) {
         city_selector.remove(0);
     }
+    city_selector.innerHTML = '';
+
+    // alert(city_selector.children[0].textContent);
 
     var city_keys = Object.keys(colours).sort();
     for (i=0; i<city_keys.length; i++) {
@@ -17,11 +20,30 @@ function loadCity(elem, city=null, line=null) {
         }
         option.value = key;
         city_selector.add(option);
+        // var option = document.createElement('li');
+        // var key = city_keys[i];
+        // option.textContent = colours[key]['name'][0];
+        // var n_name = colours[key]['name'].length;
+        // if (n_name > 1) {
+        //     for (j=1; j<n_name; j++) {
+        //         option.textContent += ' - ' + colours[key]['name'][j];
+        //     }
+        // }
+        // option.setAttribute('data-val', key);
+        // option.setAttribute('class', 'mdl-menu__item');
+        // if (city == key) {
+        //     // city_selector.MaterialTextfield.change(city);
+        //     // city_selector.value = city;
+        //     option.setAttribute('data-selected', 'true');
+        // }
+        // city_selector.appendChild(option);
     }
+    // getmdlSelect.init('.getmdl-select');
 
     if (city != null) {
         // city_selector.MaterialTextfield.change(city);
         city_selector.value = city;
+        // city_selector.querySelector('')
     }
 
     loadLine(elem, line=line);
@@ -30,6 +52,7 @@ function loadCity(elem, city=null, line=null) {
 function loadLine(elem, line=null) {
     var line_selector = elem.querySelector('#line');
     var city = elem.querySelector('#city').value;
+    // var city = elem.querySelector('#city').parentNode.children[1].value;
     while (line_selector.length) {
         line_selector.remove(0);
     }
@@ -60,6 +83,7 @@ function loadLine(elem, line=null) {
 function loadColour(elem) {
     var city = elem.querySelector('#city').value;
     var line = elem.querySelector('#line').value;
+    // alert([city,line])
     elem.querySelector('#colour').value = colours[city]['line'][line]['colour'];
 
     // On SVG
