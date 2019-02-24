@@ -857,6 +857,7 @@ function flipStnPos() {
     putParams(params_instance);
 
     reposStnName();
+    addCurrentBG();
 }
 
 function wrapStnName(elem) {
