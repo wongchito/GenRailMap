@@ -9,8 +9,8 @@
     <script src="mdl/material.min.js"></script>
     <link rel="stylesheet" href="mdl/icons.css">
 
-    <!-- <link rel="stylesheet" href="getmdl-select/getmdl-select.min.css">
-    <script defer src="getmdl-select/getmdl-select.min.js"></script> -->
+    <link rel="stylesheet" href="getmdl-select/getmdl-select.min.css">
+    <script defer src="getmdl-select/getmdl-select.min.js"></script>
 
     <script src="gen_rail_map.js"></script>
     <script src="load_params.js"></script>
@@ -27,17 +27,22 @@
         }
 
         .mdl-layout__drawer {
-            width: 350px;
-            -webkit-transform:translateX(-360px);
-            transform:translateX(-360px);
+            width: 400px;
+            -webkit-transform:translateX(-410px);
+            transform:translateX(-410px);
+        }
+
+        .mdl-layout__drawer.is-visible {
+            width: 90%;
+            max-width: 400px;
         }
 
         .mdl-layout--fixed-drawer.is-upgraded:not(.is-small-screen)>.mdl-layout__header {
-            margin-left: 350px;
-            width:calc(100% - 350px);
+            margin-left: 400px;
+            width:calc(100% - 400px);
         }
 
-        .mdl-layout--fixed-drawer>.mdl-layout__content{margin-left:350px}
+        .mdl-layout--fixed-drawer>.mdl-layout__content{margin-left:400px}
  
         .mdl-layout__container.has-scrolling-header .mdl-layout__content{overflow:visible}@media screen and (max-width:1024px){.mdl-layout--fixed-drawer>.mdl-layout__content{margin-left:0}.mdl-layout__container.has-scrolling-header .mdl-layout__content{overflow-y:auto;overflow-x:hidden}}
     </style>
@@ -187,11 +192,18 @@
             <span class="mdl-chip__text">HAN</span>
         </span>
     </div>
-    <div class="mdl-cell mdl-cell--7-col mdl-cell--5-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <select id="font_zh" class="mdl-textfield__input">
+    <div class="mdl-cell mdl-cell--7-col mdl-cell--5-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height">
+        <input type="text" value="" class="mdl-textfield__input" id="font_zh" readonly>
+        <input type="hidden" value="" name="font_zh">
+        <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+        <label for="font_zh" class="mdl-textfield__label">Font</label>
+        <ul for="font_zh" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+            <li class="mdl-menu__item" data-val="na" data-selected="true">N/A</li>
+        </ul>
+        <!-- <select id="font_zh" class="mdl-textfield__input">
             <option value="na">N/A</option>
         </select>
-        <label class="mdl-textfield__label" for="font_zh">Font</label>
+        <label class="mdl-textfield__label" for="font_zh">Font</label> -->
     </div>
     <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
         <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="weight_zh">
@@ -221,7 +233,7 @@
 
     <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" value="15" id="txt_bg_gap_text" onchange="setTxtBGGap('text')">
-        <label class="mdl-textfield__label" for="txt_bg_gap_text">Padding</label>
+        <label class="mdl-textfield__label" for="txt_bg_gap_text">Gap</label>
     </div>
     <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle">
         <input class="mdl-slider mdl-js-slider" id="txt_bg_gap_slider" type="range" min="0" max="30" value="15" tabindex="0" onchange="setTxtBGGap('slider')">
@@ -240,6 +252,13 @@
 
 <div style="display: none" id="nav_station">
 <div class="mdl-grid">
+    <!-- <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-cell--middle">
+        <span class="mdl-chip mdl-chip--contact">
+            <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">1</span>
+            <span class="mdl-chip__text">中環 - Central</span>
+        </span>
+    </div> -->
+
         <ul class="w3-ul" id="stn_list">
 
                 <li class="w3-row-padding" id="stn0">
@@ -251,6 +270,7 @@
                 </div>
                 <div class="w3-col" style="width:45%;">
                     <input id="field1" class="w3-input" type="text" onchange="setStnName(this, 1)">
+                    <input id="wrap" type="checkbox" onchange="wrapStnName(this)">Wrap</input>
                 </div>
                 <div class="w3-right">
                     <input id="stn_num" class="w3-input" type="text" value style="display: none;">
@@ -318,8 +338,11 @@ id="root" width="500" height="200" onload="initSVG()">
         .PassedName {
             fill: #AAAAAA;
         }
-        .CurrentName {
+        .CurrentNameHK {
             fill: #FFFFFF;
+        }
+        .CurrentNameGZ {
+            fill: #FF0000;
         }
         .FutureName {
             fill: #000000;
@@ -399,7 +422,7 @@ id="root" width="500" height="200" onload="initSVG()">
 
     <g id="station_number" style="display:none">
         <g id="stn_num_0" class="FutureName">
-            <text x="16" y="100" class="StnNum" id="ln">1</text>
+            <text transform="translate(16,100)scale(1)" class="StnNum" id="ln">1</text>
             <text x="34" y="100" class="StnNum" id="stn">01</text>
         </g>
     </g>

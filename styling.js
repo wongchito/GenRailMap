@@ -79,14 +79,14 @@ function setStyle(load=false) {
             stn_names[i].setAttribute('transform', 'translate('+pre_x+','+pre_y+')rotate(-45)');
             stn_names[i].setAttribute('text-anchor', 'start');
             if (i == current_stn_idx) {
-                stn_names[i].setAttribute('class', 'FutureName');
+                stn_names[i].setAttribute('class', 'CurrentNameGZ');
             }
         }
         if (style == 'mtr') {
             stn_names[i].setAttribute('transform', 'translate('+pre_x+','+pre_y+')rotate(0)');
             stn_names[i].setAttribute('text-anchor', 'middle');
             if (i == current_stn_idx) {
-                stn_names[i].setAttribute('class', 'CurrentName');
+                stn_names[i].setAttribute('class', 'CurrentNameHK');
             }
         }
     }
@@ -96,7 +96,7 @@ function setStyle(load=false) {
         document.getElementById('change_bgs').style.display = 'inline';
         var int_names = document.getElementById('change_names').children;
         for (i=0; i<int_names.length; i++) {
-            int_names[i].setAttribute('class', 'CurrentName');
+            int_names[i].setAttribute('class', 'CurrentNameHK');
         }
     }
     if (style == 'mtr') {

@@ -23,12 +23,14 @@ function loadSVGSize() {
     // }
 
     var svg_width = params_instance['svg_width'];
-    document.getElementById('svg_width').value = svg_width;
+    document.getElementById('svg_width').parentElement.MaterialTextfield.change(svg_width);
+    // document.getElementById('svg_width').value = svg_width;
     document.getElementById('root').setAttribute('width', svg_width);
     document.getElementById('outer').setAttribute('width', svg_width);
 
     var svg_height = params_instance['svg_height'];
-    document.getElementById('svg_height').value = svg_height;
+    document.getElementById('svg_height').parentElement.MaterialTextfield.change(svg_height);
+    // document.getElementById('svg_height').value = svg_height;
     document.getElementById('root').setAttribute('height', svg_height);
     document.getElementById('outer').setAttribute('height', svg_height);
 
@@ -41,21 +43,22 @@ function loadSVGSize() {
     }
 
     var padding = params_instance['padding'];
-    document.getElementById('padding_text').value = padding;
-    document.getElementById('padding_slider').value = padding;
+    document.getElementById('padding_text').parentElement.MaterialTextfield.change(padding);
+    document.getElementById('padding_slider').MaterialSlider.change(padding);
 
     var y_pc = params_instance['y_pc'];
-    document.getElementById('y_text').value = y_pc;
-    document.getElementById('y_slider').value = y_pc;
+    document.getElementById('y_text').parentElement.MaterialTextfield.change(y_pc);
+    document.getElementById('y_slider').MaterialSlider.change(y_pc);
 
     var strip_pc = params_instance['strip_pc'];
-    document.getElementById('strip_text').value = strip_pc;
-    document.getElementById('strip_slider').value = strip_pc;
+    document.getElementById('strip_text').parentElement.MaterialTextfield.change(strip_pc);
+    document.getElementById('strip_slider').MaterialSlider.change(strip_pc);
     redrawStrip();
 
     var theme_city = params_instance['theme'][0];
     var theme = document.getElementById('theme');
-    theme.querySelector('#city').value = theme_city;
+    theme.querySelector('#city').parentElement.MaterialTextfield.change(theme_city);
+    // theme.querySelector('#city').value = theme_city;
     loadLine(theme, params_instance['theme'][1]);
 
     // var theme_line = params_instance['theme'][1];
@@ -84,24 +87,25 @@ function loadSVGSize() {
     setFontWeight();
 
     var txt_bg_gap = params_instance['txt_bg_gap'];
-    document.getElementById('txt_bg_gap_text').value = txt_bg_gap;
-    document.getElementById('txt_bg_gap_slider').value = txt_bg_gap;
+    document.getElementById('txt_bg_gap_text').parentElement.MaterialTextfield.change(txt_bg_gap);
+    document.getElementById('txt_bg_gap_slider').MaterialSlider.change(txt_bg_gap);
 
     var stn_list = params_instance['stn_list'];
     var n_stn = stn_list.length;
     var stns = document.getElementById('stn_list').children;
 
     while (stns.length - 1) {
-        rmStn(stns[1].children[3].children[3], true);
+        rmStn(stns[1].querySelector('#rm'), true);
     }
 
     stns[0].querySelector('#change').checked = false;
-    if (stns[0].children[8]) {
+    if (stns[0].children[4]) {
         stns[0].removeChild(stns[0].children[6]);
         stns[0].removeChild(stns[0].children[5]);
         stns[0].removeChild(stns[0].children[4]);
     }
     document.getElementById('stn_int_0').setAttribute('stroke', 'none');
+    document.getElementById('int_bg_0').setAttribute('fill', 'none');
 
     var stn_to_add = n_stn - 1;
     while (stn_to_add != 0) {
@@ -122,7 +126,7 @@ function loadSVGSize() {
     for (k=0; k<n_stn; k++) {
         // Wrap
         var wrap = stn_list[k]['wrap'];
-        document.getElementById('stn'+k).children[3].checked = wrap;
+        document.getElementById('stn'+k).querySelector('#wrap').checked = wrap;
 
         // Name in list
         document.getElementById('stn'+k).querySelector('#field0').value = stn_list[k]['name'][0];

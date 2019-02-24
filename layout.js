@@ -90,6 +90,7 @@ function loadChangeColourSelector(elem) {
         loadCity(selector, theme_city);
     } else {
         params_instance['stn_list'][stn_idx]['change'] = ['nullCity','nullLine'];
+        params_instance['stn_list'][stn_idx]['change_name'] = ['',''];
         putParams(params_instance);
 
         if (elem.parentNode.parentNode.children[4]) {
@@ -99,6 +100,7 @@ function loadChangeColourSelector(elem) {
         }
 
         document.getElementById('stn_int_'+stn_idx).setAttribute('stroke', 'none');
+        document.getElementById('int_bg_'+stn_idx).setAttribute('fill', 'none')
 
         var int_names = document.getElementById('int_name_'+stn_idx).children;
         for (i=0; i<int_names.length; i++) {
