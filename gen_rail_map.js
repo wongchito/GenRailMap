@@ -1,6 +1,7 @@
 function setSVGWidth() {
     // Get new value
     var svg_width = document.getElementById('svg_width').value;
+    // var svg_width = mdc.textField.MDCTextField.attachTo(document.getElementById('svg_width').parentElement).value;
 
     // Log changes
     var params_instance = getParams();
@@ -33,7 +34,7 @@ function setSVGHeight() {
     redrawLines();
     redrawStn();
     reposStnName();
-    reposStnName();
+    addCurrentBG();
 }
 
 function setFont() {
@@ -106,15 +107,18 @@ function showOuter(elem) {
     }
 }
 
-function setPadding(src) {
+function setPadding(src, val=null) {
     // Get new value
     if (src == 'slider') {
-        var padding = document.getElementById('padding_slider').value;
-        document.getElementById('padding_text').parentElement.MaterialTextfield.change(padding);
+        var padding = val.toString();
+        // var padding = document.getElementById('padding_slider').value;
+        mdc.textField.MDCTextField.attachTo(document.getElementById('padding_text').parentElement).value = padding;
+        // document.getElementById('padding_text').parentElement.MaterialTextfield.change(padding);
     }
     if (src == 'text') {
         var padding = document.getElementById('padding_text').value;
-        document.getElementById('padding_slider').MaterialSlider.change(padding);
+        mdc.slider.MDCSlider.attachTo(document.getElementById('padding_slider')).value = padding;
+        // document.getElementById('padding_slider').MaterialSlider.change(padding);
     }
 
     // Log changes
@@ -180,15 +184,18 @@ function redrawLines(line=null) {
     }
 }
 
-function setY(src) {
+function setY(src, val=null) {
     // Get new value
     if (src == 'slider') {
-        var y_pc = document.getElementById('y_slider').value;
-        document.getElementById('y_text').parentElement.MaterialTextfield.change(y_pc);
+        var y_pc = val.toString();
+        // var y_pc = document.getElementById('y_slider').value;
+        mdc.textField.MDCTextField.attachTo(document.getElementById('y_text').parentElement).value = y_pc;
+        // document.getElementById('y_text').parentElement.MaterialTextfield.change(y_pc);
     }
     if (src == 'text') {
         var y_pc = document.getElementById('y_text').value;
-        document.getElementById('y_slider').MaterialSlider.change(y_pc);
+        mdc.slider.MDCSlider.attachTo(document.getElementById('y_slider')).value = y_pc;
+        // document.getElementById('y_slider').MaterialSlider.change(y_pc);
         // document.getElementById('y_slider').value = y_pc;
     }
 
@@ -204,15 +211,18 @@ function setY(src) {
     addCurrentBG();
 }
 
-function setStripY(src) {
+function setStripY(src, val=null) {
     // Get new value
     if (src == 'slider') {
-        var strip_pc = document.getElementById('strip_slider').value;
-        document.getElementById('strip_text').value = strip_pc;
+        var strip_pc = val.toString();
+        // var strip_pc = document.getElementById('strip_slider').value;
+        mdc.textField.MDCTextField.attachTo(document.getElementById('strip_text').parentElement).value = strip_pc;
+        // document.getElementById('strip_text').parentElement.MaterialTextfield.change(strip_pc);
     }
     if (src == 'text') {
         var strip_pc = document.getElementById('strip_text').value;
-        document.getElementById('strip_slider').MaterialSlider.change(strip_pc);
+        mdc.slider.MDCSlider.attachTo(document.getElementById('strip_slider')).value = strip_pc;
+        // document.getElementById('strip_slider').MaterialSlider.change(strip_pc);
     }
 
     // Log changes

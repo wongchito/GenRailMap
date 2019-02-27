@@ -5,6 +5,12 @@
     <title>Generator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+    <!-- Instantiate single textfield component rendered in the document -->
+
+
     <link rel="stylesheet" href="mdl/material.min.css">
     <script src="mdl/material.min.js"></script>
     <link rel="stylesheet" href="mdl/icons.css">
@@ -21,337 +27,454 @@
     <script src="params.js"></script>
     <script src="fontlist.js"></script>
     <style>
-        .test:after {
-            transition-duration:.2s;
-            transition-timing-function:cubic-bezier(.4,0,.2,1);
+        body {
+        display: flex;
+        height: 100vh;
         }
 
-        .mdl-layout__drawer {
-            width: 400px;
-            -webkit-transform:translateX(-410px);
-            transform:translateX(-410px);
+        .mdc-drawer-app-content {
+        flex: auto;
+        overflow: auto;
+        position: relative;
         }
 
-        .mdl-layout__drawer.is-visible {
-            width: 90%;
-            max-width: 400px;
+        .main-content {
+        overflow: auto;
+        height: 100%;
         }
 
-        .mdl-layout--fixed-drawer.is-upgraded:not(.is-small-screen)>.mdl-layout__header {
-            margin-left: 400px;
-            width:calc(100% - 400px);
+        .app-bar {
+        position: absolute;
         }
 
-        .mdl-layout--fixed-drawer>.mdl-layout__content{margin-left:400px}
- 
-        .mdl-layout__container.has-scrolling-header .mdl-layout__content{overflow:visible}@media screen and (max-width:1024px){.mdl-layout--fixed-drawer>.mdl-layout__content{margin-left:0}.mdl-layout__container.has-scrolling-header .mdl-layout__content{overflow-y:auto;overflow-x:hidden}}
+        .mdc-top-app-bar {
+        z-index: 7;
+        }
+
+        .mdc-drawer {
+          width: 350px;
+          max-width: 100%;
+        }
+
+        .mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing)+.mdc-drawer-app-content {
+          margin-left: 350px;
+        }
+
+        .mdc-text-field {
+          height: 30px;
+        }
+
+        .mdc-text-field--outlined .mdc-floating-label {
+          top: 6px;
+        }
+
+        .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+          transform: translateY(-70%) scale(0.75);
+        }
+
+        .mdc-select {
+          height: 30px;
+        }
+
+        .mdc-select.mdc-select--outlined .mdc-floating-label {
+          top: 6px;
+        }
+        .mdc-select__selected-text {
+          height: 30px;
+        }
+        .mdc-select--outlined .mdc-select__selected-text {
+          padding-top: 3px;
+        }
+        .mdc-select__dropdown-icon {
+          height: 22px;
+          bottom: 5px;
+        }
+        .mdc-select--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+          transform: translateY(-70%) scale(0.75);
+        }
+
     </style>
+
 </head>
 
 <body onload="init()">
-
-<!-- <div class="w3-row"> -->
-
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-<header class="mdl-layout__header">
-<div class="mdl-layout__header-row">
-    <span class="mdl-layout-title">Rail Map Generator</span>
-    <div class="mdl-layout-spacer"></div>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
-    <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
-        <i class="material-icons">search</i>
-    </label>
-    <div class="mdl-textfield__expandable-holder">
-        <input class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp">
+  <header class="mdc-top-app-bar app-bar" id="app-bar">
+    <div class="mdc-top-app-bar__row">
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+        <a href="#" class="demo-menu material-icons mdc-top-app-bar__navigation-icon">tune</a>
+        <span class="mdc-top-app-bar__title">Rail Map Generator</span>
+      </section>
     </div>
-    </div>
-</div>
-</header>
-<div class="mdl-layout__drawer">
-<span class="mdl-layout-title">Configurations</span>
-<nav class="mdl-navigation">
-
-<div class="mdl-grid">
-    <button class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="showConfig('nav_layout')">Layout</button>
-    <button class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="showConfig('nav_design')">Design</button>
-    <button class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="showConfig('nav_font')">Font</button>
-    <button class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="showConfig('nav_station')">Station</button>
-    <button class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="showConfig('nav_template')">Template</button>
-    <button class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="showConfig('nav_save')">Save</button>
-</div>
-            
-<div style="display: none" id="nav_layout">
-<div class="mdl-grid">
-    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" value="500" id="svg_width" onchange="setSVGWidth()">
-        <label class="mdl-textfield__label" for="svg_width">Width</label>
-    </div>
-    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" value="200" id="svg_height" onchange="setSVGHeight()">
-        <label class="mdl-textfield__label" for="svg_height">Height</label>
-    </div>
-    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="outer_checkbox">
-            <input type="checkbox" id="outer_checkbox" class="mdl-switch__input" onchange="showOuter(this)" checked>
-            <span class="mdl-switch__label">Border</span>
-        </label>
-    </div>
-    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" value="10" id="padding_text" onchange="setPadding('text')">
-        <label class="mdl-textfield__label" for="padding_text">Padding</label>
-    </div>
-    <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone mdl-cell--middle">
-        <input class="mdl-slider mdl-js-slider" id="padding_slider" type="range" min="0" max="50" value="10" tabindex="0" onchange="setPadding('slider')">
-    </div>
-    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" value="50" id="y_text" onchange="setY('text')">
-        <label class="mdl-textfield__label" for="y_text">y</label>
-    </div>
-    <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone mdl-cell--middle">
-        <input class="mdl-slider mdl-js-slider" id="y_slider" type="range" min="0" max="100" value="50" tabindex="0" onchange="setY('slider')">
-    </div>
-    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" value="95" id="strip_text" onchange="setStripY('text')">
-        <label class="mdl-textfield__label" for="strip_text">Banner</label>
-    </div>
-    <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone mdl-cell--middle">
-        <input class="mdl-slider mdl-js-slider" id="strip_slider" type="range" min="80" max="100" value="95" tabindex="0" onchange="setStripY('slider')">
-    </div>
-
-    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onclick="this.parentNode.parentNode.style.display='none'">
-        <i class="material-icons">expand_less</i>
-    </button>
-</div>
-</div>
-
-<div style="display: none" id="nav_design">
-<div class="mdl-grid">
-    <div id="theme">
-    <!-- <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height">
-        <input type="text" value="" class="mdl-textfield__input" id="city" readonly onchange="loadLine(this.parentNode.parentNode)">
-        <input type="hidden" value="" name="city">
-        <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
-        <label for="city" class="mdl-textfield__label">Font</label>
-        <ul for="city" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
-            <li class="mdl-menu__item" data-val="na" data-selected="true">N/A</li>
-        </ul>
-    </div> -->
-    <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <select id="city" class="mdl-textfield__input" onchange="loadLine(this.parentNode.parentNode)">
-        </select>
-        <label class="mdl-textfield__label" for="city">City</label>
-    </div>
-    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <select id="line" class="mdl-textfield__input" onchange="loadColour(this.parentNode.parentNode)">
-        </select>
-        <label class="mdl-textfield__label" for="line">Line</label>
-    </div>
-    <div class="mdl-cell mdl-cell--5-col mdl-cell--3-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input id="colour" class="mdl-textfield__input" type="color" onchange="notImplement()">
-        <label class="mdl-textfield__label" for="colour">Colour</label>
-    </div>
-    </div>
-
-    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <select id="style" class="mdl-textfield__input" onchange="setStyle()">
-            <option value="gzmtr">Guangzhou Metro - 广州地铁</option>
-            <option value="mtr">MTR - 港鐵</option>
-        </select>
-        <label class="mdl-textfield__label" for="style">Style</label>
-    </div>
-    <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="display: none;">
-        <input class="mdl-textfield__input" type="text" value="T" id="line_num" onchange="setLineNum()">
-        <label class="mdl-textfield__label" for="strip_text">Line</label>
-    </div>
-    <div class="mdl-cell mdl-cell--4-col mdl-cell--3-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height">
-        <input type="text" value="" class="mdl-textfield__input" id="auto_num" readonly onchange="setStnNum()">
-        <input type="hidden" value="" name="auto_num">
-        <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
-        <label for="auto_num" class="mdl-textfield__label">Numbering</label>
-        <ul for="auto_num" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
-            <li class="mdl-menu__item" data-val="asc" data-selected="true">Ascending</li>
-            <li class="mdl-menu__item" data-val="desc">Descending</li>
-        </ul>
-    </div>
-    <!-- <div class="mdl-cell mdl-cell--4-col mdl-cell--3-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="display: none;">
-        <select id="auto_num" class="mdl-textfield__input" onchange="setStnNum()">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
-        <label class="mdl-textfield__label" for="auto_num">Numbering</label>
-    </div> -->
-    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle">
-        <button class="mdl-button mdl-js-button mdl-button--primary" disabled>
-            Direction
-        </button>   
-    </div>
-    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
-        <button class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="setDirection(this)" id="direc_l">
-            <i class="material-icons">arrow_back</i>
-        </button>
-    </div>
-    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
-        <button class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="setDirection(this)" id="direc_r" disabled>
-            <i class="material-icons">arrow_forward</i>
-        </button>
-    </div>
-
-
-    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onclick="this.parentNode.parentNode.style.display='none'">
-        <i class="material-icons">expand_less</i>
-    </button>
-</div>
-</div>
-
-<div style="display: none" id="nav_font">
-<div class="mdl-grid">
-    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
-        <span class="mdl-chip mdl-chip--contact">
-            <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">字</span>
-            <span class="mdl-chip__text">HAN</span>
-        </span>
-    </div>
-    <div class="mdl-cell mdl-cell--7-col mdl-cell--5-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height">
-        <input type="text" value="" class="mdl-textfield__input" id="font_zh" readonly>
-        <input type="hidden" value="" name="font_zh">
-        <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
-        <label for="font_zh" class="mdl-textfield__label">Font</label>
-        <ul for="font_zh" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
-            <li class="mdl-menu__item" data-val="na" data-selected="true">N/A</li>
-        </ul>
-        <!-- <select id="font_zh" class="mdl-textfield__input">
-            <option value="na">N/A</option>
-        </select>
-        <label class="mdl-textfield__label" for="font_zh">Font</label> -->
-    </div>
-    <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
-        <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="weight_zh">
-            <input type="checkbox" id="weight_zh" class="mdl-icon-toggle__input" onchange="setFontWeight('zh')">
-            <i class="mdl-icon-toggle__label material-icons">format_bold</i>
-        </label>
-    </div>
-
-    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
-        <span class="mdl-chip mdl-chip--contact">
-            <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">A</span>
-            <span class="mdl-chip__text">LAT</span>
-        </span>
-    </div>
-    <div class="mdl-cell mdl-cell--7-col mdl-cell--5-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height">
-        <input type="text" value="" class="mdl-textfield__input" id="font_en" readonly>
-        <input type="hidden" value="" name="font_en">
-        <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
-        <label for="font_en" class="mdl-textfield__label">Font</label>
-        <ul for="font_en" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
-            <li class="mdl-menu__item" data-val="na" data-selected="true">N/A</li>
-        </ul>
-        <!-- <select id="font_en" class="mdl-textfield__input">
-            <option value="na">N/A</option>
-        </select>
-        <label class="mdl-textfield__label" for="font_en">Font</label> -->
-    </div>
-    <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
-        <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="weight_en">
-            <input type="checkbox" id="weight_en" class="mdl-icon-toggle__input" onchange="setFontWeight('en')">
-            <i class="mdl-icon-toggle__label material-icons">format_bold</i>
-        </label>
-    </div>
-
-    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" value="15" id="txt_bg_gap_text" onchange="setTxtBGGap('text')">
-        <label class="mdl-textfield__label" for="txt_bg_gap_text">Gap</label>
-    </div>
-    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle">
-        <input class="mdl-slider mdl-js-slider" id="txt_bg_gap_slider" type="range" min="0" max="30" value="15" tabindex="0" onchange="setTxtBGGap('slider')">
-    </div>
-    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
-        <button class="mdl-button mdl-js-button mdl-button--primary" onclick="flipStnPos()">
-            Flip
-        </button>   
-    </div>
-
-    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onclick="this.parentNode.parentNode.style.display='none'">
-        <i class="material-icons">expand_less</i>
-    </button>
-</div>
-</div>
-
-<div style="display: none" id="nav_station">
-<div class="mdl-grid">
-    <!-- <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-cell--middle">
-        <span class="mdl-chip mdl-chip--contact">
-            <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">1</span>
-            <span class="mdl-chip__text">中環 - Central</span>
-        </span>
-    </div> -->
-    <div id="stn_list">
-    <div class="mdl-grid" id="stn0">
-        <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
-            <!-- <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="current">
-                <input type="radio" id="current" class="mdl-radio__button" name="current" onchange="setCurrentStn(this)">
-                <span class="mdl-radio__label">Second</span>
-            </label> -->
-            <input type="radio" class="w3-radio" id="current" name="current" onchange="setCurrentStn(this)">
+  </header>
+  <aside class="mdc-drawer mdc-drawer--dismissible mdc-top-app-bar--fixed-adjust app-layout__drawer--align-end">
+    <div class="mdc-drawer__content">
+      <div class="mdc-list">
+        <a class="mdc-list-item mdc-list-item--activated" id="nav_layout__header" onclick="showConfig(this)">
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">inbox</i>
+          <span class="mdc-list-item__text">Layout</span>
+          <div class="mdl-layout-spacer"></div>
+          <i class="material-icons" aria-hidden="true" style="display: inline;" id="nav_layout__show">keyboard_arrow_down</i>
+          <i class="material-icons" aria-hidden="true" style="display: none;" id="nav_layout__hide">keyboard_arrow_up</i>
+        </a>
+        <div id="nav_layout" style="margin-left:24px; display: none;">
+          <div class="mdc-list-item">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true" style="transform:rotate(90deg)">unfold_more</i>
+            <div class="mdc-text-field mdc-text-field--outlined" style="width:100%;">
+              <input type="text" id="svg_width" class="mdc-text-field__input" onchange="setSVGWidth()">
+              <div class="mdc-notched-outline">
+                <div class="mdc-notched-outline__leading"></div>
+                <div class="mdc-notched-outline__notch">
+                  <label for="svg_width" class="mdc-floating-label">Width</label>
+                </div>
+                <div class="mdc-notched-outline__trailing"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mdc-list-item">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">unfold_more</i>
+            <div class="mdc-text-field mdc-text-field--outlined" style="width:100%;">
+              <input type="text" id="svg_height" class="mdc-text-field__input" onchange="setSVGHeight()">
+              <div class="mdc-notched-outline">
+                <div class="mdc-notched-outline__leading"></div>
+                <div class="mdc-notched-outline__notch">
+                  <label for="svg_height" class="mdc-floating-label">Height</label>
+                </div>
+                <div class="mdc-notched-outline__trailing"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mdc-list-item">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">border_outer</i>
+            <span class="mdc-list-item__text">Border</span>
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdc-switch">
+              <div class="mdc-switch__track"></div>
+              <div class="mdc-switch__thumb-underlay">
+                <div class="mdc-switch__thumb">
+                    <input type="checkbox" id="outer_checkbox" class="mdc-switch__native-control" role="switch">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mdc-list-item">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">border_outer</i>
+            <!-- <span class="mdc-list-item__text">Padding</span> -->
+            <div class="mdc-text-field mdc-text-field--outlined" style="width:30%;">
+              <input type="text" id="padding_text" class="mdc-text-field__input" onchange="setPadding('text')">
+              <div class="mdc-notched-outline">
+                <div class="mdc-notched-outline__leading"></div>
+                <div class="mdc-notched-outline__notch">
+                  <label for="padding_text" class="mdc-floating-label">Padding</label>
+                </div>
+                <div class="mdc-notched-outline__trailing"></div>
+              </div>
+            </div>
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdc-slider mdc-slider--discrete" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" id="padding_slider" style="width:40%">
+              <div class="mdc-slider__track-container">
+                <div class="mdc-slider__track"></div>
+              </div>
+              <div class="mdc-slider__thumb-container">
+                <div class="mdc-slider__pin">
+                  <span class="mdc-slider__pin-value-marker"></span>
+                </div>
+                <svg class="mdc-slider__thumb" width="21" height="21">
+                  <circle cx="10.5" cy="10.5" r="7.875"></circle>
+                </svg>
+                <div class="mdc-slider__focus-ring"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mdc-list-item">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">border_outer</i>
+            <div class="mdc-text-field mdc-text-field--outlined" style="width:30%;">
+              <input type="text" id="y_text" class="mdc-text-field__input">
+              <div class="mdc-notched-outline">
+                <div class="mdc-notched-outline__leading"></div>
+                <div class="mdc-notched-outline__notch">
+                  <label for="y_text" class="mdc-floating-label">y</label>
+                </div>
+                <div class="mdc-notched-outline__trailing"></div>
+              </div>
+            </div>
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdc-slider mdc-slider--discrete" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" id="y_slider" style="width:40%">
+              <div class="mdc-slider__track-container">
+                <div class="mdc-slider__track"></div>
+              </div>
+              <div class="mdc-slider__thumb-container">
+                <div class="mdc-slider__pin">
+                  <span class="mdc-slider__pin-value-marker"></span>
+                </div>
+                <svg class="mdc-slider__thumb" width="21" height="21">
+                  <circle cx="10.5" cy="10.5" r="7.875"></circle>
+                </svg>
+                <div class="mdc-slider__focus-ring"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mdc-list-item">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">border_outer</i>
+            <div class="mdc-text-field mdc-text-field--outlined" style="width:30%;">
+              <input type="text" id="strip_text" class="mdc-text-field__input">
+              <div class="mdc-notched-outline">
+                <div class="mdc-notched-outline__leading"></div>
+                <div class="mdc-notched-outline__notch">
+                  <label for="strip_text" class="mdc-floating-label">Banner</label>
+                </div>
+                <div class="mdc-notched-outline__trailing"></div>
+              </div>
+            </div>
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdc-slider mdc-slider--discrete" tabindex="0" role="slider" aria-valuemin="80" aria-valuemax="100" aria-valuenow="95" id="strip_slider" style="width:40%">
+              <div class="mdc-slider__track-container">
+                <div class="mdc-slider__track"></div>
+              </div>
+              <div class="mdc-slider__thumb-container">
+                <div class="mdc-slider__pin">
+                  <span class="mdc-slider__pin-value-marker"></span>
+                </div>
+                <svg class="mdc-slider__thumb" width="21" height="21">
+                  <circle cx="10.5" cy="10.5" r="7.875"></circle>
+                </svg>
+                <div class="mdc-slider__focus-ring"></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="field0">
-            <input class="mdl-textfield__input" type="text" value="" id="stn0_field0" onchange="setStnName(this, 0)">
-            <label class="mdl-textfield__label" for="stn0_field0">Field 1</label>
-        </div>
-        <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="field1">
-            <input class="mdl-textfield__input" type="text" value id="stn0_field1" onchange="setStnName(this, 1)">
-            <label class="mdl-textfield__label" for="stn0_field1">Field 2</label>
-        </div>
-        <div class="w3-right">
-            <input id="wrap" type="checkbox" onchange="wrapStnName(this)">Wrap</input>
-            <input id="stn_num" class="w3-input" type="text" value style="display: none;">
-            <input id="change" type="checkbox" class="w3-check" onchange="loadChangeColourSelector(this)">
-            <button class="w3-button" id="add" onclick="addStn(this)">&plus;</button>
-            <button class="w3-button" id="rm" onclick="rmStn(this)">&times;</button>
-        </div>
-    </div>
-    </div>
 
-    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onclick="this.parentNode.parentNode.style.display='none'">
-        <i class="material-icons">expand_less</i>
-    </button>
-</div>
-</div>
+        <a class="mdc-list-item" id="nav_design__header" onclick="showConfig(this)">
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">style</i>
+          <span class="mdc-list-item__text">Design</span>
+          <div class="mdl-layout-spacer"></div>
+          <i class="material-icons" aria-hidden="true" style="display: inline;" id="nav_design__show">keyboard_arrow_down</i>
+          <i class="material-icons" aria-hidden="true" style="display: none;" id="nav_design__hide">keyboard_arrow_up</i>
+        </a>
+        <div id="nav_design" style="margin-left:24px; display: none;">
+          <!-- <div id="theme">
+            <div class="mdc-select mdc-select--outlined" id="theme_city">
+              <input type="hidden" name="enhanced-select">
+              <i class="mdc-select__dropdown-icon"></i>
+              <div class="mdc-select__selected-text"></div>
+              <div class="mdc-select__menu mdc-menu mdc-menu-surface demo-width-class">
+                <ul class="mdc-list" id="theme_city__list">
+                  <li class="mdc-list-item" style="height:30px;" data-value="grains">Bread, Cereal, Rice, and Pasta</li>
+                  <li class="mdc-list-item" style="height:30px;" data-value="vegetables">Vegetables</li>
+                  <li class="mdc-list-item" style="height:30px;" data-value="fruit">Fruit</li>
+                </ul>
+              </div>
+              <div class="mdc-notched-outline">
+                <div class="mdc-notched-outline__leading"></div>
+                <div class="mdc-notched-outline__notch">
+                  <label class="mdc-floating-label mdc-floating-label--float-above">Food</label>
+                </div>
+                <div class="mdc-notched-outline__trailing"></div>
+              </div>
+            </div>
+          </div> -->
+          <div id="theme">
+            <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <select id="city" class="mdl-textfield__input" onchange="loadLine(this.parentNode.parentNode)">
+              </select>
+              <label class="mdl-textfield__label" for="city">City</label>
+            </div>
+            <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <select id="line" class="mdl-textfield__input" onchange="loadColour(this.parentNode.parentNode)">
+              </select>
+              <label class="mdl-textfield__label" for="line">Line</label>
+            </div>
+            <div class="mdl-cell mdl-cell--5-col mdl-cell--3-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input id="colour" class="mdl-textfield__input" type="color" onchange="notImplement()">
+              <label class="mdl-textfield__label" for="colour">Colour</label>
+            </div>
+          </div>
+          <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height">
+            <input type="text" value="" class="mdl-textfield__input" id="style" readonly onchange="setStyle()">
+            <input type="hidden" value="" name="style">
+            <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+            <label for="style" class="mdl-textfield__label">Style</label>
+            <ul for="style" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+              <li class="mdl-menu__item" data-val="gzmtr">Guangzhou Metro - 广州地铁</li>
+              <li class="mdl-menu__item" data-val="mtr" data-selected="true">MTR - 港鐵</li>
+            </ul>
+          </div>
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="display: none;">
+            <input class="mdl-textfield__input" type="text" value="T" id="line_num" onchange="setLineNum()">
+            <label class="mdl-textfield__label" for="strip_text">Line</label>
+          </div>
+          <div class="mdl-cell mdl-cell--4-col mdl-cell--3-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height">
+              <input type="text" value="" class="mdl-textfield__input" id="auto_num" readonly onchange="setStnNum()">
+              <input type="hidden" value="" name="auto_num">
+              <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+              <label for="auto_num" class="mdl-textfield__label">Numbering</label>
+              <ul for="auto_num" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                <li class="mdl-menu__item" data-val="asc" data-selected="true">Ascending</li>
+                <li class="mdl-menu__item" data-val="desc">Descending</li>
+              </ul>
+          </div>
+          <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle">
+            <button class="mdl-button mdl-js-button mdl-button--primary" disabled>
+                Direction
+            </button>   
+          </div>
+          <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="setDirection(this)" id="direc_l">
+              <i class="material-icons">arrow_back</i>
+            </button>
+          </div>
+          <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="setDirection(this)" id="direc_r" disabled>
+              <i class="material-icons">arrow_forward</i>
+            </button>
+          </div>
+        </div>
 
-<div style="display: none" id="nav_template">
-<div class="mdl-grid">
-        <select id="template">
-                <option value="wrl">West Rail Line - 西鐵綫</option>
-                <option value="gz8">Line 8 - 8号线</option>
-                <option value="edi24">Edinburgh Lothian Service 24</option>
+        <a class="mdc-list-item" id="nav_font__header" onclick="showConfig(this)">
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">text_format</i>
+          <span class="mdc-list-item__text">Text Format</span>
+          <div class="mdl-layout-spacer"></div>
+          <i class="material-icons" aria-hidden="true" style="display: inline;" id="nav_font__show">keyboard_arrow_down</i>
+          <i class="material-icons" aria-hidden="true" style="display: none;" id="nav_font__hide">keyboard_arrow_up</i>
+        </a>
+        <div id="nav_font" style="margin-left:24px; display: none;">
+          <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+            <span class="mdl-chip mdl-chip--contact">
+              <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">字</span>
+              <span class="mdl-chip__text">HAN</span>
+            </span>
+          </div>
+          <div class="mdl-cell mdl-cell--7-col mdl-cell--5-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height">
+            <input type="text" value="" class="mdl-textfield__input" id="font_zh" readonly>
+            <input type="hidden" value="" name="font_zh">
+            <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+            <label for="font_zh" class="mdl-textfield__label">Font</label>
+            <ul for="font_zh" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+              <li class="mdl-menu__item" data-val="na" data-selected="true">N/A</li>
+            </ul>
+            <!-- <select id="font_zh" class="mdl-textfield__input">
+                <option value="na">N/A</option>
             </select>
-            <button onclick="loadTemplate(document.getElementById('template').value)">Load</button>
+            <label class="mdl-textfield__label" for="font_zh">Font</label> -->
+          </div>
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+            <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="weight_zh">
+              <input type="checkbox" id="weight_zh" class="mdl-icon-toggle__input" onchange="setFontWeight('zh')">
+              <i class="mdl-icon-toggle__label material-icons">format_bold</i>
+            </label>
+          </div>
+    
+          <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+            <span class="mdl-chip mdl-chip--contact">
+              <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">A</span>
+              <span class="mdl-chip__text">LAT</span>
+            </span>
+          </div>
+          <div class="mdl-cell mdl-cell--7-col mdl-cell--5-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height">
+            <input type="text" value="" class="mdl-textfield__input" id="font_en" readonly>
+            <input type="hidden" value="" name="font_en">
+            <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+            <label for="font_en" class="mdl-textfield__label">Font</label>
+            <ul for="font_en" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+              <li class="mdl-menu__item" data-val="na" data-selected="true">N/A</li>
+            </ul>
+            <!-- <select id="font_en" class="mdl-textfield__input">
+                <option value="na">N/A</option>
+            </select>
+            <label class="mdl-textfield__label" for="font_en">Font</label> -->
+          </div>
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+            <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="weight_en">
+              <input type="checkbox" id="weight_en" class="mdl-icon-toggle__input" onchange="setFontWeight('en')">
+              <i class="mdl-icon-toggle__label material-icons">format_bold</i>
+            </label>
+          </div>
 
-    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onclick="this.parentNode.parentNode.style.display='none'">
-        <i class="material-icons">expand_less</i>
-    </button>
-</div>
-</div>
+          <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" value="15" id="txt_bg_gap_text" onchange="setTxtBGGap('text')">
+            <label class="mdl-textfield__label" for="txt_bg_gap_text">Gap</label>
+          </div>
+          <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle">
+            <input class="mdl-slider mdl-js-slider" id="txt_bg_gap_slider" type="range" min="0" max="30" value="15" tabindex="0" onchange="setTxtBGGap('slider')">
+          </div>
+          <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone mdl-cell--middle">
+            <button class="mdl-button mdl-js-button mdl-button--primary" onclick="flipStnPos()">
+                  Flip
+            </button>   
+          </div>
+        </div>
 
-<div style="display: none" id="nav_save">
-<div class="mdl-grid">
-        <button onclick="save()">Save state</button> Copy the configuration script below and save it!
-<br/>
-<textarea id="params_string" rows="30" cols="50"></textarea>
-<br/>
-<button onclick="load()">Load state</button> Refresh this page, paste your configuration script above and load your work!
+        <a class="mdc-list-item" id="nav_station__header" onclick="showConfig(this)">
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">text_format</i>
+          <span class="mdc-list-item__text">Station</span>
+          <div class="mdl-layout-spacer"></div>
+          <i class="material-icons" aria-hidden="true" style="display: inline;" id="nav_station__show">keyboard_arrow_down</i>
+          <i class="material-icons" aria-hidden="true" style="display: none;" id="nav_station__hide">keyboard_arrow_up</i>
+        </a>
+        <div id="nav_station" style="margin-left:24px; display: none;">
+          <div id="stn_list">
+            <div class="mdl-grid" id="stn0">
+              <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+                    
+                <input type="radio" class="w3-radio" id="current" name="current" onchange="setCurrentStn(this)">
+              </div>
+              <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="field0">
+                <input class="mdl-textfield__input" type="text" value="" id="stn0_field0" onchange="setStnName(this, 0)">
+                <label class="mdl-textfield__label" for="stn0_field0">Field 1</label>
+              </div>
+              <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-cell--middle mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="field1">
+                <input class="mdl-textfield__input" type="text" value id="stn0_field1" onchange="setStnName(this, 1)">
+                <label class="mdl-textfield__label" for="stn0_field1">Field 2</label>
+              </div>
+              <div class="w3-right">
+                <input id="wrap" type="checkbox" onchange="wrapStnName(this)">Wrap</input>
+                <input id="stn_num" class="w3-input" type="text" value style="display: none;">
+                <input id="change" type="checkbox" class="w3-check" onchange="loadChangeColourSelector(this)">
+                <button class="w3-button" id="add" onclick="addStn(this)">&plus;</button>
+                <button class="w3-button" id="rm" onclick="rmStn(this)">&times;</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onclick="this.parentNode.parentNode.style.display='none'">
-        <i class="material-icons">expand_less</i>
-    </button>
-</div>
-</div>
+        <a class="mdc-list-item" id="nav_template__header" onclick="showConfig(this)">
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">text_format</i>
+          <span class="mdc-list-item__text">Templates</span>
+          <div class="mdl-layout-spacer"></div>
+          <i class="material-icons" aria-hidden="true" style="display: inline;" id="nav_template__show">keyboard_arrow_down</i>
+          <i class="material-icons" aria-hidden="true" style="display: none;" id="nav_template__hide">keyboard_arrow_up</i>
+        </a>
+        <div id="nav_template" style="margin-left:24px; display: none;">
+          <select id="template">
+            <option value="wrl">West Rail Line - 西鐵綫</option>
+            <option value="gz8">Line 8 - 8号线</option>
+            <option value="edi24">Edinburgh Lothian Service 24</option>
+          </select>
+          <button onclick="loadTemplate(document.getElementById('template').value)">Load</button>
+        </div>
 
+        <a class="mdc-list-item" id="nav_save__header" onclick="showConfig(this)">
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">text_format</i>
+          <span class="mdc-list-item__text">Save</span>
+          <div class="mdl-layout-spacer"></div>
+          <i class="material-icons" aria-hidden="true" style="display: inline;" id="nav_save__show">keyboard_arrow_down</i>
+          <i class="material-icons" aria-hidden="true" style="display: none;" id="nav_save__hide">keyboard_arrow_up</i>
+        </a>
+        <div id="nav_save" style="margin-left:24px; display: none;">
+          <button onclick="save()">Save state</button> Copy the configuration script below and save it!
+          <br/>
+          <textarea id="params_string" rows="30" cols="50"></textarea>
+          <br/>
+          <button onclick="load()">Load state</button> Refresh this page, paste your configuration script above and load your work!
+          
+        </div>
+        
+      </div>
+    </div>
+  </aside>
 
-</nav>
-</div>
-<main class="mdl-layout__content">
-    <div class="page-content" style="overflow-x:auto;">
-
+  <div class="mdc-drawer-app-content mdc-top-app-bar--fixed-adjust">
+    <main class="main-content" id="main-content">
+      <!-- <button onclick="testAdd()"></button> -->
 <svg 
 xmlns="http://www.w3.org/2000/svg"
 xmlns:xlink="http://www.w3.org/1999/xlink" 
@@ -497,22 +620,99 @@ id="root" width="500" height="200" onload="initSVG()">
     <rect id="outer" x="0" y="0" width="500" height="200" fill="none" stroke="black"/>
 </svg>
 
-    </div>
-</main>
-</div>
+    </main>
+  </div>
 
-<script>
-function showConfig(nav) {
-    var all_nav = ['nav_layout', 'nav_design', 'nav_font', 'nav_station', 'nav_template', 'nav_save'];
-    for (i=0; i<all_nav.length; i++) {
-        if (all_nav[i] == nav) {
-            document.getElementById(all_nav[i]).style.display = 'inline';
-        } else {
-            document.getElementById(all_nav[i]).style.display = 'none';
-        }
-    }
-}
-</script>
+  <script>
+      function showConfig(elem) {
+          var nav = elem.getAttribute('id').replace(/__header/g, '');
+          if (document.getElementById(nav).style.display == 'block') {
+            document.getElementById(nav).style.display = 'none';
+            document.getElementById(nav+'__hide').style.display = 'none';
+            document.getElementById(nav+'__show').style.display = 'inline';
+          } else {
+            document.getElementById(nav).style.display = 'block';
+            document.getElementById(nav+'__hide').style.display = 'inline';
+            document.getElementById(nav+'__show').style.display = 'none';
+          }
+          // var all_nav = ['nav_layout'];
+          // for (i=0; i<all_nav.length; i++) {
+          //     if (all_nav[i] == nav) {
+          //         document.getElementById(all_nav[i]).style.display = 'block';
+          //         document.getElementById(all_nav[i]+'__hide').style.display = 'inline';
+          //         document.getElementById(all_nav[i]+'__show').style.display = 'none';
+          //     } else {
+          //         document.getElementById(all_nav[i]).style.display = 'none';
+          //         document.getElementById(all_nav[i]+'__hide').style.display = 'none';
+          //         document.getElementById(all_nav[i]+'__show').style.display = 'inline';
+          //     }
+          // }
+          if (nav == 'nav_design') {
+              // window.theme_city_selector = mdc.select.MDCSelect.attachTo(document.getElementById('theme_city'));
+              // theme_city_selector.listen('MDCSelect:change');
+          }
 
+
+          // var sliders = document.querySelectorAll('.mdc-slider');
+          // for (i=0; i<sliders.length; i++) {
+          //   var slider = mdc.slider.MDCSlider.attachTo(sliders[i]);
+          //   slider.listen('MDCSlider:change', () => console.log(`Value changed to ${slider.value}`));
+          // }
+          const padding_slider = mdc.slider.MDCSlider.attachTo(document.getElementById('padding_slider'));
+          padding_slider.listen('MDCSlider:change', () => setPadding('slider', padding_slider.value));
+
+          const y_slider = mdc.slider.MDCSlider.attachTo(document.getElementById('y_slider'));
+          y_slider.listen('MDCSlider:change', () => setY('slider', y_slider.value));
+
+          const strip_slider = mdc.slider.MDCSlider.attachTo(document.getElementById('strip_slider'));
+          strip_slider.listen('MDCSlider:change', () => setStripY('slider', strip_slider.value));
+
+          // const slider = mdc.slider.MDCSlider.attachTo(document.querySelector('.mdc-slider'));
+          // slider.listen('MDCSlider:change', () => console.log(`Value changed to ${slider.value}`));
+      }
+
+      function testAdd() {
+        var li = document.createElement('li');
+        li.setAttribute('class', 'mdc-list-item');
+        li.setAttribute('style', 'height:30px;');
+        li.setAttribute('data-val', 'na');
+        li.textContent = 'N/A';
+        document.getElementById('theme_city__list').appendChild(li);
+        theme_city_selector.listen('MDCSelect:change');
+      }
+      </script>
+  
+
+              <script>
+
+               const drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+                  const topAppBar = mdc.topAppBar.MDCTopAppBar.attachTo(document.getElementById('app-bar'));
+                  topAppBar.setScrollTarget(document.getElementById('main-content'));
+                    topAppBar.listen('MDCTopAppBar:nav', () => {
+                    drawer.open = !drawer.open;
+                    });
+
+                    var lists = document.querySelectorAll('.mdc-list');
+                    for (i=0; i<lists.length; i++) {
+                      var list = mdc.list.MDCList.attachTo(lists[i]);
+               list.wrapFocus = true;
+                    }
+
+                    // mdc.menu.MDCMenu.attachTo(document.querySelector('.mdc-menu'));
+                    // mdc.menuSurface.MDCMenuSurface.attachTo(document.querySelector('.mdc-menu-surface'));
+
+              //  const slider = mdc.slider.MDCSlider.attachTo(document.querySelector('.mdc-slider'));
+              //  const slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
+              // slider.listen('MDCSlider:change', () => console.log(`Value changed to ${slider.value}`));
+              // mdc.layoutGrid.MDCLayoutGrid.attachTo(document.querySelector('.mdc-layout-grid'));
+              // var select = mdc.select.MDCSelect.attachTo(document.querySelector('.mdc-select'));
+
+              // select.listen('MDCSelect:change');
+              var textFields = document.querySelectorAll('.mdc-text-field');
+               for (i=0; i<textFields.length; i++) {
+                 mdc.textField.MDCTextField.attachTo(textFields[i]);
+               }
+               mdc.switchControl.MDCSwitch.attachTo(document.querySelectorAll('.mdc-switch')[0]);
+                   </script>
 </body>
 </html>

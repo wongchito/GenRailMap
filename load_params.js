@@ -21,41 +21,51 @@ function loadSVGSize() {
     //     document.getElementById('style').value = 'mtr';
     //     setStyle(true);
     // }
+    // document.querySelector('li[data-val="mtr"]').setAttribute('data-selected', 'true');
 
     var svg_width = params_instance['svg_width'];
-    document.getElementById('svg_width').parentElement.MaterialTextfield.change(svg_width);
+    mdc.textField.MDCTextField.attachTo(document.getElementById('svg_width').parentElement).value = svg_width;
+    // document.getElementById('svg_width').parentElement.MaterialTextfield.change(svg_width);
     // document.getElementById('svg_width').value = svg_width;
     document.getElementById('root').setAttribute('width', svg_width);
     document.getElementById('outer').setAttribute('width', svg_width);
 
     var svg_height = params_instance['svg_height'];
-    document.getElementById('svg_height').parentElement.MaterialTextfield.change(svg_height);
+    mdc.textField.MDCTextField.attachTo(document.getElementById('svg_height').parentElement).value = svg_height;
+    // document.getElementById('svg_height').parentElement.MaterialTextfield.change(svg_height);
     // document.getElementById('svg_height').value = svg_height;
     document.getElementById('root').setAttribute('height', svg_height);
     document.getElementById('outer').setAttribute('height', svg_height);
 
     var show_outer = params_instance['show_outer'];
-    document.getElementById('outer_checkbox').checked = show_outer;
+    mdc.switchControl.MDCSwitch.attachTo(document.getElementById('outer_checkbox').parentNode.parentNode.parentNode).checked = show_outer;
+    // document.getElementById('outer_checkbox').checked = show_outer;
     // document.getElementById('outer_checkbox').checked = show_outer;
     if (show_outer) {
-        document.getElementById('outer_checkbox').parentNode.MaterialSwitch.on();
+        // document.getElementById('outer_checkbox').parentNode.MaterialSwitch.on();
         document.getElementById('outer').setAttribute('stroke', 'black');
     } else {
-        document.getElementById('outer_checkbox').parentNode.MaterialSwitch.off();
+        // document.getElementById('outer_checkbox').parentNode.MaterialSwitch.off();
         document.getElementById('outer').setAttribute('stroke', 'none');
     }
 
     var padding = params_instance['padding'];
-    document.getElementById('padding_text').parentElement.MaterialTextfield.change(padding);
-    document.getElementById('padding_slider').MaterialSlider.change(padding);
+    mdc.textField.MDCTextField.attachTo(document.getElementById('padding_text').parentElement).value = padding;
+    // document.getElementById('padding_text').parentElement.MaterialTextfield.change(padding);
+    mdc.slider.MDCSlider.attachTo(document.getElementById('padding_slider')).value = padding;
+    // document.getElementById('padding_slider').MaterialSlider.change(padding);
 
     var y_pc = params_instance['y_pc'];
-    document.getElementById('y_text').parentElement.MaterialTextfield.change(y_pc);
-    document.getElementById('y_slider').MaterialSlider.change(y_pc);
+    mdc.textField.MDCTextField.attachTo(document.getElementById('y_text').parentElement).value = y_pc;
+    // document.getElementById('y_text').parentElement.MaterialTextfield.change(y_pc);
+    mdc.slider.MDCSlider.attachTo(document.getElementById('y_slider')).value = y_pc;
+    // document.getElementById('y_slider').MaterialSlider.change(y_pc);
 
     var strip_pc = params_instance['strip_pc'];
-    document.getElementById('strip_text').parentElement.MaterialTextfield.change(strip_pc);
-    document.getElementById('strip_slider').MaterialSlider.change(strip_pc);
+    mdc.textField.MDCTextField.attachTo(document.getElementById('strip_text').parentElement).value = strip_pc;
+    // document.getElementById('strip_text').parentElement.MaterialTextfield.change(strip_pc);
+    mdc.slider.MDCSlider.attachTo(document.getElementById('strip_slider')).value = strip_pc;
+    // document.getElementById('strip_slider').MaterialSlider.change(strip_pc);
     redrawStrip();
 
     var theme_city = params_instance['theme'][0];
@@ -71,6 +81,7 @@ function loadSVGSize() {
     redrawLines('main');
 
     var style = params_instance['style'];
+    
     // var style_selector = document.getElementById('style');
     // style_selector.value = style;
 
@@ -201,10 +212,21 @@ function loadSVGSize() {
     reposStnName();
     addCurrentBG();
 
-    if (style != document.getElementById('style').value) {
-        document.getElementById('style').value = style;
-        setStyle();
-    }
+    // if (style != document.getElementById('style').value) {
+    //     document.getElementById('style').value = style;
+    //     setStyle();
+    // }
+    document.querySelector('input[name="style"]').setAttribute('value', style);
+    // var styles = ['gzmtr', 'mtr'];
+    // for (i=0; i<styles.length; i++) {
+    //     if (style == styles[i]) {
+    //         document.querySelector('li[data-val="'+style+'"]').className = 'mdl-menu__item selected';
+    //     } else {
+    //         document.querySelector('li[data-val="'+style+'"]').className = 'mdl-menu__item';
+    //     }
+    // }
+    getmdlSelect.init('.getmdl-select');
+    setStyle();
 }
 
 function save() {
