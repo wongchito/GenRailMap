@@ -113,8 +113,8 @@
           <i class="material-icons mdc-list-item__graphic" aria-hidden="true">panorama</i>
           <span class="mdc-list-item__text">Layout</span>
           <div class="mdl-layout-spacer"></div>
-          <i class="material-icons" aria-hidden="true" style="display: inline;" id="nav_layout__show">keyboard_arrow_down</i>
-          <i class="material-icons" aria-hidden="true" style="display: none;" id="nav_layout__hide">keyboard_arrow_up</i>
+          <i class="material-icons" aria-hidden="true" style="display: none;" id="nav_layout__show">keyboard_arrow_down</i>
+          <i class="material-icons" aria-hidden="true" style="display: inline;" id="nav_layout__hide">keyboard_arrow_up</i>
         </a>
         <div id="nav_layout" style="margin-left:24px; display: block;">
           <div class="mdc-list-item">
@@ -619,6 +619,42 @@ id="root" width="500" height="200" onload="initSVG()">
     <rect id="outer" x="0" y="0" width="500" height="200" fill="none" stroke="black"/>
 </svg>
 
+<p>Temporary padding slider:</p>
+<div class="mdc-slider" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" id="padding_slider1" style="width:40%">
+  <div class="mdc-slider__track-container">
+    <div class="mdc-slider__track"></div>
+  </div>
+  <div class="mdc-slider__thumb-container">
+    <svg class="mdc-slider__thumb" width="21" height="21">
+      <circle cx="10.5" cy="10.5" r="7.875"></circle>
+    </svg>
+    <div class="mdc-slider__focus-ring"></div>
+  </div>
+</div>
+<p>Temporary y slider:</p>
+<div class="mdc-slider" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" id="y_slider1" style="width:40%">
+  <div class="mdc-slider__track-container">
+    <div class="mdc-slider__track"></div>
+  </div>
+  <div class="mdc-slider__thumb-container">
+    <svg class="mdc-slider__thumb" width="21" height="21">
+      <circle cx="10.5" cy="10.5" r="7.875"></circle>
+    </svg>
+    <div class="mdc-slider__focus-ring"></div>
+  </div>
+</div>
+<p>Temporary banner slider:</p>
+<div class="mdc-slider" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" id="strip_slider1" style="width:40%">
+  <div class="mdc-slider__track-container">
+    <div class="mdc-slider__track"></div>
+  </div>
+  <div class="mdc-slider__thumb-container">
+    <svg class="mdc-slider__thumb" width="21" height="21">
+      <circle cx="10.5" cy="10.5" r="7.875"></circle>
+    </svg>
+    <div class="mdc-slider__focus-ring"></div>
+  </div>
+</div>
     </main>
   </div>
   
@@ -641,13 +677,14 @@ id="root" width="500" height="200" onload="initSVG()">
   mdc.switchControl.MDCSwitch.attachTo(document.querySelectorAll('.mdc-switch')[0]);
   const svg_width__input = mdc.textField.MDCTextField.attachTo(document.getElementById('svg_width').parentElement);
   const svg_height__input = mdc.textField.MDCTextField.attachTo(document.getElementById('svg_height').parentElement);
-  const padding__slider = mdc.slider.MDCSlider.attachTo(document.getElementById('padding_slider'));
+
+  const padding__slider = mdc.slider.MDCSlider.attachTo(document.getElementById('padding_slider1'));
   padding__slider.listen('MDCSlider:change', () => setPadding('slider', padding__slider.value));
 
-    const y_slider = mdc.slider.MDCSlider.attachTo(document.getElementById('y_slider'));
+    const y_slider = mdc.slider.MDCSlider.attachTo(document.getElementById('y_slider1'));
     y_slider.listen('MDCSlider:change', () => setY('slider', y_slider.value));
 
-    const strip_slider = mdc.slider.MDCSlider.attachTo(document.getElementById('strip_slider'));
+    const strip_slider = mdc.slider.MDCSlider.attachTo(document.getElementById('strip_slider1'));
     strip_slider.listen('MDCSlider:change', () => setStripY('slider', strip_slider.value));
   </script>
 </body>

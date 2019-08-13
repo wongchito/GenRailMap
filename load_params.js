@@ -47,7 +47,7 @@ function loadSVGSize() {
     mdc.textField.MDCTextField.attachTo(document.getElementById('padding_text').parentElement).value = padding;
     // document.getElementById('padding_text').parentElement.MaterialTextfield.change(padding);
     // mdc.slider.MDCSlider.attachTo(document.getElementById('padding_slider')).value = padding;
-    padding_slider.value = padding;
+    padding__slider.value = padding;
     // document.getElementById('padding_slider').MaterialSlider.change(padding);
 
     var y_pc = params_instance['y_pc'];
@@ -60,6 +60,7 @@ function loadSVGSize() {
     mdc.textField.MDCTextField.attachTo(document.getElementById('strip_text').parentElement).value = strip_pc;
     // document.getElementById('strip_text').parentElement.MaterialTextfield.change(strip_pc);
     mdc.slider.MDCSlider.attachTo(document.getElementById('strip_slider')).value = strip_pc;
+    strip_slider.value = strip_pc;
     // document.getElementById('strip_slider').MaterialSlider.change(strip_pc);
     redrawStrip();
 

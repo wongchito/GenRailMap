@@ -111,6 +111,7 @@ function showOuter(elem) {
 
 function setPadding(src, val=null) {
     // Get new value
+    // var padding = val.toString();
     if (src == 'slider') {
         var padding = val.toString();
         // var padding = document.getElementById('padding_slider').value;
@@ -773,7 +774,7 @@ function setStnName(elem, target) {
     // Apply changes
     var stn_name = document.getElementById('stn_name_'+stn_idx);
     if (wrap && target == 1) {
-        var [str1, str2] = splitText(elem.parentNode.querySelector('#field1').value);
+        var [str1, str2] = splitText(elem.value);
         var stn_x = getStnX(stn_idx);
         var stn_name_html = str1 + '<tspan x="0" dy="15">' + str2 + '</tspan>';
         stn_name.querySelector('#field1').innerHTML = stn_name_html;
@@ -887,7 +888,7 @@ function wrapStnName(elem) {
     putParams(params_instance);
 
     // Apply changes
-    setStnName(elem.parentNode.parentNode.querySelector('#field1'), 1);
+    setStnName(elem.parentNode.parentNode.querySelector('#field1').children[0], 1);
 }
 
 
