@@ -1,3 +1,5 @@
+'use strict';
+
 function loadTemplate(line) {
     alert('All changes will be discarded! ')
     if (line == 'gz8') {
@@ -16,22 +18,14 @@ function loadTemplate(line) {
 function loadSVGSize() {
     var params_instance = getParams();
 
-    // reset style
-    // if (document.getElementById('style').value != 'mtr') {
-    //     document.getElementById('style').value = 'mtr';
-    //     setStyle(true);
-    // }
-    // document.querySelector('li[data-val="mtr"]').setAttribute('data-selected', 'true');
-
     var svg_width = params_instance['svg_width'];
-    mdc.textField.MDCTextField.attachTo(document.getElementById('svg_width').parentElement).value = svg_width;
-    // document.getElementById('svg_width').parentElement.MaterialTextfield.change(svg_width);
-    // document.getElementById('svg_width').value = svg_width;
+    svg_width__input.foundation_.setValue(svg_width);
     document.getElementById('root').setAttribute('width', svg_width);
     document.getElementById('outer').setAttribute('width', svg_width);
 
     var svg_height = params_instance['svg_height'];
-    mdc.textField.MDCTextField.attachTo(document.getElementById('svg_height').parentElement).value = svg_height;
+    svg_height__input.foundation_.setValue(svg_height);
+    // mdc.textField.MDCTextField.attachTo(document.getElementById('svg_height').parentElement).value = svg_height;
     // document.getElementById('svg_height').parentElement.MaterialTextfield.change(svg_height);
     // document.getElementById('svg_height').value = svg_height;
     document.getElementById('root').setAttribute('height', svg_height);
@@ -52,7 +46,8 @@ function loadSVGSize() {
     var padding = params_instance['padding'];
     mdc.textField.MDCTextField.attachTo(document.getElementById('padding_text').parentElement).value = padding;
     // document.getElementById('padding_text').parentElement.MaterialTextfield.change(padding);
-    mdc.slider.MDCSlider.attachTo(document.getElementById('padding_slider')).value = padding;
+    // mdc.slider.MDCSlider.attachTo(document.getElementById('padding_slider')).value = padding;
+    padding_slider.value = padding;
     // document.getElementById('padding_slider').MaterialSlider.change(padding);
 
     var y_pc = params_instance['y_pc'];
@@ -138,14 +133,12 @@ function loadSVGSize() {
     document.getElementById('stn'+current_stn_idx).querySelector('#current').checked = true;
     // document.getElementById('stn_list').children[current_stn_idx].children[0].checked = true;
     redrawLines('passed');
-    for (k=0; k<n_stn; k++) {
+    for (var k=0; k<n_stn; k++) {
         // Wrap
         var wrap = stn_list[k]['wrap'];
         document.getElementById('stn'+k).querySelector('#wrap').checked = wrap;
 
         // Name in list
-        // document.getElementById('stn'+k+'_field0').value = stn_list[k]['name'][0];
-        // document.getElementById('stn'+k+'_field1').value = stn_list[k]['name'][1];
         document.getElementById('stn'+k+'_field0').parentElement.MaterialTextfield.change(stn_list[k]['name'][0]);
         document.getElementById('stn'+k+'_field1').parentElement.MaterialTextfield.change(stn_list[k]['name'][1]);
         // document.getElementById('stn'+k).querySelector('#field0').value = stn_list[k]['name'][0];

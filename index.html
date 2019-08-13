@@ -110,13 +110,13 @@
     <div class="mdc-drawer__content">
       <div class="mdc-list">
         <a class="mdc-list-item mdc-list-item--activated" id="nav_layout__header" onclick="showConfig(this)">
-          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">inbox</i>
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">panorama</i>
           <span class="mdc-list-item__text">Layout</span>
           <div class="mdl-layout-spacer"></div>
           <i class="material-icons" aria-hidden="true" style="display: inline;" id="nav_layout__show">keyboard_arrow_down</i>
           <i class="material-icons" aria-hidden="true" style="display: none;" id="nav_layout__hide">keyboard_arrow_up</i>
         </a>
-        <div id="nav_layout" style="margin-left:24px; display: none;">
+        <div id="nav_layout" style="margin-left:24px; display: block;">
           <div class="mdc-list-item">
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true" style="transform:rotate(90deg)">unfold_more</i>
             <div class="mdc-text-field mdc-text-field--outlined" style="width:100%;">
@@ -157,7 +157,7 @@
             </div>
           </div>
           <div class="mdc-list-item">
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">border_outer</i>
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">stay_current_landscape</i>
             <!-- <span class="mdc-list-item__text">Padding</span> -->
             <div class="mdc-text-field mdc-text-field--outlined" style="width:30%;">
               <input type="text" id="padding_text" class="mdc-text-field__input" onchange="setPadding('text')">
@@ -186,7 +186,7 @@
             </div>
           </div>
           <div class="mdc-list-item">
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">border_outer</i>
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">vertical_align_center</i>
             <div class="mdc-text-field mdc-text-field--outlined" style="width:30%;">
               <input type="text" id="y_text" class="mdc-text-field__input">
               <div class="mdc-notched-outline">
@@ -214,7 +214,7 @@
             </div>
           </div>
           <div class="mdc-list-item">
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">border_outer</i>
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">vertical_align_bottom</i>
             <div class="mdc-text-field mdc-text-field--outlined" style="width:30%;">
               <input type="text" id="strip_text" class="mdc-text-field__input">
               <div class="mdc-notched-outline">
@@ -404,7 +404,7 @@
         </div>
 
         <a class="mdc-list-item" id="nav_station__header" onclick="showConfig(this)">
-          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">text_format</i>
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">train</i>
           <span class="mdc-list-item__text">Station</span>
           <div class="mdl-layout-spacer"></div>
           <i class="material-icons" aria-hidden="true" style="display: inline;" id="nav_station__show">keyboard_arrow_down</i>
@@ -453,7 +453,7 @@
         </div>
 
         <a class="mdc-list-item" id="nav_save__header" onclick="showConfig(this)">
-          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">text_format</i>
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">save</i>
           <span class="mdc-list-item__text">Save</span>
           <div class="mdl-layout-spacer"></div>
           <i class="material-icons" aria-hidden="true" style="display: inline;" id="nav_save__show">keyboard_arrow_down</i>
@@ -474,7 +474,6 @@
 
   <div class="mdc-drawer-app-content mdc-top-app-bar--fixed-adjust">
     <main class="main-content" id="main-content">
-      <!-- <button onclick="testAdd()"></button> -->
 <svg 
 xmlns="http://www.w3.org/2000/svg"
 xmlns:xlink="http://www.w3.org/1999/xlink" 
@@ -622,97 +621,34 @@ id="root" width="500" height="200" onload="initSVG()">
 
     </main>
   </div>
-
-  <script>
-      function showConfig(elem) {
-          var nav = elem.getAttribute('id').replace(/__header/g, '');
-          if (document.getElementById(nav).style.display == 'block') {
-            document.getElementById(nav).style.display = 'none';
-            document.getElementById(nav+'__hide').style.display = 'none';
-            document.getElementById(nav+'__show').style.display = 'inline';
-          } else {
-            document.getElementById(nav).style.display = 'block';
-            document.getElementById(nav+'__hide').style.display = 'inline';
-            document.getElementById(nav+'__show').style.display = 'none';
-          }
-          // var all_nav = ['nav_layout'];
-          // for (i=0; i<all_nav.length; i++) {
-          //     if (all_nav[i] == nav) {
-          //         document.getElementById(all_nav[i]).style.display = 'block';
-          //         document.getElementById(all_nav[i]+'__hide').style.display = 'inline';
-          //         document.getElementById(all_nav[i]+'__show').style.display = 'none';
-          //     } else {
-          //         document.getElementById(all_nav[i]).style.display = 'none';
-          //         document.getElementById(all_nav[i]+'__hide').style.display = 'none';
-          //         document.getElementById(all_nav[i]+'__show').style.display = 'inline';
-          //     }
-          // }
-          if (nav == 'nav_design') {
-              // window.theme_city_selector = mdc.select.MDCSelect.attachTo(document.getElementById('theme_city'));
-              // theme_city_selector.listen('MDCSelect:change');
-          }
-
-
-          // var sliders = document.querySelectorAll('.mdc-slider');
-          // for (i=0; i<sliders.length; i++) {
-          //   var slider = mdc.slider.MDCSlider.attachTo(sliders[i]);
-          //   slider.listen('MDCSlider:change', () => console.log(`Value changed to ${slider.value}`));
-          // }
-          const padding_slider = mdc.slider.MDCSlider.attachTo(document.getElementById('padding_slider'));
-          padding_slider.listen('MDCSlider:change', () => setPadding('slider', padding_slider.value));
-
-          const y_slider = mdc.slider.MDCSlider.attachTo(document.getElementById('y_slider'));
-          y_slider.listen('MDCSlider:change', () => setY('slider', y_slider.value));
-
-          const strip_slider = mdc.slider.MDCSlider.attachTo(document.getElementById('strip_slider'));
-          strip_slider.listen('MDCSlider:change', () => setStripY('slider', strip_slider.value));
-
-          // const slider = mdc.slider.MDCSlider.attachTo(document.querySelector('.mdc-slider'));
-          // slider.listen('MDCSlider:change', () => console.log(`Value changed to ${slider.value}`));
-      }
-
-      function testAdd() {
-        var li = document.createElement('li');
-        li.setAttribute('class', 'mdc-list-item');
-        li.setAttribute('style', 'height:30px;');
-        li.setAttribute('data-val', 'na');
-        li.textContent = 'N/A';
-        document.getElementById('theme_city__list').appendChild(li);
-        theme_city_selector.listen('MDCSelect:change');
-      }
-      </script>
   
 
-              <script>
+  <script>
+  const drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+  drawer.open = true;
+  const topAppBar = mdc.topAppBar.MDCTopAppBar.attachTo(document.getElementById('app-bar'));
+  topAppBar.setScrollTarget(document.getElementById('main-content'));
+  topAppBar.listen('MDCTopAppBar:nav', () => {
+    drawer.open = !drawer.open;
+  });
 
-               const drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
-                  const topAppBar = mdc.topAppBar.MDCTopAppBar.attachTo(document.getElementById('app-bar'));
-                  topAppBar.setScrollTarget(document.getElementById('main-content'));
-                    topAppBar.listen('MDCTopAppBar:nav', () => {
-                    drawer.open = !drawer.open;
-                    });
+  var lists = document.querySelectorAll('.mdc-list');
+  for (var l of lists) {
+    var list = mdc.list.MDCList.attachTo(l);
+    list.wrapFocus = true;
+  }
 
-                    var lists = document.querySelectorAll('.mdc-list');
-                    for (i=0; i<lists.length; i++) {
-                      var list = mdc.list.MDCList.attachTo(lists[i]);
-               list.wrapFocus = true;
-                    }
+  mdc.switchControl.MDCSwitch.attachTo(document.querySelectorAll('.mdc-switch')[0]);
+  const svg_width__input = mdc.textField.MDCTextField.attachTo(document.getElementById('svg_width').parentElement);
+  const svg_height__input = mdc.textField.MDCTextField.attachTo(document.getElementById('svg_height').parentElement);
+  const padding__slider = mdc.slider.MDCSlider.attachTo(document.getElementById('padding_slider'));
+  padding__slider.listen('MDCSlider:change', () => setPadding('slider', padding__slider.value));
 
-                    // mdc.menu.MDCMenu.attachTo(document.querySelector('.mdc-menu'));
-                    // mdc.menuSurface.MDCMenuSurface.attachTo(document.querySelector('.mdc-menu-surface'));
+    const y_slider = mdc.slider.MDCSlider.attachTo(document.getElementById('y_slider'));
+    y_slider.listen('MDCSlider:change', () => setY('slider', y_slider.value));
 
-              //  const slider = mdc.slider.MDCSlider.attachTo(document.querySelector('.mdc-slider'));
-              //  const slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
-              // slider.listen('MDCSlider:change', () => console.log(`Value changed to ${slider.value}`));
-              // mdc.layoutGrid.MDCLayoutGrid.attachTo(document.querySelector('.mdc-layout-grid'));
-              // var select = mdc.select.MDCSelect.attachTo(document.querySelector('.mdc-select'));
-
-              // select.listen('MDCSelect:change');
-              var textFields = document.querySelectorAll('.mdc-text-field');
-               for (i=0; i<textFields.length; i++) {
-                 mdc.textField.MDCTextField.attachTo(textFields[i]);
-               }
-               mdc.switchControl.MDCSwitch.attachTo(document.querySelectorAll('.mdc-switch')[0]);
-                   </script>
+    const strip_slider = mdc.slider.MDCSlider.attachTo(document.getElementById('strip_slider'));
+    strip_slider.listen('MDCSlider:change', () => setStripY('slider', strip_slider.value));
+  </script>
 </body>
 </html>

@@ -1,3 +1,5 @@
+'use strict';
+
 function setSVGWidth() {
     // Get new value
     var svg_width = document.getElementById('svg_width').value;
@@ -821,10 +823,10 @@ function reposStnName() {
             pt.x = bcr.left;
             pt.y = bcr.top;
             var pos = pt.matrixTransform(ctm.inverse());
-            x = stn_x - bb.height * Math.cos(Number(pre_d)) * 0.8;
+            var x = stn_x - bb.height * Math.cos(Number(pre_d)) * 0.8;
         }
         if (style == 'mtr') {
-            x = stn_x;
+            var x = stn_x;
         }
         stn_names[i].setAttribute('transform', 'translate('+x.toString()+','+new_y.toString()+')rotate('+pre_d+')');
 
@@ -849,10 +851,10 @@ function reposStnName() {
         var int_name_bb = int_name.getBBox();
         var int_name_bg_y = int_name_bb.y + int_name_bb.height/2 - 10;
         if (int_name_bb.width > 29) {
-            int_name_bb_x = stn_x - int_name_bb.width/2 - 4;
+            var int_name_bb_x = stn_x - int_name_bb.width/2 - 4;
             document.getElementById('int_bg_'+i.toString()).setAttribute('width', (int_name_bb.width+8).toString());
         } else {
-            int_name_bb_x = stn_x - 18.5;
+            var int_name_bb_x = stn_x - 18.5;
             document.getElementById('int_bg_'+i.toString()).setAttribute('width', '37');
         }
         document.getElementById('int_bg_'+i.toString()).setAttribute('y', int_name_bg_y.toString());

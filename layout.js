@@ -141,6 +141,7 @@ function init() {
     setFont();
     setFontWeight();
     loadSVGSize();
+    // document.getElementById('nav_layout').style.display = 'none';
 }
 
 function test() {
@@ -200,3 +201,37 @@ function checkVer() {
 
     
 }
+
+function showConfig(elem) {
+    var nav = elem.getAttribute('id').replace(/__header/g, '');
+    if (document.getElementById(nav).style.display == 'block') {
+      document.getElementById(nav).style.display = 'none';
+      document.getElementById(nav+'__hide').style.display = 'none';
+      document.getElementById(nav+'__show').style.display = 'inline';
+    } else {
+      document.getElementById(nav).style.display = 'block';
+      document.getElementById(nav+'__hide').style.display = 'inline';
+      document.getElementById(nav+'__show').style.display = 'none';
+    }
+
+}
+
+// function loadMDCElem() {
+//     const drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+//     drawer.open = true;
+//     const topAppBar = mdc.topAppBar.MDCTopAppBar.attachTo(document.getElementById('app-bar'));
+//     topAppBar.setScrollTarget(document.getElementById('main-content'));
+//     topAppBar.listen('MDCTopAppBar:nav', () => {
+//         drawer.open = !drawer.open;
+//     });
+
+//     var lists = document.querySelectorAll('.mdc-list');
+//     for (var l of lists) {
+//         var list = mdc.list.MDCList.attachTo(l);
+//         list.wrapFocus = true;
+//     }
+
+//     mdc.switchControl.MDCSwitch.attachTo(document.querySelectorAll('.mdc-switch')[0]);
+//     const svg_width__input = mdc.textField.MDCTextField.attachTo(document.getElementById('svg_width').parentElement);
+//     const svg_height__input = mdc.textField.MDCTextField.attachTo(document.getElementById('svg_height').parentElement);
+// }
